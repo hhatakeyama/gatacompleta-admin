@@ -17,6 +17,8 @@
   padding-bottom: var(--mantine-spacing-md);
   margin-bottom: calc(var(--mantine-spacing-md) * 1.5);
   border-bottom: 1px solid #333333;
+  display: flex;
+  width: 100%;
 }
 
 .footer {

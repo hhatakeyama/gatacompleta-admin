@@ -2,7 +2,9 @@
 
 import {
   Avatar,
+  Box,
   Burger,
+  Button,
   Container,
   Group,
   Menu,
@@ -31,18 +33,23 @@ import { useAuth } from '@/providers/AuthProvider';
 import classes from './Header.module.css';
 
 export default function Header() {
+  // Hooks
   const theme = useMantineTheme();
-  const { userData } = useAuth();
+  const { isLoggedIn, userData } = useAuth();
+
+  // States
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   return (
-    <div className={classes.header}>
+    <div className={classes.header} style={{ left: isLoggedIn ? '300px' : '0', width: isLoggedIn ? 'calc(100% - 300px)' : '100%' }}>
       <Container className={classes.mainSection} size="xl">
         <Group justify="space-between">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+          <Box>
+            <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+          </Box>
 
-          {userData && (
+          {userData ? (
             <Menu
               width={260}
               position="bottom-end"
@@ -50,6 +57,7 @@ export default function Header() {
               onClose={() => setUserMenuOpened(false)}
               onOpen={() => setUserMenuOpened(true)}
               withinPortal
+              styles={{ dropdown: { zIndex: 1001 }}}
             >
               <Menu.Target>
                 <UnstyledButton
@@ -140,6 +148,10 @@ export default function Header() {
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
+          ) : (
+            <Group visibleFrom="sm">
+              <Button component="a" href="/accounts/login" variant="default">Login</Button>
+            </Group>
           )}
         </Group>
       </Container>

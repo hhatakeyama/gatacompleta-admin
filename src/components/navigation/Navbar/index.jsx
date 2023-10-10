@@ -1,6 +1,5 @@
 'use client'
 
-import { Group } from '@mantine/core';
 import {
   Icon2fa,
   IconBellRinging,
@@ -10,15 +9,17 @@ import {
   IconLogout,
   IconReceipt2,
   IconSettings,
-  IconSwitchHorizontal,
 } from '@tabler/icons-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
+
+import { useAuth } from '@/providers/AuthProvider';
 
 import logo from '../../../../public/logo.jpg';
 import classes from './Navbar.module.css';
 
-const data = [
+const menu = [
   { link: '', label: 'Notifications', icon: IconBellRinging },
   { link: '', label: 'Billing', icon: IconReceipt2 },
   { link: '', label: 'Security', icon: IconFingerprint },
@@ -29,9 +30,14 @@ const data = [
 ];
 
 export default function Navbar() {
+  // Hooks
+  const { isAuthenticated, isValidating, logout, userData } = useAuth()
+
+  // States
   const [active, setActive] = useState('Billing');
 
-  const links = data.map((item) => (
+  // Constants
+  const menuItens = menu.map((item) => (
     <a
       className={classes.link}
       data-active={item.label === active || undefined}
@@ -47,21 +53,28 @@ export default function Navbar() {
     </a>
   ));
 
+  if (!isAuthenticated && !isValidating && !userData) return null
+
   return (
     <nav className={classes.navbar}>
       <div className={classes.navbarMain}>
-        <Group className={classes.header} justify="space-between">
+        <Link href="/" className={classes.header} justify="space-between">
           <Image alt="GataCompleta" src={logo} width="auto" height={45} />
-        </Group>
-        {links}
+        </Link>
+        {isAuthenticated && menuItens}
       </div>
 
-      <div className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-          <IconLogout className={classes.linkIcon} stroke={1.5} />
-          <span>Logout</span>
-        </a>
-      </div>
+      {isAuthenticated && (
+        <div className={classes.footer}>
+          <a href="#" className={classes.link} onClick={(event) => {
+            event.preventDefault()
+            logout?.()
+          }}>
+            <IconLogout className={classes.linkIcon} stroke={1.5} />
+            <span>Logout</span>
+          </a>
+        </div>
+      )}
     </nav>
   );
 }

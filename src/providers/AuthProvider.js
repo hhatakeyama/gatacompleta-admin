@@ -3,7 +3,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useSWRConfig } from 'swr'
 
-import { useFetch } from '@/hooks'
 import { api, getCookie, removeCookie, setCookie } from '@/utils'
 
 const AuthContext = createContext(null)
@@ -15,25 +14,33 @@ function useProvideAuth() {
   const { cache } = useSWRConfig()
 
   // Constants
-  const { token: cookieToken, expiry: cookieExpiry } = getCookie('gatacompleta-cms-token') || {}
+  const cookieTokenString = 'gatacompleta-cms-token'
+  const { token: cookieToken, expiry: cookieExpiry } = getCookie(cookieTokenString) || {}
 
   // States
+  const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
+  const [isValidating, setIsValidating] = useState(null)
+  const [userData, setUserData] = useState(null)
+  const [permissionsData, setPermissionsData] = useState(null)
+  const userIsValidating = false
+  const permissionsIsValidating = false
 
-  // Fetch
-  const { data: userData, isValidating: userIsValidating } = useFetch([
-    isAuthenticated ? '/accounts/me/' : null
-  ])
+  // // Fetch
+  // const { data: userData, isValidating: userIsValidating } = useFetch([
+  //   isAuthenticated === true ? '/accounts/me/' : null
+  // ])
 
-  const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-    isAuthenticated ? '/accounts/permissions/' : null
-  ])
+  // const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
+  //   isAuthenticated === true ? '/accounts/permissions/' : null
+  // ])
 
   // Login with credentials
   const login = async (credentials) => {
+    setLoading(true)
     const response = await api
       .post('/authentication/login/', {
-        email: credentials.login,
+        email: credentials.email,
         password: credentials.password
       })
       .then(response => {
@@ -41,8 +48,8 @@ function useProvideAuth() {
         if (data?.token) {
           const date = new Date()
           date.setDate(date.getDate() + 1)
-          const tokenData = { expiry: date.toISOString(), token: data?.token }
-          setCookie('gatacompleta-cms-token', tokenData)
+          const tokenData = { expiry: date.toISOString(), token: data.token }
+          setCookie(cookieTokenString, tokenData)
           setIsAuthenticated(true)
         } else {
           return { error: 'E-mail ou senha inválidos' }
@@ -56,6 +63,7 @@ function useProvideAuth() {
               : 'Ocorreu um erro inesperado. Tente novamente mais tarde'
         }
       })
+      .finally(() => setLoading(false))
 
     return response
   }
@@ -65,8 +73,10 @@ function useProvideAuth() {
     try {
       await api.post('/authentication/logout/')
     } finally {
-      removeCookie('gatacompleta-cms-token')
+      removeCookie(cookieTokenString)
       setIsAuthenticated(false)
+      setUserData(null)
+      setPermissionsData(null)
     }
   }
 
@@ -96,7 +106,7 @@ function useProvideAuth() {
       expired = nowDate.getTime() > expiryDate.getTime()
 
       if (expired) {
-        removeCookie('gatacompleta-cms-token')
+        removeCookie(cookieTokenString)
       }
     }
 
@@ -108,6 +118,18 @@ function useProvideAuth() {
     const isValidToken = verifyToken()
     setIsAuthenticated(!!isValidToken)
   }, [verifyToken, cookieToken])
+
+  useEffect(() => {
+    async function getUserData() {
+      if (isAuthenticated)
+        await api.get(`${process.env.NEXT_PUBLIC_ENTRYPOINT}/accounts/me`).then(response => setUserData(response.data))
+    }
+    getUserData()
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    setIsValidating(loading || userIsValidating || permissionsIsValidating)
+  }, [loading, userIsValidating, permissionsIsValidating])
 
   // Clear all SWR cache (experimental)
   useEffect(() => {
@@ -121,8 +143,9 @@ function useProvideAuth() {
     forgotPassword,
     resetPassword,
     verifyToken,
+    isLoggedIn: isAuthenticated && !isValidating && !!userData,
     isAuthenticated,
-    isValidating: userIsValidating || permissionsIsValidating,
+    isValidating: isValidating,
     userData,
     permissionsData
   }

@@ -2,6 +2,8 @@
 
 import { Anchor, Container, Group } from '@mantine/core';
 
+import { useAuth } from '@/providers/AuthProvider';
+
 import classes from './Footer.module.css';
 
 const links = [
@@ -12,6 +14,10 @@ const links = [
 ];
 
 export default function Footer() {
+  // Hooks
+  const { isLoggedIn } = useAuth()
+  
+  // Constants
   const items = links.map((link) => (
     <Anchor
       key={link.label}
@@ -24,7 +30,7 @@ export default function Footer() {
   ));
 
   return (
-    <div className={classes.footer}>
+    <div className={classes.footer} style={{ left: isLoggedIn ? '300px' : '0', width: isLoggedIn ? 'calc(100% - 300px)' : '100%' }}>
       <Container className={classes.inner} size="full">
         <Group className={classes.links}>{items}</Group>
       </Container>
