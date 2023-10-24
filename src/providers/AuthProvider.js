@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useSWRConfig } from 'swr'
 
+import { useFetch } from '@/hooks'
 import { api, getCookie, removeCookie, setCookie } from '@/utils'
 
 const AuthContext = createContext(null)
@@ -21,15 +22,13 @@ function useProvideAuth() {
   const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [isValidating, setIsValidating] = useState(null)
-  const [userData, setUserData] = useState(null)
-  const [permissionsData, setPermissionsData] = useState(null)
-  const userIsValidating = false
+  const [permissionsData, setPermissionsData] = useState(['admin'])
   const permissionsIsValidating = false
 
   // // Fetch
-  // const { data: userData, isValidating: userIsValidating } = useFetch([
-  //   isAuthenticated === true ? '/accounts/me/' : null
-  // ])
+  const { data: userData, isValidating: userIsValidating } = useFetch([
+    !!isAuthenticated ? '/admin/accounts/me/' : null
+  ])
 
   // const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
   //   isAuthenticated === true ? '/accounts/permissions/' : null
@@ -39,7 +38,7 @@ function useProvideAuth() {
   const login = async (credentials) => {
     setLoading(true)
     const response = await api
-      .post('/authentication/login/', {
+      .post('/admin/authentication/login/', {
         email: credentials.email,
         password: credentials.password
       })
@@ -71,11 +70,10 @@ function useProvideAuth() {
   // Logout user from API
   const logout = async () => {
     try {
-      await api.post('/authentication/logout/')
+      await api.post('/admin/authentication/logout/')
     } finally {
       removeCookie(cookieTokenString)
       setIsAuthenticated(false)
-      setUserData(null)
       setPermissionsData(null)
     }
   }
@@ -120,14 +118,6 @@ function useProvideAuth() {
   }, [verifyToken, cookieToken])
 
   useEffect(() => {
-    async function getUserData() {
-      if (isAuthenticated)
-        await api.get(`${process.env.NEXT_PUBLIC_ENTRYPOINT}/accounts/me`).then(response => setUserData(response.data))
-    }
-    getUserData()
-  }, [isAuthenticated])
-
-  useEffect(() => {
     setIsValidating(loading || userIsValidating || permissionsIsValidating)
   }, [loading, userIsValidating, permissionsIsValidating])
 
@@ -143,9 +133,8 @@ function useProvideAuth() {
     forgotPassword,
     resetPassword,
     verifyToken,
-    isLoggedIn: isAuthenticated && !isValidating && !!userData,
     isAuthenticated,
-    isValidating: isValidating,
+    isValidating,
     userData,
     permissionsData
   }

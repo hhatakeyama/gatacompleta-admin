@@ -15,7 +15,7 @@ const links = [
 
 export default function Footer() {
   // Hooks
-  const { isLoggedIn } = useAuth()
+  const { isAuthenticated } = useAuth()
   
   // Constants
   const items = links.map((link) => (
@@ -30,7 +30,7 @@ export default function Footer() {
   ));
 
   return (
-    <div className={classes.footer} style={{ left: isLoggedIn ? '300px' : '0', width: isLoggedIn ? 'calc(100% - 300px)' : '100%' }}>
+    <div className={classes.footer} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
       <Container className={classes.inner} size="full">
         <Group className={classes.links}>{items}</Group>
       </Container>

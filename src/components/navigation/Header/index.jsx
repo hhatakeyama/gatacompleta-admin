@@ -35,14 +35,14 @@ import classes from './Header.module.css';
 export default function Header() {
   // Hooks
   const theme = useMantineTheme();
-  const { isLoggedIn, userData } = useAuth();
+  const { isAuthenticated, userData } = useAuth();
 
   // States
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   return (
-    <div className={classes.header} style={{ left: isLoggedIn ? '300px' : '0', width: isLoggedIn ? 'calc(100% - 300px)' : '100%' }}>
+    <div className={classes.header} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
       <Container className={classes.mainSection} size="xl">
         <Group justify="space-between">
           <Box>

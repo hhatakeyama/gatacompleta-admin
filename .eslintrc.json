@@ -21,7 +21,6 @@
     "jsx-quotes": ["error", "prefer-double"],
     "multiline-ternary": "off",
     "no-console": "warn",
-    "no-use-before-define": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "simple-import-sort/imports": "error",

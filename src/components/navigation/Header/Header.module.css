@@ -1,6 +1,5 @@
 .header {
   background-color: #3f0f2b;
-  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-2), transparent);
   height: 80px;
   left: 0px;
   margin-bottom: 15px;
