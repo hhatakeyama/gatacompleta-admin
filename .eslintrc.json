@@ -6,6 +6,7 @@
   "extends": ["next", "plugin:react/recommended"],
   "plugins": ["react", "simple-import-sort"],
   "rules": {
+    "semi": "off",
     "import/no-anonymous-default-export": "off",
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
@@ -21,6 +22,8 @@
     "jsx-quotes": ["error", "prefer-double"],
     "multiline-ternary": "off",
     "no-console": "warn",
+    "no-unused-vars": "error",
+    "no-use-before-define": "off",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "simple-import-sort/imports": "error",

@@ -12,8 +12,8 @@ import {
   Text,
   UnstyledButton,
   useMantineTheme,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+} from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import {
   IconChevronDown,
   IconHeart,
@@ -24,22 +24,22 @@ import {
   IconStar,
   IconSwitchHorizontal,
   IconTrash,
-} from '@tabler/icons-react';
-import cx from 'clsx';
-import { useState } from 'react';
+} from '@tabler/icons-react'
+import cx from 'clsx'
+import { useState } from 'react'
 
-import { useAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider'
 
-import classes from './Header.module.css';
+import classes from './Header.module.css'
 
 export default function Header() {
   // Hooks
-  const theme = useMantineTheme();
-  const { isAuthenticated, userData } = useAuth();
+  const theme = useMantineTheme()
+  const { isAuthenticated, userData } = useAuth()
 
   // States
-  const [opened, { toggle }] = useDisclosure(false);
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const [opened, { toggle }] = useDisclosure(false)
+  const [userMenuOpened, setUserMenuOpened] = useState(false)
 
   return (
     <div className={classes.header} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
@@ -156,5 +156,5 @@ export default function Header() {
         </Group>
       </Container>
     </div>
-  );
+  )
 }

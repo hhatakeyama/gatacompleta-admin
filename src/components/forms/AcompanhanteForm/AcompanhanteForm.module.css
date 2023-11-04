@@ -1,0 +1,8 @@
+.pictureBox {
+  border: '1px solid #CCCCCC';
+  height: '190px';
+  margin: 'auto';
+  max-width: '100%';
+  position: 'relative';
+  width: '190px';
+}

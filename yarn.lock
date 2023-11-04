@@ -7,6 +7,14 @@
   resolved "https://registry.yarnpkg.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz#bd9154aec9983f77b3a034ecaa015c2e4201f6cf"
   integrity sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==
 
+"@babel/runtime-corejs3@^7.22.6":
+  version "7.23.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.23.2.tgz#a5cd9d8b408fb946b2f074b21ea40c04e516795c"
+  integrity sha512-54cIh74Z1rp4oIjsHjqN+WM4fMyCBYe+LpZ9jWm51CZ1fbH3SkAzQD/3XLoNkjbJ7YEmjobLXyvQrFypRHOrXw==
+  dependencies:
+    core-js-pure "^3.30.2"
+    regenerator-runtime "^0.14.0"
+
 "@babel/runtime@^7.20.13", "@babel/runtime@^7.20.7", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
   version "7.23.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.1.tgz#72741dc4d413338a91dcb044a86f3c0bc402646d"
@@ -757,6 +765,11 @@ cookie@^0.4.1:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.2.tgz#0e41f24de5ecf317947c82fc789e06a884824432"
   integrity sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==
 
+core-js-pure@^3.30.2:
+  version "3.33.2"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.33.2.tgz#644830db2507ef84d068a70980ccd99c275f5fa6"
+  integrity sha512-a8zeCdyVk7uF2elKIGz67AjcXOxjRbwOLz8SbklEso1V+2DoW4OkAMZN9S9GBgvZIaqQi/OemFX4OiSoQEmg1Q==
+
 cross-spawn@^7.0.2:
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
@@ -1492,6 +1505,13 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.4.tgz#a291c0c6178ff1b960befe47fcdec301674a6324"
   integrity sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==
 
+imask@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/imask/-/imask-7.1.3.tgz#d07e6f50effe353630323a58baf25c2f7a83c2eb"
+  integrity sha512-jZCqTI5Jgukhl2ff+znBQd8BiHOTlnFYCIgggzHYDdoJsHmSSWr1BaejcYBxsjy4ZIs8Rm0HhbOxQcobcdESRQ==
+  dependencies:
+    "@babel/runtime-corejs3" "^7.22.6"
+
 import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -2172,6 +2192,14 @@ react-dropzone@14.2.3:
   dependencies:
     attr-accept "^2.2.2"
     file-selector "^0.6.0"
+    prop-types "^15.8.1"
+
+react-imask@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/react-imask/-/react-imask-7.1.3.tgz#bb0131c643678532005f266e7df6d54b117eeaf6"
+  integrity sha512-anCnzdkqpDzNwe7ot76kQSvmnz4Sw7AW/QFjjLh3B87HVNv9e2oHC+1m9hQKSIui2Tqm7w68ooMgDFsCQlDMyg==
+  dependencies:
+    imask "^7.1.3"
     prop-types "^15.8.1"
 
 react-is@^16.13.1:

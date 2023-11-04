@@ -23,7 +23,7 @@ export default function Home() {
     if (isAuthenticated === false) return router.push('/accounts/login')
   }, [isAuthenticated, router])
 
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>;
+  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
     <Container>

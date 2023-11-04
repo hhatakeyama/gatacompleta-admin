@@ -15,5 +15,5 @@ export default function Providers({ children }) {
         </AuthProvider>
       </MantineProvider>
     </SWRConfig>
-  );
+  )
 }

@@ -34,13 +34,13 @@ function isDate(value) {
     // If you call a Date method, like .valueOf(),
     // with a "this" value that's anything
     // other than a Date, a TypeError is thrown.
-    Date.prototype.valueOf.call(value);
-    return true;
+    Date.prototype.valueOf.call(value)
+    return true
   } catch (error) {
     if (error instanceof TypeError) {
-      return false;
+      return false
     }
-    throw error;
+    throw error
   }
 }
 

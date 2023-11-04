@@ -10,7 +10,7 @@ export default function Dashboard({ dashboardData }) {
     { label: 'Ativas', stats: ativas, progress: ativas * 100 / total, color: 'teal' },
     { label: 'Expirando', stats: expirando, progress: expirando * 100 / total, color: 'orange' },
     { label: 'Inativas', stats: inativas, progress: inativas * 100 / total, color: 'red' },
-  ];
+  ]
 
   return (
     <SimpleGrid cols={{ base: 1, sm: 3 }}>
@@ -35,7 +35,7 @@ export default function Dashboard({ dashboardData }) {
               </Box>
             </Group>
           </Paper>
-        );
+        )
       })}
     </SimpleGrid>
   )

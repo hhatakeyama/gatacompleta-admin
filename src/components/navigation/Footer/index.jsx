@@ -1,17 +1,17 @@
 'use client'
 
-import { Anchor, Container, Group } from '@mantine/core';
+import { Anchor, Container, Group } from '@mantine/core'
 
-import { useAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider'
 
-import classes from './Footer.module.css';
+import classes from './Footer.module.css'
 
 const links = [
   { link: '#', label: 'Contact' },
   { link: '#', label: 'Privacy' },
   { link: '#', label: 'Blog' },
   { link: '#', label: 'Careers' },
-];
+]
 
 export default function Footer() {
   // Hooks
@@ -27,7 +27,7 @@ export default function Footer() {
     >
       {link.label}
     </Anchor>
-  ));
+  ))
 
   return (
     <div className={classes.footer} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
@@ -35,5 +35,5 @@ export default function Footer() {
         <Group className={classes.links}>{items}</Group>
       </Container>
     </div>
-  );
+  )
 }
