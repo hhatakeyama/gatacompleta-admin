@@ -1,6 +1,6 @@
 'use client'
 
-import { Center, Grid, Loader, Stack } from '@mantine/core'
+import { Box, Center, Grid, Loader, Stack } from '@mantine/core'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -48,8 +48,10 @@ export default function Photos() {
   if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
-    <Stack>
-      {data && <AcompanhanteForm.Photos onFileUpload={handleFileUpload} />}
+    <Stack align="center">
+      <Box maw={600} mt="sm">
+        {data && <AcompanhanteForm.Photos onFileUpload={handleFileUpload} />}
+      </Box>
       <Grid>
         {data?.fotos?.map((foto, index) => {
           return (

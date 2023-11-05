@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar, Badge, Button, Center, Container, Group, Loader, Stack, Tabs, Text } from '@mantine/core'
+import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Tabs, Text } from '@mantine/core'
 import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -74,16 +74,14 @@ export default function Acompanhantes() {
     <Container size="100%" mb="50px">
       <Stack>
         <Group wrap="nowrap">
-          <Avatar src={"https://admin.gatacompleta.com" + fotoDestaque} size={200} radius="md" />
+          <Image alt="Foto destaque" src={"https://admin.gatacompleta.com" + fotoDestaque} width={200} height={200} radius="md" />
 
           <div>
-            <Text fz="xs" tt="uppercase" fw={700} c="dimmed">
-              {data?.status === '1' ? (
-                <Badge size="sm" color="green">Ativo</Badge>
-              ) : (
-                <Badge size="sm" color="red">Inativo</Badge>
-              )}
-            </Text>
+            {data?.status === '1' ? (
+              <Badge size="sm" color="green">Ativo</Badge>
+            ) : (
+              <Badge size="sm" color="red">Inativo</Badge>
+            )}
             <Text fz="lg" fw={500} className={classes.profileName}>
               {data?.id} - {data?.nome}
             </Text>

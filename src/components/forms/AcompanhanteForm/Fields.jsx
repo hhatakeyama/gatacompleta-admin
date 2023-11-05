@@ -1,15 +1,15 @@
-import { Button, Checkbox, FileInput, InputBase, Select, Stack, Textarea, TextInput } from '@mantine/core'
+import { Button, Checkbox, FileInput, InputBase, Select, TextInput } from '@mantine/core'
 import { IconFileUpload } from '@tabler/icons-react'
 import { IMaskInput } from 'react-imask'
 
-const acceptTypes = ['image/gif', 'image/png', 'image/jpeg', 'image/webp', 'image/bmp']
+const acceptTypes = ['image/gif', 'image/png', 'image/jpeg']
 
 export const NameField = ({ inputProps }) => (
-  <TextInput {...inputProps} label="Nome*" placeholder="Nome" type="text" />
+  <TextInput {...inputProps} label="Nome" placeholder="Nome" type="text" />
 )
 
 export const EmailField = ({ inputProps }) => (
-  <TextInput {...inputProps} label="E-mail*" placeholder="E-mail" type="email" />
+  <TextInput {...inputProps} label="E-mail" placeholder="E-mail" type="email" />
 )
 
 export const PasswordField = ({ inputProps }) => (
@@ -26,11 +26,7 @@ export const ConfirmPasswordField = ({ inputProps }) => (
 )
 
 export const OldPasswordField = ({ inputProps }) => (
-  <TextInput {...inputProps} label="Senha Antiga*" placeholder="Senha Antiga" type="password" />
-)
-
-export const AboutField = ({ inputProps }) => (
-  <Textarea {...inputProps} label="Sobre" placeholder="Sobre" rows={4} />
+  <TextInput {...inputProps} label="Senha Antiga" placeholder="Senha Antiga" type="password" />
 )
 
 export const StateField = ({ inputProps }) => (
@@ -69,13 +65,6 @@ export const PhoneNumberField = ({ inputProps }) => (
 
 export const WhatsappCheckboxField = ({ inputProps }) => (
   <Checkbox {...inputProps} label="Whatsapp?" />
-)
-
-export const PhoneField = ({ phoneNumberProps, whatsappProps }) => (
-  <Stack>
-    <PhoneNumberField inputProps={{ ...phoneNumberProps }} />
-    <WhatsappCheckboxField inputProps={{ ...whatsappProps }} />
-  </Stack>
 )
 
 export const PictureField = ({ inputProps }) => (

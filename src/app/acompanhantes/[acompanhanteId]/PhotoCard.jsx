@@ -1,4 +1,4 @@
-import { Avatar, Button, ButtonGroup, Card, Group, TextInput } from '@mantine/core'
+import { Button, ButtonGroup, Card, Group, Image, TextInput } from '@mantine/core'
 import { IconPlus, IconRotate, IconRotateClockwise, IconStar, IconStarFilled, IconX } from '@tabler/icons-react'
 import React from 'react'
 
@@ -48,9 +48,9 @@ export default function PhotoCard({ acompanhanteData, fotoData, index }) {
       )}
       <Group justify="center">
         {newPhoto ? (
-          <Avatar alt="Nova foto" color="violet" src={fotoData} radius="xs" size={150} />
+          <Image alt="Nova foto" color="violet" src={fotoData} radius="xs" width={200} height={200} fit="contain" />
         ) : (
-          <Avatar alt={fotoData.nome} color="violet" src={`https://admin.gatacompleta.com${fotoData.path}/210x314-${fotoData.nome}`} radius="xs" size={150} />
+          <Image alt={fotoData.nome} color="violet" src={`https://admin.gatacompleta.com${fotoData.path}/210x314-${fotoData.nome}`} radius="xs" width={200} height={200} fit="contain" />
         )}
       </Group>
       <Card.Section inheritPadding py="xs">
