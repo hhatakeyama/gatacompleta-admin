@@ -24,7 +24,7 @@ export default function Acompanhantes() {
   const [tab, setTab] = useState('profile')
 
   // Fetch
-  const { data } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
 
   // Constants
   const tabs = [
@@ -115,7 +115,7 @@ export default function Acompanhantes() {
           <Tabs.Panel value="profile">
             {data && (
               <Container size="100%" mb="xl" mt="xs">
-                <AcompanhanteForm.Basic acompanhanteData={data} />
+                <AcompanhanteForm.Basic acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>

@@ -1,30 +1,64 @@
 import { Button, ButtonGroup, Card, Group, Image, TextInput } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { IconPlus, IconRotate, IconRotateClockwise, IconStar, IconStarFilled, IconX } from '@tabler/icons-react'
 import React from 'react'
 
-export default function PhotoCard({ acompanhanteData, fotoData, index }) {
+import { api } from '@/utils'
+import errorHandler from '@/utils/errorHandler'
+
+export default function PhotoCard({ acompanhanteData, fotoData, index, mutate }) {
   // Constants
   const newPhoto = !fotoData.id
   const destacado = fotoData.destaque === "1"
-  
+
   // Actions
-  const handleHighlight = (foto) => {
-    // "/acompanhantes/fotos/" + id + "/destacar"
-    console.log(foto)
+  const handleHighlight = () => {
+    return api
+      .post(`/admin/acompanhantes/${acompanhanteData.id}/fotos/${fotoData.id}/destacar`)
+      .then(() => {
+        mutate?.()
+        notifications.show({
+          title: 'Sucesso',
+          message: 'Foto destacada com sucesso!',
+          color: 'green'
+        })
+      })
+      .catch(error => {
+        notifications.show({
+          title: 'Erro',
+          message: errorHandler(error?.response?.data?.errors)?.messages || 'Erro ao destacar foto.',
+          color: 'red'
+        })
+      })
   }
 
-  const handleSort = (foto) => {
+  const handleSort = () => {
     // "/acompanhantes/fotos/" + id + "/destacar"
-    console.log(foto)
+    console.log(fotoData)
   }
 
-  const handleRotate = (foto, direcao) => {
+  const handleRotate = (direcao) => {
     let rotacionar = "girar-esquerda"
     if (direcao === "right") {
       rotacionar = "girar-direita"
     }
-    const url = `/admin/acompanhantes/${acompanhanteData.id}/fotos/${fotoData.id}/${rotacionar}/`
-    console.log(foto, direcao, url)
+    return api
+      .post(`/admin/acompanhantes/${acompanhanteData.id}/fotos/${fotoData.id}/${rotacionar}`)
+      .then(() => {
+        mutate?.()
+        notifications.show({
+          title: 'Sucesso',
+          message: 'Foto girada com sucesso!',
+          color: 'green'
+        })
+      })
+      .catch(error => {
+        notifications.show({
+          title: 'Erro',
+          message: errorHandler(error?.response?.data?.errors)?.messages || 'Erro ao girar foto.',
+          color: 'red'
+        })
+      })
   }
 
   return (
@@ -39,7 +73,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index }) {
       ) : (
         <Card.Section inheritPadding py="xs">
           <Group justify="center">
-            <TextInput defaultValue={index} styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }} onChange={() => handleSort(foto)} />
+            <TextInput defaultValue={index} styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }} onChange={() => handleSort()} />
             <Button variant={destacado ? "filled" : "outline"} color="yellow" onClick={() => !destacado ? handleHighlight(fotoData) : null} leftSection={destacado ? <IconStarFilled /> : <IconStar />}>
               {destacado ? "Destacado" : "Destacar"}
             </Button>
@@ -57,15 +91,15 @@ export default function PhotoCard({ acompanhanteData, fotoData, index }) {
         <Group justify="center">
           <ButtonGroup>
             {!newPhoto && (
-              <Button title="Rotacionar esquerda" color="blue" onClick={() => handleRotate(fotoData, 'left')}>
+              <Button title="Rotacionar esquerda" color="blue" onClick={() => handleRotate('left')}>
                 <IconRotate />
               </Button>
             )}
-            <Button color="red" onClick={() => handleRemove(fotoData)}>
+            <Button color="red" onClick={() => handleRemove()}>
               <IconX />
             </Button>
             {!newPhoto && (
-              <Button title="Rotacionar direita" color="blue" onClick={() => handleRotate(fotoData, 'right')}>
+              <Button title="Rotacionar direita" color="blue" onClick={() => handleRotate('right')}>
                 <IconRotateClockwise />
               </Button>
             )}

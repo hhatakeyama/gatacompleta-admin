@@ -1,20 +1,20 @@
 import { Alert, Button, Grid, Group, LoadingOverlay, Select, Stack, Textarea, TextInput, useMantineTheme } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
 import { IconBrandSkype, IconBrandYoutube } from '@tabler/icons-react'
 import React, { useState } from 'react'
-import { useSWRConfig } from 'swr'
 
 import { useAuth } from '@/providers/AuthProvider'
 import { api, Yup } from '@/utils'
+import errorHandler from '@/utils/errorHandler'
 
 import * as Fields from './Fields'
 
-export default function Basic({ acompanhanteData }) {
+export default function Basic({ acompanhanteData, mutate }) {
   // Hooks
   const { isValidating } = useAuth()
   const theme = useMantineTheme()
-  const { mutate: mutateGlobal } = useSWRConfig()
   const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`)
 
   // States
@@ -23,10 +23,10 @@ export default function Basic({ acompanhanteData }) {
 
   // Constants
   const initialValues = {
-    nome: acompanhanteData?.usuario?.name || '',
+    name: acompanhanteData?.usuario?.name || '',
     email: acompanhanteData?.usuario?.email || '',
-    senha: '',
-    confirmSenha: '',
+    password: '',
+    confirmPassword: '',
     sobre: acompanhanteData?.sobre || '',
     ordem: acompanhanteData?.ordem || '',
     virtual: acompanhanteData?.virtual || '0',
@@ -51,16 +51,16 @@ export default function Basic({ acompanhanteData }) {
     acessorios: acompanhanteData?.acessorios || '',
     atende: acompanhanteData?.atende || '',
     locais: acompanhanteData?.locais || '',
-    viaja: acompanhanteData?.viaja || '',
+    viagem: acompanhanteData?.viagem || '',
     anal: acompanhanteData?.anal || '',
     adicionais: acompanhanteData?.adicionais || '',
   }
 
   const schema = Yup.object().shape({
-    nome: Yup.string().required(),
+    name: Yup.string().required(),
     email: Yup.string().email().required(),
-    senha: Yup.string().nullable(),
-    confirmSenha: Yup.string().oneOf([Yup.ref('senha'), null], 'Senhas diferentes'),
+    password: Yup.string().nullable(),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Senhas diferentes'),
     sobre: Yup.string().nullable(),
     ordem: Yup.string().nullable(),
     virtual: Yup.string().nullable(),
@@ -103,42 +103,30 @@ export default function Basic({ acompanhanteData }) {
     setError(null)
     setIsSubmitting(true)
     if (form.isDirty()) {
-      console.log(newValues)
-      // api
-      //   // .patch(`/admin/accounts/me/`, { user: newValues }) /*ou*/ .post(`/admin/acompanhantes/${acompanhante?.id}/`) // Verificar usuário logado no painel
-      //   .then(response => {
-      //     mutateGlobal(`/admin/accounts/me/`)
-      //     showNotification({
-      //       title: 'Sucesso',
-      //       message: successMessage,
-      //       color: 'blue'
-      //     })
-      //     return response?.data?.uid
-      //   })
-      //   .catch(errorHandler)
-      //   .finally(() => setIsSubmitting(false))
+      return api
+        .patch(`/admin/acompanhantes/${acompanhanteData?.usuario?.id}/`, {
+          ...newValues, ...(newValues ? { password_confirmation: newValues.confirmPassword } : {})
+        }) // Verificar usuário logado no painel
+        .then(() => {
+          form.reset()
+          setTimeout(() => mutate(), 2000)
+          notifications.show({
+            title: 'Sucesso',
+            message: 'Dados atualizados com sucesso!',
+            color: 'green'
+          })
+        })
+        .catch(error => {
+          notifications.show({
+            title: 'Erro',
+            message:
+              errorHandler(error.response.data.errors).messages ||
+              'Erro ao atualizar os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.',
+            color: 'red'
+          })
+        })
+        .finally(() => setIsSubmitting(false))
     }
-
-    // if (newValues.senha) {
-    //   api
-    //     .post(`/admin/acompanhantes/${acompanhante?.id}/`, {
-    //       oldSenha: newValues.oldSenha,
-    //       newSenha: newValues.senha
-    //     })
-    //     .then(() => {
-    //       showNotification({
-    //         title: 'Sucesso',
-    //         message: 'Senha atualizada com sucesso',
-    //         color: 'blue'
-    //       })
-    //       router.reload()
-    //     })
-    //     .catch(response => {
-    //       if (response?.error) setError(response.error)
-    //     })
-    //     .finally(() => setIsSubmitting(false))
-    // }
-    setIsSubmitting(false)
   }
 
   return (
@@ -149,16 +137,16 @@ export default function Basic({ acompanhanteData }) {
           <Stack>
             <Grid>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.NameField inputProps={{ ...form.getInputProps('nome'), required: true, disabled: isSubmitting }} />
+                <Fields.NameField inputProps={{ ...form.getInputProps('name'), required: true, disabled: isSubmitting }} />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
                 <Fields.EmailField inputProps={{ ...form.getInputProps('email'), required: true, disabled: isSubmitting }} />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.PasswordField inputProps={{ ...form.getInputProps('senha'), disabled: isSubmitting }} />
+                <Fields.PasswordField inputProps={{ ...form.getInputProps('password'), disabled: isSubmitting }} />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.ConfirmPasswordField inputProps={{ ...form.getInputProps('confirmSenha'), disabled: isSubmitting }} />
+                <Fields.ConfirmPasswordField inputProps={{ ...form.getInputProps('confirmPassword'), disabled: isSubmitting }} />
               </Grid.Col>
               <Grid.Col span={12}>
                 <Textarea {...form.getInputProps('sobre')} disabled={isSubmitting} label="Sobre" placeholder="Sobre" rows={6} />
@@ -314,7 +302,7 @@ export default function Basic({ acompanhanteData }) {
                 <TextInput {...form.getInputProps('locais')} disabled={isSubmitting} label="Atende em (atende em motel, local próprio, etc...)" placeholder="Atende em (atende em motel, local próprio, etc...)" type="text" />
               </Grid.Col>
               <Grid.Col span={6}>
-                <TextInput {...form.getInputProps('viaja')} disabled={isSubmitting} label="Viaja (sim, não, a combinar, etc...)" placeholder="Viaja" type="text" />
+                <TextInput {...form.getInputProps('viagem')} disabled={isSubmitting} label="Viaja (sim, não, a combinar, etc...)" placeholder="Viaja" type="text" />
               </Grid.Col>
               <Grid.Col span={6}>
                 <TextInput {...form.getInputProps('anal')} disabled={isSubmitting} label="Anal (sim, não, a combinar, etc...)" placeholder="Anal" type="text" />

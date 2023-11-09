@@ -8,7 +8,7 @@ import { fetcher } from '@/utils'
 
 export default function Providers({ children }) {
   return (
-    <SWRConfig value={{ fetcher }}>
+    <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
       <MantineProvider defaultColorScheme="dark">
         <AuthProvider>
           {children}

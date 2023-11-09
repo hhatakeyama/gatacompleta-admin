@@ -19,7 +19,7 @@ export default function Photos() {
   const [picture, setPicture] = useState(null)
 
   // Fetch
-  const { data } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
 
   // Actions
   const handleFileUpload = (payload) => {
@@ -33,6 +33,27 @@ export default function Photos() {
     if (filteredFiles) {
       const reader = new FileReader()
       reader.onloadend = () => {
+        return api
+          .post(`/admin/acompanhantes/${acompanhanteData?.usuario?.id}/fotos`, { picture: reader.result }) // Verificar usuário logado no painel
+          .then(() => {
+            form.reset()
+            setTimeout(() => mutate(), 2000)
+            notifications.show({
+              title: 'Sucesso',
+              message: 'Dados atualizados com sucesso!',
+              color: 'green'
+            })
+          })
+          .catch(error => {
+            notifications.show({
+              title: 'Erro',
+              message:
+                errorHandler(error.response.data.errors).messages ||
+                'Erro ao atualizar os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.',
+              color: 'red'
+            })
+          })
+          .finally(() => setIsSubmitting(false))
         // patchProfile({ picture: reader.result }, 'Foto atualizada com sucesso')
       }
       reader.readAsDataURL(filteredFiles)
@@ -56,7 +77,7 @@ export default function Photos() {
         {data?.fotos?.map((foto, index) => {
           return (
             <Grid.Col key={foto.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
-              <PhotoCard acompanhanteData={data} fotoData={foto} index={index + 1} />
+              <PhotoCard acompanhanteData={data} fotoData={foto} index={index + 1} mutate={mutate} />
             </Grid.Col>
           )
         })}
