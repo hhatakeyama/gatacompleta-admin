@@ -1,6 +1,7 @@
 'use client'
 
 import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Tabs, Text } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -24,8 +25,8 @@ export default function Acompanhantes() {
   const [tab, setTab] = useState('profile')
 
   // Fetch
-  const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
-
+  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  
   // Constants
   const tabs = [
     { id: 'profile', label: 'Perfil', icon: <IconUser style={{ height: 12, width: 12 }} /> },
@@ -37,6 +38,11 @@ export default function Acompanhantes() {
   useEffect(() => {
     if (isAuthenticated === false) return router.push('/')
   }, [isAuthenticated, router])
+
+  if (error?.response?.data?.message === "Unauthorized") {
+    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
+    return router.push('/')
+  }
 
   if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
@@ -122,7 +128,7 @@ export default function Acompanhantes() {
           <Tabs.Panel value="photos">
             {data && (
               <Container size="100%" mb="xl" mt="xs">
-                <Photos acompanhanteData={data} />
+                <Photos acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>

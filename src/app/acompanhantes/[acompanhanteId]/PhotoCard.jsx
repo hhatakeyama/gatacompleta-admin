@@ -1,20 +1,22 @@
 import { Button, ButtonGroup, Card, Group, Image, TextInput } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconPlus, IconRotate, IconRotateClockwise, IconStar, IconStarFilled, IconX } from '@tabler/icons-react'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { api } from '@/utils'
-import errorHandler from '@/utils/errorHandler'
 
 export default function PhotoCard({ acompanhanteData, fotoData, index, mutate }) {
   // Constants
   const newPhoto = !fotoData.id
   const destacado = fotoData.destaque === "1"
 
+  // States
+  const [order, setOrder] = useState(index)
+
   // Actions
   const handleHighlight = () => {
     return api
-      .post(`/admin/acompanhantes/${acompanhanteData.id}/fotos/${fotoData.id}/destacar`)
+      .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/destacar`)
       .then(() => {
         mutate?.()
         notifications.show({
@@ -26,24 +28,40 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       .catch(error => {
         notifications.show({
           title: 'Erro',
-          message: errorHandler(error?.response?.data?.errors)?.messages || 'Erro ao destacar foto.',
+          message: error?.response?.data?.message || 'Erro ao destacar foto.',
           color: 'red'
         })
       })
   }
 
   const handleSort = () => {
-    // "/acompanhantes/fotos/" + id + "/destacar"
-    console.log(fotoData)
+    if (order && Number(fotoData.ordem) !== Number(order))
+      return api
+        .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/ordenar/${order}`)
+        .then(() => {
+          mutate?.()
+          notifications.show({
+            title: 'Sucesso',
+            message: 'Foto ordenada com sucesso!',
+            color: 'green'
+          })
+        })
+        .catch(error => {
+          notifications.show({
+            title: 'Erro',
+            message: error?.response?.data?.message || 'Erro ao ordenar foto.',
+            color: 'red'
+          })
+        })
   }
 
-  const handleRotate = (direcao) => {
+  const handleRotate = async (direcao) => {
     let rotacionar = "girar-esquerda"
     if (direcao === "right") {
       rotacionar = "girar-direita"
     }
-    return api
-      .post(`/admin/acompanhantes/${acompanhanteData.id}/fotos/${fotoData.id}/${rotacionar}`)
+    await api
+      .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/${rotacionar}`)
       .then(() => {
         mutate?.()
         notifications.show({
@@ -55,7 +73,27 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       .catch(error => {
         notifications.show({
           title: 'Erro',
-          message: errorHandler(error?.response?.data?.errors)?.messages || 'Erro ao girar foto.',
+          message: error?.response?.data?.message || 'Erro ao girar foto.',
+          color: 'red'
+        })
+      })
+  }
+
+  const handleRemove = () => {
+    return api
+      .delete(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}`)
+      .then(() => {
+        mutate?.()
+        notifications.show({
+          title: 'Sucesso',
+          message: 'Foto deletada com sucesso!',
+          color: 'green'
+        })
+      })
+      .catch(error => {
+        notifications.show({
+          title: 'Erro',
+          message: error?.response?.data?.message || 'Erro ao deletar foto.',
           color: 'red'
         })
       })
@@ -73,7 +111,12 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       ) : (
         <Card.Section inheritPadding py="xs">
           <Group justify="center">
-            <TextInput defaultValue={index} styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }} onChange={() => handleSort()} />
+            <TextInput
+              value={order}
+              onChange={e => setOrder(e.target.value || '')}
+              onBlur={handleSort}
+              styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }}
+            />
             <Button variant={destacado ? "filled" : "outline"} color="yellow" onClick={() => !destacado ? handleHighlight(fotoData) : null} leftSection={destacado ? <IconStarFilled /> : <IconStar />}>
               {destacado ? "Destacado" : "Destacar"}
             </Button>
@@ -84,7 +127,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
         {newPhoto ? (
           <Image alt="Nova foto" color="violet" src={fotoData} radius="xs" width={200} height={200} fit="contain" />
         ) : (
-          <Image alt={fotoData.nome} color="violet" src={`https://admin.gatacompleta.com${fotoData.path}/210x314-${fotoData.nome}`} radius="xs" width={200} height={200} fit="contain" />
+          <Image alt={fotoData.nome} color="violet" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoData.path}/210x314-${fotoData.nome}?i=${Math.random()}`} radius="xs" width={200} height={200} fit="contain" />
         )}
       </Group>
       <Card.Section inheritPadding py="xs">
@@ -95,7 +138,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
                 <IconRotate />
               </Button>
             )}
-            <Button color="red" onClick={() => handleRemove()}>
+            <Button color="red" onClick={handleRemove}>
               <IconX />
             </Button>
             {!newPhoto && (
