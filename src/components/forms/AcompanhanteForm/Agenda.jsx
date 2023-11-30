@@ -7,22 +7,24 @@ import { api, Yup } from '@/utils'
 
 import * as Fields from './Fields'
 
-export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
+export default function Agenda({ acompanhanteId, agendaData, onSuccess }) {
   // States
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Constants
   const initialValues = {
     acompanhante_id: acompanhanteId,
-    numero: phoneData?.numero || '',
-    whatsapp: phoneData?.whatsapp === "1" ? true : false,
-    operadora_id: "1",
-    status: "1",
+    estado_id: agendaData?.cidade?.estado_id || '',
+    cidade_id: agendaData?.cidade?.cidade_id || '',
+    dataInicio: agendaData?.dataInicio || '',
+    dataFim: agendaData?.dataFim || '',
   }
 
   const schema = Yup.object().shape({
-    numero: Yup.string(),
-    whatsapp: Yup.string(),
+    uf: Yup.string(),
+    cidade: Yup.string(),
+    dataInicio: Yup.string(),
+    dataFim: Yup.string(),
   })
 
   // Mantine form
@@ -36,15 +38,15 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
   // Actions
   const handleSubmit = async (newValues) => {
     setIsSubmitting(true)
-    if (phoneData) {
+    if (agendaData) {
       return api
-        .patch(`/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`, newValues)
+        .patch(`/admin/acompanhantes/${acompanhanteId}/agendas/${agendaData.id}`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone atualizado com sucesso!', color: 'green' })
+          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda atualizada com sucesso!', color: 'green' })
         })
         .catch(response => {
-          showNotification({ title: 'Erro', message: response?.data?.message || 'Ocorreu um erro ao atualizar o telefone. Tente novamente mais tarde.', color: 'red' })
+          showNotification({ title: 'Erro', message: response?.data?.message || 'Ocorreu um erro ao atualizar a agenda. Tente novamente mais tarde.', color: 'red' })
         })
         .finally(() => {
           setIsSubmitting(false)
@@ -53,15 +55,15 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
         })
     } else {
       return api
-        .post(`/admin/acompanhantes/${acompanhanteId}/telefones`, newValues)
+        .post(`/admin/acompanhantes/${acompanhanteId}/agendas`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone cadastrado com sucesso!', color: 'green' })
+          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda cadastrada com sucesso!', color: 'green' })
         })
         .catch(response => {
           showNotification({
             title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao cadastrar o telefone. Tente novamente mais tarde.',
+            message: response?.data?.message || 'Ocorreu um erro ao cadastrar a agenda. Tente novamente mais tarde.',
             color: 'red'
           })
         })
@@ -74,17 +76,17 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
 
   const handleDelete = async () => {
     setIsSubmitting(true)
-    if (phoneData) {
+    if (agendaData) {
       return api
-        .delete(`/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`)
+        .delete(`/admin/acompanhantes/${acompanhanteId}/agendas/${agendaData.id}`)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone removido com sucesso!', color: 'green' })
+          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda removida com sucesso!', color: 'green' })
         })
         .catch(response => {
           showNotification({
             title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao remover o telefone. Tente novamente mais tarde.',
+            message: response?.data?.message || 'Ocorreu um erro ao remover a agenda. Tente novamente mais tarde.',
             color: 'red'
           })
         })
@@ -95,25 +97,21 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
       <Grid align="center">
-        <Grid.Col span={{ base: 12, sm: 6 }}>
-          <Fields.PhoneNumberField
-            inputProps={{
-              ...form.getInputProps('numero'),
-              disabled: isSubmitting,
-            }}
-          />
+        <Grid.Col span={4}>
+          <Fields.StateField inputProps={{ ...form.getInputProps('uf'), disabled: isSubmitting }} />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6 }}>
-          <Fields.WhatsappCheckboxField
-            inputProps={{
-              ...form.getInputProps('whatsapp', { type: 'checkbox' }),
-              disabled: isSubmitting
-            }}
-          />
+        <Grid.Col span={8}>
+          <Fields.CityField inputProps={{ ...form.getInputProps('cidade_id'), disabled: isSubmitting }} />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Fields.DateField inputProps={{ ...form.getInputProps('data_inicio'), disabled: isSubmitting }} />
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <Fields.DateField inputProps={{ ...form.getInputProps('data_fim'), disabled: isSubmitting }} />
         </Grid.Col>
       </Grid>
       <Group mt="xl">
-        {phoneData && (
+        {agendaData && (
           <Button
             color="red"
             type="button"
@@ -129,7 +127,7 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
           size="sm"
           disabled={!form.isValid() || !form.isDirty()}
           loading={isSubmitting}>
-          {phoneData ? "Editar" : "Salvar"}
+          {agendaData ? "Editar" : "Salvar"}
         </Button>
       </Group>
     </form>

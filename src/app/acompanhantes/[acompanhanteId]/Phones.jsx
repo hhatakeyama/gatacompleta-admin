@@ -15,7 +15,7 @@ export default function Phones() {
   const router = useRouter()
 
   // Fetch
-  const { data } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
 
   // Effects
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function Phones() {
           <Stack>
             {data?.telefones?.map(telefone => (
               <Card key={telefone.id} style={{ width: '100%' }}>
-                <AcompanhanteForm.Phones acompanhanteId={acompanhanteId} phoneData={telefone} />
+                <AcompanhanteForm.Phones acompanhanteId={acompanhanteId} phoneData={telefone} onSuccess={() => mutate()} />
               </Card>
             ))}
           </Stack>
@@ -39,7 +39,7 @@ export default function Phones() {
         <Grid.Col span={{ base: 12, sm: 6 }}>
           Novo Telefone
           <Card>
-            <AcompanhanteForm.Phones acompanhanteId={acompanhanteId} />
+            <AcompanhanteForm.Phones acompanhanteId={acompanhanteId} onSuccess={() => mutate()} />
           </Card>
         </Grid.Col>
       </Grid>

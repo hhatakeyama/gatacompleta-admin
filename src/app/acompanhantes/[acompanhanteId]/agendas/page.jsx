@@ -1,41 +1,27 @@
 'use client'
 
-import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Tabs, Text } from '@mantine/core'
+import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser } from '@tabler/icons-react'
+import { IconAt, IconCalendar, IconPhoneCall } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { AcompanhanteForm } from '@/components/forms'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
 
-import classes from './Acompanhante.module.css'
-import Agenda from './Agenda'
-import Phones from './Phones'
-import Photos from './Photos'
+import Agenda from '../Agenda'
+import classes from './Agenda.module.css'
 
-export default function Acompanhantes() {
+export default function Agendas() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { acompanhanteId } = useParams()
   const router = useRouter()
 
-  // States
-  const [tab, setTab] = useState('profile')
-
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, error } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
   
-  // Constants
-  const tabs = [
-    { id: 'profile', label: 'Perfil', icon: <IconUser style={{ height: 12, width: 12 }} /> },
-    { id: 'photos', label: 'Fotos', icon: <IconPhoto style={{ height: 12, width: 12 }} /> },
-    { id: 'phones', label: 'Telefones', icon: <IconPhone style={{ height: 12, width: 12 }} /> },
-    { id: 'agenda', label: 'Agenda', icon: <IconCalendar style={{ height: 12, width: 12 }} /> },
-  ]
-
   // Effects
   useEffect(() => {
     if (isAuthenticated === false) return router.push('/')
@@ -112,43 +98,9 @@ export default function Acompanhantes() {
           </div>
         </Group>
 
-        <Tabs value={tab} onChange={setTab}>
-          <Tabs.List>
-            {tabs.map(item => (
-              <Tabs.Tab key={item.id} value={item.id} leftSection={item.icon}>
-                {item.label}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-          <Tabs.Panel value="profile">
-            {data && (
-              <Container size="100%" mb="xl" mt="xs">
-                <AcompanhanteForm.Basic acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="photos">
-            {data && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Photos acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="phones">
-            {data && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Phones acompanhanteData={data} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="agenda">
-            {data && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Agenda acompanhanteData={data} />
-              </Container>
-            )}
-          </Tabs.Panel>
-        </Tabs>
+        <Container size="100%" mb="xl" mt="xs">
+          <Agenda acompanhanteData={data} />
+        </Container>
       </Stack>
     </Container>
   )

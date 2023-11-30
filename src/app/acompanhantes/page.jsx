@@ -1,6 +1,7 @@
 'use client'
 
 import { Badge, Box, Button, Center, Container, Group, Loader, Modal, rem, ScrollArea, Table, Text, TextInput } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
 import { IconExternalLink, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -8,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
-import { dateToHuman } from '@/utils'
+import { api, dateToHuman } from '@/utils'
 
 import classes from './TableSort.module.css'
 
@@ -20,14 +21,32 @@ export default function Acompanhantes() {
   // States
   const [search, setSearch] = useState('')
   const [opened, setOpened] = useState(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [acompanhantes, setAcompanhantes] = useState([])
 
   // Fetch
-  const { data } = useFetch([isAuthenticated ? '/admin/acompanhantes/' : null, { busca: search }])
+  const { data, mutate } = useFetch([isAuthenticated ? '/admin/acompanhantes/' : null, { busca: search }])
 
   // Actions
   const handleDelete = () => {
-
+    setIsDeleting(true)
+    if (opened?.usuario?.id) {
+      return api
+        .delete(`/admin/acompanhantes/${opened.usuario.id}`)
+        .then(response => {
+          mutate?.()
+          setOpened(null)
+          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Acompanhante desativada com sucesso!', color: 'green' })
+        })
+        .catch(response => {
+          showNotification({
+            title: 'Erro',
+            message: response?.data?.message || 'Ocorreu um erro ao desativar acompanhante. Tente novamente mais tarde.',
+            color: 'red'
+          })
+        })
+        .finally(() => setIsDeleting(false))
+    }
   }
 
   // Effects
@@ -110,7 +129,7 @@ export default function Acompanhantes() {
             }
             <Button size="compact-sm" component="a" color="blue" title="Agenda" href={`/acompanhantes/${row.id}/agenda`}>Agenda</Button>
             <Button size="compact-sm" component="a" color="orange" title="Editar" href={`/acompanhantes/${row.id}`}>Editar</Button>
-            <Button size="compact-sm" color="red" title="Excluir" onClick={() => setOpened(row)}>Excluir</Button>
+            <Button size="compact-sm" color="red" title="Desativar" disabled={isDeleting} onClick={() => setOpened(row)}>Desativar</Button>
           </Group>
         </Table.Td>
       </Table.Tr>
@@ -157,9 +176,9 @@ export default function Acompanhantes() {
           </Table>
         </ScrollArea>
       </Container>
-      <Modal centered opened={!!opened} onClose={() => setOpened(null)} title="Excluir acompanhante">
-        Tem certeza que deseja excluir a acompanhante?
-        <Button color="red" onClick={handleDelete}>Excluir</Button>
+      <Modal centered opened={!!opened} onClose={() => setOpened(null)} title="Desativar acompanhante">
+        Tem certeza que deseja desativar a acompanhante {opened?.name}?
+        <Button color="red" onClick={handleDelete}>Desativar</Button>
       </Modal>
     </>
   )
