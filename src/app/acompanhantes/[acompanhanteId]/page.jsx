@@ -121,30 +121,30 @@ export default function Acompanhantes() {
             ))}
           </Tabs.List>
           <Tabs.Panel value="profile">
-            {data && (
+            {data && tab === 'profile' && (
               <Container size="100%" mb="xl" mt="xs">
                 <AcompanhanteForm.Basic acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>
           <Tabs.Panel value="photos">
-            {data && (
+            {data && tab === 'photos' && (
               <Container size="100%" mb="xl" mt="xs">
                 <Photos acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>
           <Tabs.Panel value="phones">
-            {data && (
+            {data && tab === 'phones' && (
               <Container size="100%" mb="xl" mt="xs">
                 <Phones acompanhanteData={data} />
               </Container>
             )}
           </Tabs.Panel>
           <Tabs.Panel value="agenda">
-            {data && (
+            {data && tab === 'agenda' && (
               <Container size="100%" mb="xl" mt="xs">
-                <Agenda acompanhanteData={data} />
+                <Agenda acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>

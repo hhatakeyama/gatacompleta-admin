@@ -98,9 +98,7 @@ export default function Agendas() {
           </div>
         </Group>
 
-        <Container size="100%" mb="xl" mt="xs">
-          <Agenda acompanhanteData={data} />
-        </Container>
+        <Agenda acompanhanteData={data} />
       </Stack>
     </Container>
   )

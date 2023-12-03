@@ -1,5 +1,4 @@
 import { Button, Checkbox, FileInput, InputBase, Select, TextInput } from '@mantine/core'
-import { DatePickerInput } from '@mantine/dates'
 import { IconFileUpload } from '@tabler/icons-react'
 import { IMaskInput } from 'react-imask'
 
@@ -35,10 +34,6 @@ export const StateField = ({ inputProps }) => (
     {...inputProps}
     label="UF"
     placeholder="UF"
-    data={[
-      { value: 'react', label: 'React' },
-      { value: 'ng', label: 'Angular' },
-    ]}
   />
 )
 
@@ -47,17 +42,12 @@ export const CityField = ({ inputProps }) => (
     {...inputProps}
     label="Cidade"
     placeholder="Cidade"
-    data={[
-      { value: 'react', label: 'React' },
-      { value: 'ng', label: 'Angular' },
-    ]}
   />
 )
 
 export const DateField = ({ inputProps }) => (
-  <DatePickerInput
-    label="Data"
-    placeholder="Data"
+  <TextInput
+    type="date"
     {...inputProps}
   />
 )
