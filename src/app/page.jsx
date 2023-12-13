@@ -28,7 +28,7 @@ export default function Home() {
   return (
     <Container>
       <Stack>
-        {permissionsData?.indexOf('admin') !== -1 && (
+        {permissionsData?.permissions?.indexOf('s') !== -1 && (
           <>
             <Text><strong>Acompanhantes</strong></Text>
             {isLoading ? <Loader color="blue" /> : (
@@ -40,14 +40,14 @@ export default function Home() {
         <Text>Acesse o menu abaixo.</Text>
 
         <Group>
-          {permissionsData?.indexOf('admin') !== -1 && (
+          {permissionsData?.permissions?.indexOf('s') !== -1 && (
             <>
               <Button component="a" href="/anuncios">Anúncios</Button>
               <Button component="a" href="/acompanhantes">Acompanhantes</Button>
               <Button component="a" href="/usuarios">Usuários</Button>
             </>
           )}
-          {permissionsData?.indexOf('acompanhante') !== -1 && (
+          {permissionsData?.permissions?.indexOf('g') !== -1 && (
             <>
               <Button component="a" href="/acompanhante">Acompanhante</Button>
             </>

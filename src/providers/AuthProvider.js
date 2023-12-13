@@ -22,17 +22,17 @@ function useProvideAuth() {
   const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [isValidating, setIsValidating] = useState(null)
-  const [permissionsData, setPermissionsData] = useState(['admin'])
-  const permissionsIsValidating = false
+  // const [permissionsData, setPermissionsData] = useState(['admin'])
+  // const permissionsIsValidating = false
 
   // // Fetch
   const { data: userData, isValidating: userIsValidating } = useFetch([
     !!isAuthenticated ? '/admin/accounts/me/' : null
   ])
 
-  // const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-  //   isAuthenticated === true ? '/accounts/permissions/' : null
-  // ])
+  const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
+    !!isAuthenticated ? '/admin/accounts/permissions/' : null
+  ])
 
   // Login with credentials
   const login = async (credentials) => {
