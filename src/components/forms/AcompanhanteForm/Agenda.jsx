@@ -45,10 +45,10 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
         .patch(`/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${agendaData.id}`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda atualizada com sucesso!', color: 'green' })
+          showNotification({ title: 'Sucesso', message: response?.message || 'Agenda atualizada com sucesso!', color: 'green' })
         })
         .catch(response => {
-          showNotification({ title: 'Erro', message: response?.data?.message || 'Ocorreu um erro ao atualizar a agenda. Tente novamente mais tarde.', color: 'red' })
+          showNotification({ title: 'Erro', message: response?.message || 'Ocorreu um erro ao atualizar a agenda. Tente novamente mais tarde.', color: 'red' })
         })
         .finally(() => {
           setIsSubmitting(false)
@@ -60,12 +60,12 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
         .post(`/admin/acompanhantes/${acompanhanteData.user_id}/agendas`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda cadastrada com sucesso!', color: 'green' })
+          showNotification({ title: 'Sucesso', message: response?.message || 'Agenda cadastrada com sucesso!', color: 'green' })
         })
         .catch(response => {
           showNotification({
             title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao cadastrar a agenda. Tente novamente mais tarde.',
+            message: response?.message || 'Ocorreu um erro ao cadastrar a agenda. Tente novamente mais tarde.',
             color: 'red'
           })
         })

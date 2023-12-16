@@ -1,6 +1,6 @@
 'use client'
 
-import { Badge, Box, Button, Center, Container, Group, Loader, Modal, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
+import { Badge, Box, Button, Center, Container, Group, Loader, Modal, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconExternalLink, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
@@ -19,13 +19,14 @@ export default function Acompanhantes() {
   const router = useRouter()
 
   // States
+  const [pagina, setPagina] = useState(1)
   const [search, setSearch] = useState('')
   const [searchFilter, setSearchFilter] = useState('')
   const [opened, setOpened] = useState(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
   // Fetch
-  const { data, mutate } = useFetch([isAuthenticated ? '/admin/acompanhantes' : null, { busca: searchFilter }])
+  const { data, mutate } = useFetch([isAuthenticated ? '/admin/acompanhantes' : null, { busca: searchFilter, pagina }])
   const { data: acompanhantes = [] } = data || {}
 
   // Actions
@@ -34,12 +35,12 @@ export default function Acompanhantes() {
       .patch(`/admin/acompanhantes/${acompanhanteId}/ordem`, { ordem: value })
       .then(response => {
         mutate()
-        showNotification({ title: 'Sucesso', message: response?.data?.message || 'Ordem da acompanhante atualizada com sucesso!', color: 'green' })
+        showNotification({ title: 'Sucesso', message: response?.message || 'Ordem da acompanhante atualizada com sucesso!', color: 'green' })
       })
       .catch(response => {
         showNotification({
           title: 'Erro',
-          message: response?.data?.message || 'Ocorreu um erro ao atualizar ordem da acompanhante. Tente novamente mais tarde.',
+          message: response?.message || 'Ocorreu um erro ao atualizar ordem da acompanhante. Tente novamente mais tarde.',
           color: 'red'
         })
       })
@@ -49,7 +50,7 @@ export default function Acompanhantes() {
     setIsDeleting(true)
     if (opened?.usuario?.id) {
       return api
-        .delete(`/admin/acompanhantes/${opened.usuario.id}`)
+        .delete(`/admin/acompanhantes/${opened.user_id}`)
         .then(response => {
           mutate?.()
           setOpened(null)
@@ -137,9 +138,11 @@ export default function Acompanhantes() {
                   ? row.fotoDestaque[0].path + '/210x314-' + row.fotoDestaque[0].nome
                   : (row.fotos && row.fotos.length > 0 ? row.fotos[0].path + '/210x314-' + row.fotos[0].nome : '/img/sem-foto.jpg')
                 return (
-                  <Table.Tr key={row.id} className={classes.tr}>
-                    <Table.Td className={classes.td}>{row.id}</Table.Td>
-                    <Table.Td className={classes.td}><Image alt="" src={"https://admin.gatacompleta.com" + fotoDestaque} width={54} height={80} /></Table.Td>
+                  <Table.Tr key={row.user_id} className={classes.tr}>
+                    <Table.Td className={classes.td}>{row.user_id}</Table.Td>
+                    <Table.Td className={classes.td}>
+                      <Image alt="" src={"https://admin.gatacompleta.com" + fotoDestaque} width={54} height={80} />
+                    </Table.Td>
                     <Table.Td className={classes.td}>
                       <Box display="flex" style={{ alignItems: 'center', gap: '5px' }}>
                         {row.nome}
@@ -161,7 +164,7 @@ export default function Acompanhantes() {
                         placeholder="Ordem"
                         onBlur={e => {
                           const { value } = e.target || {}
-                          if (Number(value) !== Number(row.ordem)) handleChangeOrdem(row.usuario.id, value)
+                          if (Number(value) !== Number(row.ordem)) handleChangeOrdem(row.user_id, value)
                         }}
                       />
                     </Table.Td>
@@ -170,8 +173,8 @@ export default function Acompanhantes() {
                         {row.whatsapp && row.url &&
                           <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${row.whatsapp}?text=${texto}`}>WhatsApp</Button>
                         }
-                        <Button size="compact-sm" component="a" color="blue" title="Agenda" href={`/acompanhantes/${row.id}/agendas`}>Agenda</Button>
-                        <Button size="compact-sm" component="a" color="orange" title="Editar" href={`/acompanhantes/${row.id}`}>Editar</Button>
+                        <Button size="compact-sm" component="a" color="blue" title="Agenda" href={`/acompanhantes/${row.user_id}/agendas`}>Agenda</Button>
+                        <Button size="compact-sm" component="a" color="orange" title="Editar" href={`/acompanhantes/${row.user_id}`}>Editar</Button>
                         <Button size="compact-sm" color="red" title="Desativar" disabled={isDeleting} onClick={() => setOpened(row)}>Desativar</Button>
                       </Group>
                     </Table.Td>
@@ -187,6 +190,15 @@ export default function Acompanhantes() {
                 </Table.Tr>
               )}
             </Table.Tbody>
+            <Table.Tfoot>
+              <Table.Tr>
+                <Table.Td colSpan={8}>
+                  <Center>
+                    <Pagination total={data?.last_page} defaultValue={pagina} onChange={setPagina} />
+                  </Center>
+                </Table.Td>
+              </Table.Tr>
+            </Table.Tfoot>
           </Table>
         </ScrollArea>
       </Container>

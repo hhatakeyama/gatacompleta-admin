@@ -83,5 +83,12 @@ export function datter(input, options = defaultOptions) {
 
 export const dateToHuman = (date) => {
   const dateObject = new Date(date)
-  return new Intl.DateTimeFormat('pt-BR', { timeZone: 'UTC' }).format(dateObject)
+  return new Intl.DateTimeFormat('pt-BR', {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    timeZone: 'UTC',
+  }).format(dateObject)
 }

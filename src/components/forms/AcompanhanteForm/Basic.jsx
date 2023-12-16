@@ -104,11 +104,12 @@ export default function Basic({ acompanhanteData, mutate }) {
     setIsSubmitting(true)
     if (form.isDirty()) {
       return api
-        .patch(`/admin/acompanhantes/${acompanhanteData?.usuario?.id}/`, {
+        .patch(`/admin/acompanhantes/${acompanhanteData?.user_id}/`, {
           ...newValues, ...(newValues ? { password_confirmation: newValues.confirmPassword } : {})
         }) // Verificar usuário logado no painel
         .then(() => {
-          form.reset()
+          form.resetDirty()
+          form.resetTouched()
           setTimeout(() => mutate(), 2000)
           notifications.show({
             title: 'Sucesso',

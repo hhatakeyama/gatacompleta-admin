@@ -91,7 +91,7 @@ export default function Acompanhantes() {
               <Badge size="sm" color="red">Inativo</Badge>
             )}
             <Text fz="lg" fw={500} className={classes.profileName}>
-              {data?.id} - {data?.nome}
+              {data?.nome}
             </Text>
             <Group wrap="nowrap" gap={10} mt={3}>
               <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />

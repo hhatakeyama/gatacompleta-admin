@@ -20,7 +20,7 @@ export default function Agendas() {
   const router = useRouter()
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
   
   // Effects
   useEffect(() => {
@@ -77,7 +77,7 @@ export default function Agendas() {
               <Badge size="sm" color="red">Inativo</Badge>
             )}
             <Text fz="lg" fw={500} className={classes.profileName}>
-              {data?.id} - {data?.nome}
+              {data?.nome}
             </Text>
             <Group wrap="nowrap" gap={10} mt={3}>
               <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />
@@ -98,7 +98,7 @@ export default function Agendas() {
           </div>
         </Group>
 
-        <Agenda acompanhanteData={data} />
+        <Agenda acompanhanteData={data} mutate={mutate} />
       </Stack>
     </Container>
   )
