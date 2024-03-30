@@ -32,7 +32,6 @@ export default function Photos({ acompanhanteData, mutate }) {
           .catch(error => error?.response);
       }
     })).then(requests => {
-      console.log("requests", requests)
       const failedRequests = requests?.filter(request => request?.status && ![200, 201].includes(request?.status));
       if (failedRequests.length) {
         notifications.show({
