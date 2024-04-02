@@ -2,13 +2,16 @@ import axios from 'axios'
 
 import { getCookie, removeCookie } from '@/utils'
 
+const cookieTokenString = 'gatacompleta-cms-token'
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_ENTRYPOINT}`
+  baseURL: `${process.env.NEXT_PUBLIC_API_DOMAIN}`,
+  withCredentials: true,
+  withXSRFToken: true,
 })
 
 api.interceptors.request.use(
   config => {
-    const { token } = getCookie('gatacompleta-cms-token') || {}
+    const { token } = getCookie(cookieTokenString) || {}
 
     if (
       token &&
@@ -28,9 +31,8 @@ api.interceptors.response.use(
     return response
   },
   function (error) {
-    if (error.response?.status === 401 && error.response?.data?.detail === 'Token inválido.') {
-      removeCookie('gatacompleta-cms-token')
-    }
+    if (error.response?.status === 401 && error.response?.data?.detail === 'Token inválido.')
+      removeCookie(cookieTokenString)
     return Promise.reject(error)
   }
 )
