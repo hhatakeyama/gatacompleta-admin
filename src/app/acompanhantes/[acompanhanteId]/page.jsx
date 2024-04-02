@@ -2,7 +2,7 @@
 
 import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Tabs, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser } from '@tabler/icons-react'
+import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser, IconVideo } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
@@ -15,6 +15,7 @@ import classes from './Acompanhante.module.css'
 import Agenda from './Agenda'
 import Phones from './Phones'
 import Photos from './Photos'
+import Videos from './Videos'
 
 export default function Acompanhantes() {
   // Hooks
@@ -34,6 +35,7 @@ export default function Acompanhantes() {
     { id: 'photos', label: 'Fotos', icon: <IconPhoto style={{ height: 12, width: 12 }} /> },
     { id: 'phones', label: 'Telefones', icon: <IconPhone style={{ height: 12, width: 12 }} /> },
     { id: 'agenda', label: 'Agenda', icon: <IconCalendar style={{ height: 12, width: 12 }} /> },
+    { id: 'videos', label: 'Vídeos', icon: <IconVideo style={{ height: 12, width: 12 }} /> },
   ]
 
   // Effects
@@ -145,6 +147,13 @@ export default function Acompanhantes() {
             {data && tab === 'agenda' && (
               <Container size="100%" mb="xl" mt="xs">
                 <Agenda acompanhanteData={data} mutate={mutate} />
+              </Container>
+            )}
+          </Tabs.Panel>
+          <Tabs.Panel value="videos">
+            {data && tab === 'videos' && (
+              <Container size="100%" mb="xl" mt="xs">
+                <Videos acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>

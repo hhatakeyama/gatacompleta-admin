@@ -37,8 +37,9 @@ function useProvideAuth() {
   // Login with credentials
   const login = async (credentials) => {
     setLoading(true)
+    await api.get('/sanctum/csrf-cookie')
     const response = await api
-      .post('/admin/authentication/login/', {
+      .post('/api/admin/authentication/login/', {
         email: credentials.email,
         password: credentials.password
       })
@@ -70,7 +71,7 @@ function useProvideAuth() {
   // Logout user from API
   const logout = async () => {
     try {
-      await api.post('/admin/authentication/logout/')
+      await api.post('/api/admin/authentication/logout/')
     } finally {
       removeCookie(cookieTokenString)
       setIsAuthenticated(false)
