@@ -76,7 +76,7 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
     setIsSubmitting(true)
     if (phoneData) {
       return api
-        .delete(`/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`)
+        .delete(`/api/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone removido com sucesso!', color: 'green' })

@@ -80,7 +80,7 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
     setIsSubmitting(true)
     if (remove) {
       return api
-        .delete(`/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${remove.id}`)
+        .delete(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${remove.id}`)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda removida com sucesso!', color: 'green' })

@@ -50,7 +50,7 @@ export default function Acompanhantes() {
     setIsDeleting(true)
     if (opened?.usuario?.id) {
       return api
-        .delete(`/admin/acompanhantes/${opened.user_id}`)
+        .delete(`/api/admin/acompanhantes/${opened.user_id}`)
         .then(response => {
           mutate?.()
           setOpened(null)

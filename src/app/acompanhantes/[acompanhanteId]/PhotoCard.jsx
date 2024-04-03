@@ -81,7 +81,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
 
   const handleRemove = () => {
     return api
-      .delete(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}`)
+      .delete(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}`)
       .then(() => {
         mutate?.()
         notifications.show({
