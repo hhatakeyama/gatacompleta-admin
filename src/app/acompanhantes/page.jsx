@@ -1,22 +1,21 @@
 'use client'
 
-import { Badge, Box, Button, Center, Container, Group, Loader, Modal, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
+import { Badge, Box, Button, Center, Container, Group, Modal, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { IconExternalLink, IconSearch } from '@tabler/icons-react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { api, dateToHuman } from '@/utils'
 
 import classes from './TableSort.module.css'
 
-export default function Acompanhantes() {
+function Acompanhantes() {
   // Hooks
   const { isAuthenticated } = useAuth()
-  const router = useRouter()
 
   // States
   const [pagina, setPagina] = useState(1)
@@ -66,13 +65,6 @@ export default function Acompanhantes() {
         .finally(() => setIsDeleting(false))
     }
   }
-
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   function Th({ children }) {
     return (
@@ -213,3 +205,5 @@ export default function Acompanhantes() {
     </>
   )
 }
+
+export default guardAccount(Acompanhantes)

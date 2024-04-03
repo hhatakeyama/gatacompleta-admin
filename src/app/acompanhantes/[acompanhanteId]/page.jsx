@@ -1,12 +1,13 @@
 'use client'
 
-import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Tabs, Text } from '@mantine/core'
+import { Badge, Button, Container, Group, Image, Stack, Tabs, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser, IconVideo } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import { AcompanhanteForm } from '@/components/forms'
+import { FormAcompanhante } from '@/components/forms'
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
@@ -17,7 +18,7 @@ import Phones from './Phones'
 import Photos from './Photos'
 import Videos from './Videos'
 
-export default function Acompanhantes() {
+function Acompanhante() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { acompanhanteId } = useParams()
@@ -39,16 +40,10 @@ export default function Acompanhantes() {
   ]
 
   // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
   if (error?.response?.data?.message === "Unauthorized") {
     notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
     return router.push('/')
   }
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   const expira = data?.periodos[data?.periodos.length - 1] ? new Date(data?.periodos[data?.periodos.length - 1].data_fim) : false
   // const aviso = new Date("Y-m-d")
@@ -125,7 +120,7 @@ export default function Acompanhantes() {
           <Tabs.Panel value="profile">
             {data && tab === 'profile' && (
               <Container size="100%" mb="xl" mt="xs">
-                <AcompanhanteForm.Basic acompanhanteData={data} mutate={mutate} />
+                <FormAcompanhante.Basic acompanhanteData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>
@@ -162,3 +157,5 @@ export default function Acompanhantes() {
     </Container>
   )
 }
+
+export default guardAccount(Acompanhante)

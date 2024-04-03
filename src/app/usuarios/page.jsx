@@ -5,13 +5,14 @@ import { IconSearch } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
 
 import classes from './Usuarios.module.css'
 
-export default function Usuarios() {
+function Usuarios() {
   // Hooks
   const router = useRouter()
   const { isAuthenticated, permissionsData } = useAuth()
@@ -36,14 +37,7 @@ export default function Usuarios() {
     )
   }
 
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/accounts/login')
-  }, [isAuthenticated, router])
-
   // Validations
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
-
   if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
 
   return (
@@ -130,3 +124,5 @@ export default function Usuarios() {
     </Container>
   )
 }
+
+export default guardAccount(Usuarios)

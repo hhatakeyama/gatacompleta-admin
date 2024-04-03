@@ -3,9 +3,9 @@ import { Dropzone } from '@mantine/dropzone'
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react'
 import React, { useRef } from 'react'
 
-import classes from './AcompanhanteForm.module.css'
+import classes from './FormAcompanhante.module.css'
 
-export default function Photos({ onFileUpload }) {
+export default function Videos({ onFileUpload }) {
   // Hooks
   const theme = useMantineTheme();
   const openRef = useRef(null);
@@ -17,9 +17,7 @@ export default function Photos({ onFileUpload }) {
         onDrop={onFileUpload}
         className={classes.dropzone}
         radius="md"
-        accept={['image/gif', 'image/png', 'image/jpeg']}
-        maxSize={30 * 1024 ** 2}
-      >
+        maxSize={30 * 1024 ** 2}>
         <div style={{ pointerEvents: 'none' }}>
           <Group justify="center">
             <Dropzone.Accept>
@@ -35,12 +33,12 @@ export default function Photos({ onFileUpload }) {
 
           <Text ta="center" fw={700} fz="lg" mt="xl">
             <Dropzone.Accept>Arraste os arquivos aqui</Dropzone.Accept>
-            <Dropzone.Reject>Arquivo menor que 30mb</Dropzone.Reject>
-            <Dropzone.Idle>Upload fotos</Dropzone.Idle>
+            <Dropzone.Reject>Arquivo menor que 100mb</Dropzone.Reject>
+            <Dropzone.Idle>Upload vídeos</Dropzone.Idle>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            Arraste os arquivos aqui para subir as fotos.<br />
-            Apenas imagens no formato <strong>.gif, .png, .jpg, .jpeg</strong> que são menores que 30mb.
+            Arraste os arquivos aqui para subir os vídeos.<br />
+            Apenas vídeos menores que 100mb.
           </Text>
         </div>
       </Dropzone>

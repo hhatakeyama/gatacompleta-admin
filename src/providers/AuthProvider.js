@@ -75,7 +75,7 @@ function useProvideAuth() {
     } finally {
       removeCookie(cookieTokenString)
       setIsAuthenticated(false)
-      setPermissionsData(null)
+      // setPermissionsData(null)
     }
   }
 

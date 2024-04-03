@@ -30,15 +30,14 @@ export default function Navbar() {
     { link: '/relatorios', label: 'Relatórios', icon: IconGraph, visible: adminAccess },
   ].filter(item => item.visible)
   const menuItens = menu.map((item) => (
-    <a
+    <Link
       className={classes.link}
       data-active={pathname.indexOf(item.link) !== -1 || undefined}
       href={item.link}
-      key={item.label}
-    >
+      key={item.label}>
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
-    </a>
+    </Link>
   ))
 
   if (!isAuthenticated && !userData) return null

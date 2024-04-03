@@ -5,12 +5,13 @@ import { IconSearch } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 
 import classes from './MaisAcessadas.module.css'
 
-export default function MaisAcessadas() {
+function MaisAcessadas() {
   // Hooks
   const router = useRouter()
   const { isAuthenticated, permissionsData } = useAuth()
@@ -38,14 +39,7 @@ export default function MaisAcessadas() {
     )
   }
 
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/accounts/login')
-  }, [isAuthenticated, router])
-
   // Validations
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
-
   if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
 
   return (
@@ -139,3 +133,5 @@ export default function MaisAcessadas() {
     </Container>
   )
 }
+
+export default guardAccount(MaisAcessadas)

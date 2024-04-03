@@ -9,6 +9,7 @@ import Footer from '@/components/navigation/Footer'
 import Header from '@/components/navigation/Header'
 import Navbar from '@/components/navigation/Navbar'
 
+import classes from './Global.module.css'
 import Providers from './Providers'
 
 export const metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({ children }) {
       <head>
         <ColorSchemeScript />
       </head>
-      <body>
+      <body className={classes.body}>
         <Providers>
           <Notifications position="top-right" autoClose={10000} zIndex={10000} top={95} />
           <Stack gap={0}>

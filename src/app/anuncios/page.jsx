@@ -1,27 +1,20 @@
 'use client'
 
-import { Center, Container, Loader, Stack, Text } from '@mantine/core'
+import { Container, Stack, Text } from '@mantine/core'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useAuth } from '@/providers/AuthProvider'
 
-export default function Anuncios() {
+function Anuncios() {
   // Hooks
   const router = useRouter()
-  const { isAuthenticated, permissionsData } = useAuth()
+  const { permissionsData } = useAuth()
 
   // Constants
   const { permissions } = permissionsData || {}
 
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/accounts/login')
-  }, [isAuthenticated, router])
-
   // Validations
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
-
   if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
 
   return (
@@ -34,3 +27,5 @@ export default function Anuncios() {
     </Container>
   )
 }
+
+export default guardAccount(Anuncios)

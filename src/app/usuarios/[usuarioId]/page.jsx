@@ -6,13 +6,14 @@ import { IconAt, IconUser } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-import { UsuarioForm } from '@/components/forms'
+import { FormUsuario } from '@/components/forms'
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 
 import classes from './Usuario.module.css'
 
-export default function Usuario() {
+function Usuario() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { usuarioId } = useParams()
@@ -29,17 +30,11 @@ export default function Usuario() {
     { id: 'profile', label: 'Perfil', icon: <IconUser style={{ height: 12, width: 12 }} /> },
   ]
 
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
+  // Validations
   if (error?.response?.data?.message === "Unauthorized") {
     notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
     return router.push('/')
   }
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
     
   return (
     <Container size="100%" mb="50px">
@@ -72,7 +67,7 @@ export default function Usuario() {
           <Tabs.Panel value="profile">
             {data && tab === 'profile' && (
               <Container size="100%" mb="xl" mt="xs">
-                <UsuarioForm.Basic usuarioData={data} mutate={mutate} />
+                <FormUsuario.Basic usuarioData={data} mutate={mutate} />
               </Container>
             )}
           </Tabs.Panel>
@@ -81,3 +76,5 @@ export default function Usuario() {
     </Container>
   )
 }
+
+export default guardAccount(Usuario)

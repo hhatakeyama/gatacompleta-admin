@@ -11,21 +11,11 @@ import {
   rem,
   Text,
   UnstyledButton,
-  useMantineTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import {
-  IconChevronDown,
-  IconHeart,
-  IconLogout,
-  IconMessage,
-  IconPlayerPause,
-  IconSettings,
-  IconStar,
-  IconSwitchHorizontal,
-  IconTrash,
-} from '@tabler/icons-react'
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
 import cx from 'clsx'
+import Link from 'next/link'
 import { useState } from 'react'
 
 import { useAuth } from '@/providers/AuthProvider'
@@ -34,8 +24,7 @@ import classes from './Header.module.css'
 
 export default function Header() {
   // Hooks
-  const theme = useMantineTheme()
-  const { isAuthenticated, userData } = useAuth()
+  const { isAuthenticated, logout, userData } = useAuth()
 
   // States
   const [opened, { toggle }] = useDisclosure(false)
@@ -57,7 +46,7 @@ export default function Header() {
               onClose={() => setUserMenuOpened(false)}
               onOpen={() => setUserMenuOpened(true)}
               withinPortal
-              styles={{ dropdown: { zIndex: 1001 }}}
+              styles={{ dropdown: { zIndex: 1001 } }}
             >
               <Menu.Target>
                 <UnstyledButton
@@ -74,83 +63,25 @@ export default function Header() {
               </Menu.Target>
               <Menu.Dropdown>
                 <Menu.Item
-                  leftSection={
-                    <IconHeart
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.red[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  Liked posts
+                  leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+                  component={Link}
+                  href="/accounts/perfil">
+                  Perfil
                 </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconStar
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.yellow[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  Saved posts
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconMessage
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.blue[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  Your comments
-                </Menu.Item>
-
-                <Menu.Label>Settings</Menu.Label>
-                <Menu.Item
-                  leftSection={
-                    <IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-                  }
-                >
-                  Account settings
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconSwitchHorizontal style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-                  }
-                >
-                  Change account
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-                  }
-                >
-                  Logout
-                </Menu.Item>
-
                 <Menu.Divider />
-
-                <Menu.Label>Danger zone</Menu.Label>
                 <Menu.Item
-                  leftSection={
-                    <IconPlayerPause style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-                  }
-                >
-                  Pause subscription
-                </Menu.Item>
-                <Menu.Item
-                  color="red"
-                  leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-                >
-                  Delete account
+                  leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    logout?.()
+                  }}>
+                  Logout
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           ) : (
             <Group visibleFrom="sm">
-              <Button component="a" href="/accounts/login" variant="default">Login</Button>
+              <Button component={Link} href="/accounts/login" variant="default">Login</Button>
             </Group>
           )}
         </Group>

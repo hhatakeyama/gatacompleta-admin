@@ -1,29 +1,20 @@
 'use client'
 
-import { Button, Center, Container, Group, Loader, Stack, Text } from '@mantine/core'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { Button, Container, Group, Loader, Stack, Text } from '@mantine/core'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 
 import Dashboard from './Dashboard'
 
-export default function Home() {
+function Home() {
   // Hooks
-  const router = useRouter()
   const { isAuthenticated, permissionsData, userData } = useAuth()
 
   // Fetch
   const { data, error } = useFetch([isAuthenticated ? '/admin/dashboard' : null])
   const isLoading = !data && !error
-
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/accounts/login')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
     <Container>
@@ -57,3 +48,5 @@ export default function Home() {
     </Container>
   )
 }
+
+export default guardAccount(Home)

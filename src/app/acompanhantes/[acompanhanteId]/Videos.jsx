@@ -5,7 +5,7 @@ import { notifications } from '@mantine/notifications'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
-import { AcompanhanteForm } from '@/components/forms'
+import { FormAcompanhante } from '@/components/forms'
 import { useAuth } from '@/providers/AuthProvider'
 import { api } from '@/utils'
 
@@ -69,7 +69,7 @@ export default function Videos({ acompanhanteData, mutate }) {
   return (
     <Stack align="center">
       <Box maw={600} mt="sm">
-        {acompanhanteData && <AcompanhanteForm.Videos onFileUpload={handleFileUpload} />}
+        {acompanhanteData && <FormAcompanhante.Videos onFileUpload={handleFileUpload} />}
       </Box>
       <Grid>
         {videos?.map((video) => (
