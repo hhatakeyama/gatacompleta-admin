@@ -37,7 +37,7 @@ function useProvideAuth() {
   // Login with credentials
   const login = async (credentials) => {
     setLoading(true)
-    await api.get('/sanctum/csrf-cookie')
+    // await api.get('/sanctum/csrf-cookie')
     const response = await api
       .post('/api/admin/authentication/login/', {
         email: credentials.email,
