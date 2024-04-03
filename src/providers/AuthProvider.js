@@ -27,11 +27,11 @@ function useProvideAuth() {
 
   // // Fetch
   const { data: userData, isValidating: userIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/me/' : null
+    !!isAuthenticated ? '/admin/accounts/me' : null
   ])
 
   const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/permissions/' : null
+    !!isAuthenticated ? '/admin/accounts/permissions' : null
   ])
 
   // Login with credentials
@@ -39,7 +39,7 @@ function useProvideAuth() {
     setLoading(true)
     await api.get('/sanctum/csrf-cookie')
     const response = await api
-      .post('/api/admin/authentication/login/', {
+      .post('/api/admin/authentication/login', {
         email: credentials.email,
         password: credentials.password
       })
@@ -71,7 +71,7 @@ function useProvideAuth() {
   // Logout user from API
   const logout = async () => {
     try {
-      await api.post('/api/admin/authentication/logout/')
+      await api.post('/api/admin/authentication/logout')
     } finally {
       removeCookie(cookieTokenString)
       setIsAuthenticated(false)
@@ -81,13 +81,13 @@ function useProvideAuth() {
 
   // Send reset password link
   const forgotPassword = async (email) => {
-    const response = await api.post('/password-reset/', { email })
+    const response = await api.post('/password-reset', { email })
     return response
   }
 
   // Reset password
   const resetPassword = async (password, uidb64, hash) => {
-    const response = await api.post('/password-reset/confirm/', {
+    const response = await api.post('/password-reset/confirm', {
       password,
       uidb64,
       token: hash

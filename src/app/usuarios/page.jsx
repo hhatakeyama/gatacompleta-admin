@@ -25,7 +25,7 @@ export default function Usuarios() {
   const [pagina, setPagina] = useState(1)
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated ? '/admin/usuarios/' : null, { busca: searchFilter, pagina }])
+  const { data, error } = useFetch([isAuthenticated ? '/admin/usuarios' : null, { busca: searchFilter, pagina }])
   const loading = !data && !error
 
   function Th({ children }) {

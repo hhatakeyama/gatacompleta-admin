@@ -26,7 +26,7 @@ export default function Eventos() {
   const [pagina, setPagina] = useState(1)
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated ? '/admin/events/' : null, { busca: searchFilter, pagina, evento }])
+  const { data, error } = useFetch([isAuthenticated ? '/admin/events' : null, { busca: searchFilter, pagina, evento }])
   const loading = !data && !error
 
   function Th({ children }) {
