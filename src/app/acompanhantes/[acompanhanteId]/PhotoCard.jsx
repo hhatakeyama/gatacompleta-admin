@@ -16,7 +16,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
   // Actions
   const handleHighlight = () => {
     return api
-      .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/destacar`)
+      .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/destacar`)
       .then(() => {
         mutate?.()
         notifications.show({
@@ -37,7 +37,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
   const handleSort = () => {
     if (order && Number(fotoData.ordem) !== Number(order))
       return api
-        .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/ordenar/${order}`)
+        .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/ordenar/${order}`)
         .then(() => {
           mutate?.()
           notifications.show({
@@ -61,7 +61,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       rotacionar = "girar-direita"
     }
     await api
-      .post(`/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/${rotacionar}`)
+      .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/${rotacionar}`)
       .then(() => {
         mutate?.()
         notifications.show({

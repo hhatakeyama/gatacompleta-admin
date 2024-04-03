@@ -42,7 +42,7 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
     setIsSubmitting(true)
     if (agendaData) {
       return api
-        .patch(`/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${agendaData.id}`, newValues)
+        .patch(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${agendaData.id}`, newValues)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.message || 'Agenda atualizada com sucesso!', color: 'green' })
@@ -57,7 +57,7 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
         })
     } else {
       return api
-        .post(`/admin/acompanhantes/${acompanhanteData.user_id}/agendas`, newValues)
+        .post(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas`, newValues)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.message || 'Agenda cadastrada com sucesso!', color: 'green' })

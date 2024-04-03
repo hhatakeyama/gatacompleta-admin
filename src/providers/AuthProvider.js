@@ -81,13 +81,13 @@ function useProvideAuth() {
 
   // Send reset password link
   const forgotPassword = async (email) => {
-    const response = await api.post('/password-reset', { email })
+    const response = await api.post('/api/admin/password-reset', { email })
     return response
   }
 
   // Reset password
   const resetPassword = async (password, uidb64, hash) => {
-    const response = await api.post('/password-reset/confirm', {
+    const response = await api.post('/api/admin/password-reset/confirm', {
       password,
       uidb64,
       token: hash

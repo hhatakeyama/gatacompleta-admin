@@ -38,7 +38,7 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
     setIsSubmitting(true)
     if (phoneData) {
       return api
-        .patch(`/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`, newValues)
+        .patch(`/api/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`, newValues)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone atualizado com sucesso!', color: 'green' })
@@ -53,7 +53,7 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
         })
     } else {
       return api
-        .post(`/admin/acompanhantes/${acompanhanteId}/telefones`, newValues)
+        .post(`/api/admin/acompanhantes/${acompanhanteId}/telefones`, newValues)
         .then(response => {
           onSuccess?.()
           showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone cadastrado com sucesso!', color: 'green' })

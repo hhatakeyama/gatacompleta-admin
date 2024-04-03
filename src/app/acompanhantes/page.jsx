@@ -32,7 +32,7 @@ export default function Acompanhantes() {
   // Actions
   const handleChangeOrdem = (acompanhanteId, value) => {
     return api
-      .patch(`/admin/acompanhantes/${acompanhanteId}/ordem`, { ordem: value })
+      .patch(`/api/admin/acompanhantes/${acompanhanteId}/ordem`, { ordem: value })
       .then(response => {
         mutate()
         showNotification({ title: 'Sucesso', message: response?.message || 'Ordem da acompanhante atualizada com sucesso!', color: 'green' })

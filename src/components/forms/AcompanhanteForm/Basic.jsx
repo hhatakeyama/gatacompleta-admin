@@ -104,7 +104,7 @@ export default function Basic({ acompanhanteData, mutate }) {
     setIsSubmitting(true)
     if (form.isDirty()) {
       return api
-        .patch(`/admin/acompanhantes/${acompanhanteData?.user_id}/`, {
+        .patch(`/api/admin/acompanhantes/${acompanhanteData?.user_id}/`, {
           ...newValues, ...(newValues ? { password_confirmation: newValues.confirmPassword } : {})
         }) // Verificar usuário logado no painel
         .then(() => {

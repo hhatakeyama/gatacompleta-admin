@@ -25,7 +25,7 @@ export default function Videos({ acompanhanteData, mutate }) {
         formData.append('file', file)
         formData.append('fileName', file.name)
         await api
-          .post(`/admin/acompanhantes/${acompanhanteData?.usuario?.id}/videos`, formData, {
+          .post(`/api/admin/acompanhantes/${acompanhanteData?.usuario?.id}/videos`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           })
           .catch(error => error?.response)

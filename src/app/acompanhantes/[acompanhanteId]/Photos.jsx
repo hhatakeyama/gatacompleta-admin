@@ -26,7 +26,7 @@ export default function Photos({ acompanhanteData, mutate }) {
       formData.append('fileName', file.name);
       if (file?.size < 5242880) {
         api
-          .post(`/admin/acompanhantes/${acompanhanteData?.usuario?.id}/fotos`, formData, {
+          .post(`/api/admin/acompanhantes/${acompanhanteData?.usuario?.id}/fotos`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           })
           .catch(error => error?.response);
