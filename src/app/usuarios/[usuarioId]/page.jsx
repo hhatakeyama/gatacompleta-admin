@@ -1,10 +1,10 @@
 'use client'
 
-import { Badge, Center, Container, Group, Loader, Stack, Tabs, Text } from '@mantine/core'
+import { Badge, Container, Group, Stack, Tabs, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconUser } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { FormUsuario } from '@/components/forms'
 import guardAccount from '@/guards/AccountGuard'

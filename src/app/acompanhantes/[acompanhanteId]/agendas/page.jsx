@@ -1,10 +1,10 @@
 'use client'
 
-import { Badge, Button, Center, Container, Group, Image, Loader, Stack, Text } from '@mantine/core'
+import { Badge, Button, Container, Group, Image, Stack, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhoneCall } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'

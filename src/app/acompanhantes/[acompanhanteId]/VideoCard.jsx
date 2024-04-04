@@ -1,6 +1,6 @@
-import { Button, ButtonGroup, Card, Group, Image, TextInput } from '@mantine/core'
+import { Button, ButtonGroup, Card, Group } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconPlus, IconX } from '@tabler/icons-react'
+import { IconX } from '@tabler/icons-react'
 import React, { useState } from 'react'
 
 import { api } from '@/utils'

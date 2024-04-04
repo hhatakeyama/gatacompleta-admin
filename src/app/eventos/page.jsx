@@ -1,9 +1,9 @@
 'use client'
 
-import { Box, Center, Container, Grid, Loader, LoadingOverlay, Pagination, rem, ScrollArea, Select, Stack, Table, Text, TextInput } from '@mantine/core'
+import { Box, Center, Container, Grid, LoadingOverlay, Pagination, rem, ScrollArea, Select, Stack, Table, Text, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
