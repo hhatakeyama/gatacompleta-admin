@@ -1,20 +1,14 @@
 'use client'
 
-import { Box, Center, Grid, Loader, Stack } from '@mantine/core'
+import { Box, Grid, Stack } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import PhotoCard from '@/app/acompanhantes/[acompanhanteId]/PhotoCard'
 import { FormAcompanhante } from '@/components/forms'
-import { useAuth } from '@/providers/AuthProvider'
 import { api } from '@/utils'
 
 export default function Photos({ acompanhanteData, mutate }) {
-  // Hooks
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
-
   // States
   const [photos, setPhotos] = useState([])
 
@@ -60,12 +54,6 @@ export default function Photos({ acompanhanteData, mutate }) {
   useEffect(() => {
     if (acompanhanteData?.fotos) setPhotos(acompanhanteData.fotos)
   }, [acompanhanteData.fotos])
-
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
     <Stack align="center">

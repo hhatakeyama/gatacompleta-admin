@@ -1,26 +1,13 @@
 'use client'
 
-import { Box, Button, Card, Center, Grid, Loader, Modal, Stack } from '@mantine/core'
-import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import { Box, Button, Card, Grid, Modal, Stack } from '@mantine/core'
+import React, { useState } from 'react'
 
 import { FormAcompanhante } from '@/components/forms'
-import { useAuth } from '@/providers/AuthProvider'
 
 export default function Agenda({ acompanhanteData, mutate }) {
-  // Hooks
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
-
   // States
   const [opened, setOpened] = useState(false)
-
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
     <>

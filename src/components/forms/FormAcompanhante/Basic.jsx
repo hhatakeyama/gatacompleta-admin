@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { IconBrandSkype, IconBrandYoutube } from '@tabler/icons-react'
 import React, { useState } from 'react'
+import { useSWRConfig } from 'swr'
 
 import { useAuth } from '@/providers/AuthProvider'
 import { api, Yup } from '@/utils'
@@ -11,17 +12,21 @@ import errorHandler from '@/utils/errorHandler'
 
 import * as Fields from './Fields'
 
-export default function Basic({ acompanhanteData, mutate }) {
+export default function Basic({ acompanhanteData, onClose, onCallback }) {
   // Hooks
-  const { isValidating } = useAuth()
   const theme = useMantineTheme()
   const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`)
+  const { mutate: mutateGlobal } = useSWRConfig()
+  const { isValidating } = useAuth()
+
+  // Constants
+  const editing = !!acompanhanteData
 
   // States
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Constants
+  // Form
   const initialValues = {
     name: acompanhanteData?.usuario?.name || '',
     email: acompanhanteData?.usuario?.email || '',
@@ -103,17 +108,25 @@ export default function Basic({ acompanhanteData, mutate }) {
     setError(null)
     setIsSubmitting(true)
     if (form.isDirty()) {
+      const { password, confirmPassword, ...restValues } = newValues
       return api
-        .patch(`/api/admin/acompanhantes/${acompanhanteData?.user_id}/`, {
-          ...newValues, ...(newValues ? { password_confirmation: newValues.confirmPassword } : {})
+        [editing ? 'patch' : 'post'](`/api/admin/acompanhantes${editing ? `/${acompanhanteData?.user_id}` : ''}`, {
+          ...restValues,
+          ...(password && password !== '' ? { password: password } : {}),
+          ...(confirmPassword ? { password_confirmation: confirmPassword } : {})
         }) // Verificar usuário logado no painel
-        .then(() => {
-          form.resetDirty()
-          form.resetTouched()
-          setTimeout(() => mutate(), 2000)
+        .then(response => {
+          if (editing) {
+            mutateGlobal(`/api/admin/acompanhantes/${acompanhanteData?.user_id}`)
+            form.resetTouched()
+            form.resetDirty()
+          } else {
+            onClose?.()
+            onCallback?.(response)
+          }
           notifications.show({
             title: 'Sucesso',
-            message: 'Dados atualizados com sucesso!',
+            message: `Dados ${editing ? 'atualizados' : 'cadastrados'} com sucesso!`,
             color: 'green'
           })
         })
@@ -121,8 +134,8 @@ export default function Basic({ acompanhanteData, mutate }) {
           notifications.show({
             title: 'Erro',
             message:
-              errorHandler(error.response.data.errors).messages ||
-              'Erro ao atualizar os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.',
+              errorHandler(error.response?.data?.errors)?.messages ||
+              `Erro ao ${editing ? 'atualizar' : 'cadastrar'} os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.`,
             color: 'red'
           })
         })

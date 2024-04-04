@@ -1,8 +1,8 @@
 'use client'
 
-import { Card, Center, Grid, Loader, Stack } from '@mantine/core'
-import { useParams, useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { Card, Grid, Stack } from '@mantine/core'
+import { useParams } from 'next/navigation'
+import React from 'react'
 
 import { FormAcompanhante } from '@/components/forms'
 import { useFetch } from '@/hooks'
@@ -12,17 +12,9 @@ export default function Phones() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { acompanhanteId } = useParams()
-  const router = useRouter()
 
   // Fetch
   const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
-
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
   return (
     <Stack>

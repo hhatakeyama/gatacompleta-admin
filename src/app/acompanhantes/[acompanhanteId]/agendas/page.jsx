@@ -6,6 +6,7 @@ import { IconAt, IconCalendar, IconPhoneCall } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
+import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
@@ -13,7 +14,7 @@ import { dateToHuman } from '@/utils'
 import Agenda from '../Agenda'
 import classes from './Agenda.module.css'
 
-export default function Agendas() {
+function Agendas() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { acompanhanteId } = useParams()
@@ -22,18 +23,6 @@ export default function Agendas() {
   // Fetch
   const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
   
-  // Effects
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (error?.response?.data?.message === "Unauthorized") {
-    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
-    return router.push('/')
-  }
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
-
   const expira = data?.periodos[data?.periodos.length - 1] ? new Date(data?.periodos[data?.periodos.length - 1].data_fim) : false
   // const aviso = new Date("Y-m-d")
   // const dataFim = new Date("d/m/Y")
@@ -63,6 +52,12 @@ export default function Agendas() {
   const fotoDestaque = data?.fotoDestaque && data?.fotoDestaque.length > 0
     ? `${data?.fotoDestaque[0].path}/210x314-${data?.fotoDestaque[0].nome}`
     : (data?.fotos && data?.fotos.length > 0 ? `${data?.fotos[0].path}/210x314-${data?.fotos[0].nome}` : '/img/sem-foto.jpg')
+
+  // Validations
+  if (error?.response?.data?.message === "Unauthorized") {
+    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
+    return router.push('/')
+  }
 
   return (
     <Container size="100%" mb="50px">
@@ -103,3 +98,5 @@ export default function Agendas() {
     </Container>
   )
 }
+
+export default guardAccount(Agendas)

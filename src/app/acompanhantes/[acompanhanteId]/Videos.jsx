@@ -1,19 +1,15 @@
 'use client'
 
-import { Box, Center, Grid, Loader, Stack } from '@mantine/core'
+import { Box, Grid, Stack } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import { FormAcompanhante } from '@/components/forms'
-import { useAuth } from '@/providers/AuthProvider'
 import { api } from '@/utils'
 
-export default function Videos({ acompanhanteData, mutate }) {
-  // Hooks
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
+import VideoCard from './VideoCard'
 
+export default function Videos({ acompanhanteData, mutate }) {
   // States
   const [videos, setVideos] = useState([])
 
@@ -60,21 +56,15 @@ export default function Videos({ acompanhanteData, mutate }) {
     if (acompanhanteData?.videos) setVideos(acompanhanteData.videos)
   }, [acompanhanteData.videos])
 
-  useEffect(() => {
-    if (isAuthenticated === false) return router.push('/')
-  }, [isAuthenticated, router])
-
-  if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
-
   return (
     <Stack align="center">
       <Box maw={600} mt="sm">
         {acompanhanteData && <FormAcompanhante.Videos onFileUpload={handleFileUpload} />}
       </Box>
-      <Grid>
+      <Grid w="100%">
         {videos?.map((video) => (
-          <Grid.Col key={video.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
-            {JSON.stringify(video)}
+          <Grid.Col key={video.id} span={{ base: 12, sm: 6 }}>
+            <VideoCard acompanhanteData={acompanhanteData} videoData={video} index={video.ordem} mutate={mutate} />
           </Grid.Col>
         ))}
       </Grid>

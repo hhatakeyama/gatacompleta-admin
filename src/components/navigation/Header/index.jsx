@@ -46,12 +46,9 @@ export default function Header() {
               onClose={() => setUserMenuOpened(false)}
               onOpen={() => setUserMenuOpened(true)}
               withinPortal
-              styles={{ dropdown: { zIndex: 1001 } }}
-            >
+              styles={{ dropdown: { zIndex: 1001 } }}>
               <Menu.Target>
-                <UnstyledButton
-                  className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
-                >
+                <UnstyledButton className={cx(classes.user, { [classes.userActive]: userMenuOpened })}>
                   <Group gap={7}>
                     <Avatar src={userData?.image} alt={userData?.name} radius="xl" size={20} />
                     <Text fw={500} size="sm" lh={1} mr={3}>
