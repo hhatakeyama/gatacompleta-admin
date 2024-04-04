@@ -101,7 +101,7 @@ function Usuarios() {
                 )
               }) : (
                 <Table.Tr>
-                  <Table.Td colSpan={5}>
+                  <Table.Td colSpan={6}>
                     <Text fw={500} ta="center">
                       Nenhum usuário encontrado
                     </Text>
@@ -111,7 +111,7 @@ function Usuarios() {
             </Table.Tbody>
             <Table.Tfoot>
               <Table.Tr>
-                <Table.Td colSpan={5}>
+                <Table.Td colSpan={6}>
                   <Center>
                     <Pagination total={data?.last_page} defaultValue={pagina} onChange={setPagina} />
                   </Center>

@@ -53,7 +53,7 @@ export default function Basic({ usuarioData, mutate }) {
     setIsSubmitting(true)
     if (form.isDirty()) {
       return api
-        .patch(`/api/admin/usuarios/${usuarioData?.id}/`, {
+        .patch(`/api/admin/usuarios/${usuarioData?.id}`, {
           ...newValues, ...(newValues ? { password_confirmation: newValues.confirmPassword } : {})
         }) // Verificar usuário logado no painel
         .then(() => {

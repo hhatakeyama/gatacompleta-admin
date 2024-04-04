@@ -97,7 +97,7 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
   }
 
   // Fetch
-  const { data } = useFetch([`/admin/estados/`])
+  const { data } = useFetch([`/admin/estados`])
   const { data: dataCidades } = useFetch([form.values.estado_id ? `/admin/estados/${form.values.estado_id}/cidades` : null])
   const optionsEstados = data?.map(estado => ({ value: estado.id, label: estado.nome })) || []
   const optionsCidades = dataCidades?.map(cidade => ({ value: cidade.id.toString(), label: cidade.nome })) || []
