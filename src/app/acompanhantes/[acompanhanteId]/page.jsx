@@ -79,7 +79,7 @@ function Acompanhante() {
     <Container size="100%" mb="50px">
       <Stack>
         <Group wrap="nowrap">
-          <Image alt="Foto destaque" src={"https://admin.gatacompleta.com" + fotoDestaque} width={200} height={200} radius="md" />
+          <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}/${fotoDestaque}`} width={200} height={200} radius="md" />
 
           <div>
             {data?.status === '1' ? (

@@ -161,7 +161,7 @@ function Acompanhantes() {
                     <Table.Tr key={row.user_id} className={classes.tr}>
                       <Table.Td className={classes.td}>{row.user_id}</Table.Td>
                       <Table.Td className={classes.td}>
-                        <Image alt="" src={"https://admin.gatacompleta.com" + fotoDestaque} width={54} height={80} />
+                        <Image alt="" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}/${fotoDestaque}`} width={54} height={80} />
                       </Table.Td>
                       <Table.Td className={classes.td}>
                         <Box display="flex" style={{ alignItems: 'center', gap: '5px' }}>
