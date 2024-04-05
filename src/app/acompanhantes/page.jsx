@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
+import Active from '@/components/displayers/DisplayStatus/Active'
 import { FormAcompanhante } from '@/components/forms'
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
@@ -161,7 +162,7 @@ function Acompanhantes() {
                     <Table.Tr key={row.user_id} className={classes.tr}>
                       <Table.Td className={classes.td}>{row.user_id}</Table.Td>
                       <Table.Td className={classes.td}>
-                        <Image alt="" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}/${fotoDestaque}`} width={54} height={80} />
+                        <Image alt="" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={54} height={80} />
                       </Table.Td>
                       <Table.Td className={classes.td}>
                         <Box display="flex" style={{ alignItems: 'center', gap: '5px' }}>
@@ -170,13 +171,7 @@ function Acompanhantes() {
                         </Box>
                       </Table.Td>
                       <Table.Td className={classes.td}>{row.usuario.email}</Table.Td>
-                      <Table.Td className={classes.td}>
-                        {row.status === '1' ? (
-                          <Badge size="sm" color="green">Ativo</Badge>
-                        ) : (
-                          <Badge size="sm" color="red">Inativo</Badge>
-                        )}
-                      </Table.Td>
+                      <Table.Td className={classes.td}><Active status={row.status} /></Table.Td>
                       <Table.Td className={classes.td}>{expira ? dateToHuman(expira) : ''}</Table.Td>
                       <Table.Td className={classes.td}>
                         <TextInput

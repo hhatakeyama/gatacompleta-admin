@@ -81,14 +81,22 @@ export function datter(input, options = defaultOptions) {
   return { input, output: null, raw: null, display: displayer(input, mergedOptions) }
 }
 
-export const dateToHuman = (date) => {
+export const dateToHuman = (date, type = 'datetime') => {
   const dateObject = new Date(date)
-  return new Intl.DateTimeFormat('pt-BR', {
+  let format = {
     year: "numeric",
     month: "numeric",
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
     timeZone: 'UTC',
-  }).format(dateObject)
+  }
+  if (type === 'date') {
+    format = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    }
+  }
+  return new Intl.DateTimeFormat('pt-BR', format).format(dateObject)
 }

@@ -5,6 +5,7 @@ import { IconSearch } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
+import Active from '@/components/displayers/DisplayStatus/Active'
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
@@ -84,13 +85,7 @@ function Usuarios() {
                       </Box>
                     </Table.Td>
                     <Table.Td className={classes.td}>{row.email}</Table.Td>
-                    <Table.Td className={classes.td}>
-                      {row.status === '1' ? (
-                        <Badge size="sm" color="green">Ativo</Badge>
-                      ) : (
-                        <Badge size="sm" color="red">Inativo</Badge>
-                      )}
-                    </Table.Td>
+                    <Table.Td className={classes.td}><Active status={row.status} /></Table.Td>
                     <Table.Td className={classes.td}>{row.created_at ? dateToHuman(row.created_at) : ''}</Table.Td>
                     <Table.Td className={classes.td}>
                       <Group gap="xs">
