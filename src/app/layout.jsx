@@ -22,6 +22,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         <ColorSchemeScript />
+        <meta name="robots" content="noindex,nofollow"></meta>
       </head>
       <body className={classes.body}>
         <Providers>
