@@ -6,9 +6,6 @@ import React, { useState } from 'react'
 import { api } from '@/utils'
 
 export default function VideoCard({ acompanhanteData, videoData, index, mutate }) {
-  // Constants
-  const newVideo = !videoData.id
-
   // States
   const [order, setOrder] = useState(index)
 

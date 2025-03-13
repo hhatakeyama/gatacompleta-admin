@@ -12,13 +12,13 @@ import { fetcher } from '@/utils'
 export default function Providers({ children }) {
   return (
     <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
-      <MantineProvider defaultColorScheme="dark">
-        <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0, weekendDays: [0], timezone: 'America/Sao_Paulo' }}>
+      <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0, weekendDays: [0], timezone: 'America/Sao_Paulo' }}>
+        <MantineProvider defaultColorScheme="dark">
           <AuthProvider>
             {children}
           </AuthProvider>
-        </DatesProvider>
-      </MantineProvider>
+        </MantineProvider>
+      </DatesProvider>
     </SWRConfig>
   )
 }

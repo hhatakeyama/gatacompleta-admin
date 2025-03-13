@@ -1,7 +1,7 @@
 "use client"
 
 import { Center, Loader } from "@mantine/core"
-import { redirect, usePathname, useSearchParams } from "next/navigation"
+import { redirect, usePathname } from "next/navigation"
 import { useEffect } from "react"
 
 import { useAuth } from "@/providers/AuthProvider"
@@ -13,10 +13,6 @@ export default function guardAccount(Component) {
     // Hooks
     const { isAuthenticated, isValidating } = useAuth()
     const pathname = usePathname()
-    const search = useSearchParams()
-
-    // Constants
-    const redirectCallback = search.get('redirectCallback')
 
     // Effects
     useEffect(() => {
@@ -24,13 +20,6 @@ export default function guardAccount(Component) {
         redirect(`/accounts/login?redirectCallback=${pathname}`)
     }, [isAuthenticated, isValidating, pathname])
 
-    useEffect(() => {
-      if (publicRoutes.indexOf(pathname) !== -1 && isAuthenticated === true) {
-        if (redirectCallback) redirect(redirectCallback)
-        redirect('/')
-      }
-    }, [isAuthenticated, pathname, redirectCallback, search])
-  
     if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
 
     return <Component {...props} />

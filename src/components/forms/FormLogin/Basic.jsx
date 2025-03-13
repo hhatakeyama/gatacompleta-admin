@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, Button, Container, LoadingOverlay, Paper, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core'
 import React, { useState } from 'react'
 
@@ -34,7 +36,7 @@ export default function Basic({ onForgotPassword, onSubmit }) {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md" pos="relative">
-        <LoadingOverlay visible={isValidating} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+        <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
         <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
           <Stack>
             <TextInput

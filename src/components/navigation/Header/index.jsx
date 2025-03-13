@@ -11,8 +11,9 @@ import {
   rem,
   Text,
   UnstyledButton,
+  useMantineTheme,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
 import cx from 'clsx'
 import Link from 'next/link'
@@ -24,18 +25,22 @@ import classes from './Header.module.css'
 
 export default function Header() {
   // Hooks
-  const { isAuthenticated, logout, userData } = useAuth()
+  const { isAuthenticated, logout, menuOpen, userData, setMenuOpen } = useAuth()
+  const theme = useMantineTheme()
+  const isSm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+
+  // Constants
+  const showMenu = isAuthenticated === true && !isSm;
 
   // States
-  const [opened, { toggle }] = useDisclosure(false)
   const [userMenuOpened, setUserMenuOpened] = useState(false)
 
   return (
-    <div className={classes.header} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
-      <Container className={classes.mainSection} size="xl">
-        <Group justify="space-between">
+    <Box className={classes.header} pl={showMenu ? '300px' : '0'}>
+      <Container size="xl">
+        <Group justify="space-between" h={60}>
           <Box>
-            <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
+            <Burger opened={menuOpen} onClick={() => setMenuOpen(!menuOpen)} hiddenFrom="sm" size="sm" />
           </Box>
 
           {userData ? (
@@ -83,6 +88,6 @@ export default function Header() {
           )}
         </Group>
       </Container>
-    </div>
+    </Box>
   )
 }

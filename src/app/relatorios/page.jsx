@@ -1,6 +1,6 @@
 'use client'
 
-import { Container, Stack, Text } from '@mantine/core'
+import { Stack, Text, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 
 import guardAccount from '@/guards/AccountGuard'
@@ -18,13 +18,11 @@ function Relatorios() {
   if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
 
   return (
-    <Container size="100%" mb="50px">
-      <Stack>
-        <Text>Relatórios</Text>
+    <Stack>
+      <Title order={3}>Relatórios</Title>
 
-        <Text>Em Breve</Text>
-      </Stack>
-    </Container>
+      <Text>Em Breve</Text>
+    </Stack>
   )
 }
 

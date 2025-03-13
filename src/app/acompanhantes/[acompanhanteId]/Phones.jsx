@@ -14,7 +14,7 @@ export default function Phones() {
   const { acompanhanteId } = useParams()
 
   // Fetch
-  const { data, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
 
   return (
     <Stack>
