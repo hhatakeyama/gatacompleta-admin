@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Center, Grid, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput, Title } from '@mantine/core'
+import { Button, Center, Grid, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -53,7 +53,7 @@ function Usuarios() {
         </Grid.Col>
       </Grid>
 
-      <Box pos="relative">
+      <Stack pos="relative">
         <LoadingOverlay
           visible={loading}
           overlayProps={{ radius: 'sm', blur: 2 }}
@@ -102,18 +102,14 @@ function Usuarios() {
                 </Table.Tr>
               )}
             </Table.Tbody>
-            <Table.Tfoot>
-              <Table.Tr>
-                <Table.Td colSpan={6}>
-                  <Center>
-                    <Pagination total={last_page} defaultValue={pagina} onChange={setPagina} />
-                  </Center>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tfoot>
           </Table>
         </ScrollArea>
-      </Box>
+        {last_page > 1 && (
+          <Center>
+            <Pagination total={last_page} defaultValue={pagina} onChange={setPagina} />
+          </Center>
+        )}
+      </Stack>
     </Stack>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Badge, Button, Container, Group, Image, Stack, Text } from '@mantine/core'
+import { Badge, Button, Group, Image, Stack, Text } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhoneCall } from '@tabler/icons-react'
 import { useParams, useRouter } from 'next/navigation'
@@ -22,7 +22,7 @@ function Agendas() {
 
   // Fetch
   const { data, error, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
-  
+
   const expira = data?.periodos[data?.periodos.length - 1] ? new Date(data?.periodos[data?.periodos.length - 1].data_fim) : false
   // const aviso = new Date("Y-m-d")
   // const dataFim = new Date("d/m/Y")
@@ -60,42 +60,40 @@ function Agendas() {
   }
 
   return (
-    <Container size="100%" mb="50px">
-      <Stack>
-        <Group wrap="nowrap">
-          <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={200} height={200} radius="md" />
+    <Stack>
+      <Group wrap="nowrap">
+        <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={200} height={200} radius="md" />
 
-          <div>
-            {data?.status === '1' ? (
-              <Badge size="sm" color="green">Ativo</Badge>
-            ) : (
-              <Badge size="sm" color="red">Inativo</Badge>
-            )}
-            <Text fz="lg" fw={500} className={classes.profileName}>
-              {data?.nome}
-            </Text>
-            <Group wrap="nowrap" gap={10} mt={3}>
-              <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />
-              <Text fz="xs" c="dimmed">{data?.usuario.email}</Text>
+        <div>
+          {data?.status === '1' ? (
+            <Badge size="sm" color="green">Ativo</Badge>
+          ) : (
+            <Badge size="sm" color="red">Inativo</Badge>
+          )}
+          <Text fz="lg" fw={500} className={classes.profileName}>
+            {data?.nome}
+          </Text>
+          <Group wrap="nowrap" gap={10} mt={3}>
+            <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />
+            <Text fz="xs" c="dimmed">{data?.usuario.email}</Text>
+          </Group>
+          {whatsapp && data?.url && (
+            <Group wrap="nowrap" gap={10} mt={5}>
+              <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
+              <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${whatsapp}?text=${texto}`}>{whatsapp}</Button>
             </Group>
-            {whatsapp && data?.url && (
-              <Group wrap="nowrap" gap={10} mt={5}>
-                <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
-                <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${whatsapp}?text=${texto}`}>{whatsapp}</Button>
-              </Group>
-            )}
-            {expira && (
-              <Group wrap="nowrap" gap={10} mt={5}>
-                <IconCalendar stroke={1.5} size="1rem" className={classes.icon} />
-                <Text fz="xs" c="dimmed">expira em {dateToHuman(expira)}</Text>
-              </Group>
-            )}
-          </div>
-        </Group>
+          )}
+          {expira && (
+            <Group wrap="nowrap" gap={10} mt={5}>
+              <IconCalendar stroke={1.5} size="1rem" className={classes.icon} />
+              <Text fz="xs" c="dimmed">expira em {dateToHuman(expira)}</Text>
+            </Group>
+          )}
+        </div>
+      </Group>
 
-        <Agenda acompanhanteData={data} mutate={mutate} />
-      </Stack>
-    </Container>
+      <Agenda acompanhanteData={data} mutate={mutate} />
+    </Stack>
   )
 }
 
