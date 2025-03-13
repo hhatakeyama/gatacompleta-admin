@@ -28,11 +28,11 @@ function useProvideAuth() {
 
   // // Fetch
   const { data: userData, isValidating: userIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/me' : null
+    isAuthenticated === true ? '/admin/accounts/me' : null
   ])
 
   const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/permissions' : null
+    isAuthenticated === true ? '/admin/accounts/permissions' : null
   ])
 
   // Login with credentials

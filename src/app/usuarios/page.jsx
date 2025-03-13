@@ -1,7 +1,8 @@
 'use client'
 
-import { Box, Button, Center, Container, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
+import { Box, Button, Center, Grid, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput, Title } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
@@ -10,8 +11,6 @@ import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
-
-import classes from './Usuarios.module.css'
 
 function Usuarios() {
   // Hooks
@@ -27,68 +26,68 @@ function Usuarios() {
   const [pagina, setPagina] = useState(1)
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated ? '/admin/usuarios' : null, { busca: searchFilter, pagina }])
+  const { data, error } = useFetch([
+    isAuthenticated === true ? '/admin/usuarios' : null,
+    { busca: searchFilter, pagina }
+  ])
+  const { data: usuarios = [], last_page } = data || {}
   const loading = !data && !error
 
-  function Th({ children }) {
-    return (
-      <Table.Th width="auto" className={classes.th}>
-        {children}
-      </Table.Th>
-    )
-  }
-
   // Validations
-  if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
+  if (permissions?.find(item => item !== 's' && item !== 'a'))
+    return router.push('/')
 
   return (
-    <Container size="100%" mb="50px">
-      <Stack>
-        <Text>Usuários</Text>
+    <Stack>
+      <Title order={3}>Usuários</Title>
 
-        <Box pos="relative">
-          <LoadingOverlay
-            visible={loading}
-            overlayProps={{ radius: 'sm', blur: 2 }}
-            loaderProps={{ color: 'pink', type: 'bars' }}
-          />
-        </Box>
-        <ScrollArea>
+      <Grid>
+        <Grid.Col span={{ xs: 12, sm: 6 }}>
           <TextInput
             placeholder="Buscar por nome ou e-mail"
-            mb="md"
             leftSection={<IconSearch style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
             value={search}
             onChange={event => setSearch(event.target.value)}
             onBlur={event => setSearchFilter(event.target.value)}
           />
-          <Table horizontalSpacing="xs" verticalSpacing="xs" miw={700}>
-            <Table.Tbody>
+        </Grid.Col>
+      </Grid>
+
+      <Box pos="relative">
+        <LoadingOverlay
+          visible={loading}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{ color: 'pink', type: 'bars' }}
+        />
+        <ScrollArea h={usuarios.length > 15 ? "55vh" : "auto"} offsetScrollbars>
+          <Table
+            striped
+            highlightOnHover
+            withTableBorder
+            miw={700}
+          >
+            <Table.Thead>
               <Table.Tr>
-                <Th>ID</Th>
-                <Th>Nome</Th>
-                <Th>E-mail</Th>
-                <Th>Ativo</Th>
-                <Th>Data Cadastro</Th>
-                <Th>Ações</Th>
+                <Table.Th>ID</Table.Th>
+                <Table.Th>Nome</Table.Th>
+                <Table.Th>E-mail</Table.Th>
+                <Table.Th>Ativo</Table.Th>
+                <Table.Th>Data Cadastro</Table.Th>
+                <Table.Th>Ações</Table.Th>
               </Table.Tr>
-            </Table.Tbody>
+            </Table.Thead>
             <Table.Tbody>
-              {data?.data?.length > 0 ? data?.data?.map((row) => {
+              {usuarios.length > 0 ? usuarios.map((row) => {
                 return (
-                  <Table.Tr key={row.id} className={classes.tr}>
-                    <Table.Td className={classes.td}>{row.id}</Table.Td>
-                    <Table.Td className={classes.td}>
-                      <Box display="flex" style={{ alignItems: 'center', gap: '5px' }}>
-                        {row.name}
-                      </Box>
-                    </Table.Td>
-                    <Table.Td className={classes.td}>{row.email}</Table.Td>
-                    <Table.Td className={classes.td}><Active status={row.status} /></Table.Td>
-                    <Table.Td className={classes.td}>{row.created_at ? dateToHuman(row.created_at) : ''}</Table.Td>
-                    <Table.Td className={classes.td}>
+                  <Table.Tr key={row.id}>
+                    <Table.Td>{row.id}</Table.Td>
+                    <Table.Td>{row.name}</Table.Td>
+                    <Table.Td>{row.email}</Table.Td>
+                    <Table.Td><Active status={row.status} /></Table.Td>
+                    <Table.Td>{row.created_at ? dateToHuman(row.created_at) : ''}</Table.Td>
+                    <Table.Td>
                       <Group gap="xs">
-                        <Button size="compact-sm" component="a" color="orange" title="Editar" href={`/usuarios/${row.id}`}>Editar</Button>
+                        <Button size="compact-sm" component={Link} color="orange" title="Editar" href={`/usuarios/${row.id}`}>Editar</Button>
                       </Group>
                     </Table.Td>
                   </Table.Tr>
@@ -107,15 +106,15 @@ function Usuarios() {
               <Table.Tr>
                 <Table.Td colSpan={6}>
                   <Center>
-                    <Pagination total={data?.last_page} defaultValue={pagina} onChange={setPagina} />
+                    <Pagination total={last_page} defaultValue={pagina} onChange={setPagina} />
                   </Center>
                 </Table.Td>
               </Table.Tr>
             </Table.Tfoot>
           </Table>
         </ScrollArea>
-      </Stack>
-    </Container>
+      </Box>
+    </Stack>
   )
 }
 

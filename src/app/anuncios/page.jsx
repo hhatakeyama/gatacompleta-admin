@@ -1,8 +1,9 @@
 'use client'
 
-import { Box, Button, Center, Container, Divider, Group, LoadingOverlay, Modal, Pagination, ScrollArea, Stack, Table, Text } from '@mantine/core'
+import { Box, Button, Center, Divider, Group, LoadingOverlay, Modal, Pagination, ScrollArea, Stack, Table, Text, Title } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 import Active from '@/components/displayers/DisplayStatus/Active'
@@ -12,8 +13,6 @@ import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { api, dateToHuman } from '@/utils'
-
-import classes from './Anuncios.module.css'
 
 function Anuncios() {
   // Hooks
@@ -26,7 +25,7 @@ function Anuncios() {
   const [register, setRegister] = useState(false)
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? '/admin/anuncios' : null, { pagina }])
+  const { data, error, mutate } = useFetch([isAuthenticated === true ? '/admin/anuncios' : null, { pagina }])
   const { data: anuncios = [], last_page } = data || {}
   const loading = !data && !error
 
@@ -52,88 +51,83 @@ function Anuncios() {
     }
   }
 
-  function Th({ children }) {
-    return (
-      <Table.Th width="auto" className={classes.th}>
-        {children}
-      </Table.Th>
-    )
-  }
-
   return (
     <>
-      <Container size="100%" mb="50px">
-        <Stack mb="md">
-          <Group justify="space-between">
-            <Text>Anúncios</Text>
+      <Stack mb="sm">
+        <Group justify="space-between">
+          <Title order={3}>Anúncios</Title>
 
-            <Button onClick={() => setRegister(true)}>Adicionar Anúncio</Button>
-          </Group>
-          <Divider />
-        </Stack>
+          <Button onClick={() => setRegister(true)}>Novo Anúncio</Button>
+        </Group>
+      </Stack>
 
-        <Stack pos="relative">
-          <LoadingOverlay
-            visible={loading}
-            overlayProps={{ radius: 'sm', blur: 2 }}
-            loaderProps={{ type: 'bars' }}
-          />
-          <ScrollArea h={anuncios.length > 15 ? "55vh" : "auto"} offsetScrollbars>
-            <Table horizontalSpacing="xs" verticalSpacing="xs" miw={700}>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Th>ID</Th>
-                  <Th>Foto</Th>
-                  <Th>Nome</Th>
-                  <Th>Data Início</Th>
-                  <Th>Data Fim</Th>
-                  <Th>Mostrar</Th>
-                  <Th>Tipo</Th>
-                  <Th>Ativo</Th>
-                  <Th>Ações</Th>
+      <Stack pos="relative">
+        <LoadingOverlay
+          visible={loading}
+          overlayProps={{ radius: 'sm', blur: 2 }}
+          loaderProps={{ color: 'pink', type: 'bars' }}
+        />
+        <ScrollArea h={anuncios.length > 15 ? "55vh" : "auto"} offsetScrollbars>
+          <Table
+            striped
+            highlightOnHover
+            withTableBorder
+            miw={700}
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>ID</Table.Th>
+                <Table.Th>Foto</Table.Th>
+                <Table.Th>Nome</Table.Th>
+                <Table.Th>Início / Fim</Table.Th>
+                <Table.Th>Mostrar</Table.Th>
+                <Table.Th>Tipo</Table.Th>
+                <Table.Th>Ativo</Table.Th>
+                <Table.Th>Ações</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {anuncios.length > 0 ? anuncios?.map((row) => (
+                <Table.Tr key={row.id}>
+                  <Table.Td>{row.id}</Table.Td>
+                  <Table.Td>
+                    <Image alt="" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}/storage/premium/${row.foto}`} width={80} height={30} />
+                  </Table.Td>
+                  <Table.Td>{row.acompanhante?.nome}</Table.Td>
+                  <Table.Td>
+                    {row.data_inicio ? dateToHuman(row.data_inicio, 'date') : ''}{' '}
+                    ~ {row.data_fim ? dateToHuman(row.data_fim, 'date') : ''}
+                  </Table.Td>
+                  <Table.Td>
+                    {row.cidade ? `${row.cidade?.nome} / ${row.estado_id}` : 'Home'}
+                  </Table.Td>
+                  <Table.Td><TipoAnuncio status={row.tipo} /></Table.Td>
+                  <Table.Td><Active status={row.status} /></Table.Td>
+                  <Table.Td>
+                    <Group gap="xs">
+                      <Button size="compact-sm" component={Link} color="orange" title="Editar" href={`/anuncios/${row.id}`}>Editar</Button>
+                      <Button size="compact-sm" color="red" title="Desativar" disabled={isDeleting} onClick={() => setOpened(row)}>Excluir</Button>
+                    </Group>
+                  </Table.Td>
                 </Table.Tr>
-              </Table.Tbody>
-              <Table.Tbody>
-                {anuncios.length > 0 ? anuncios?.map((row) => (
-                  <Table.Tr key={row.id} className={classes.tr}>
-                    <Table.Td className={classes.td}>{row.id}</Table.Td>
-                    <Table.Td className={classes.td}>
-                      <Image alt="" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}/storage/premium/${row.foto}`} width={80} height={30} />
-                    </Table.Td>
-                    <Table.Td className={classes.td}>{row.acompanhante?.nome}</Table.Td>
-                    <Table.Td className={classes.td}>{row.data_inicio ? dateToHuman(row.data_inicio, 'date') : ''}</Table.Td>
-                    <Table.Td className={classes.td}>{row.data_fim ? dateToHuman(row.data_fim, 'date') : ''}</Table.Td>
-                    <Table.Td className={classes.td}>
-                      {row.cidade ? `${row.cidade?.nome} / ${row.estado_id}` : 'Home'}
-                    </Table.Td>
-                    <Table.Td className={classes.td}><TipoAnuncio status={row.tipo} /></Table.Td>
-                    <Table.Td className={classes.td}><Active status={row.status} /></Table.Td>
-                    <Table.Td className={classes.td}>
-                      <Group gap="xs">
-                        <Button size="compact-sm" component="a" color="orange" title="Editar" href={`/anuncios/${row.id}`}>Editar</Button>
-                        <Button size="compact-sm" color="red" title="Desativar" disabled={isDeleting} onClick={() => setOpened(row)}>Excluir</Button>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                )) : (
-                  <Table.Tr>
-                    <Table.Td colSpan={9}>
-                      <Text fw={500} ta="center">
-                        Nenhuma acompanhante anunciando encontrada
-                      </Text>
-                    </Table.Td>
-                  </Table.Tr>
-                )}
-              </Table.Tbody>
-            </Table>
-          </ScrollArea>
-          {last_page > 1 && (
-            <Center>
-              <Pagination total={last_page} defaultValue={pagina} onChange={setPagina} />
-            </Center>
-          )}
-        </Stack>
-      </Container>
+              )) : (
+                <Table.Tr>
+                  <Table.Td colSpan={9}>
+                    <Text fw={500} ta="center">
+                      Nenhuma acompanhante anunciando encontrada
+                    </Text>
+                  </Table.Td>
+                </Table.Tr>
+              )}
+            </Table.Tbody>
+          </Table>
+        </ScrollArea>
+        {last_page > 1 && (
+          <Center>
+            <Pagination total={last_page} defaultValue={pagina} onChange={setPagina} />
+          </Center>
+        )}
+      </Stack>
 
       <Modal opened={register} onClose={() => setRegister(false)} title="Cadastrar categoria" centered size="xl">
         <FormAnuncio.Basic
@@ -141,9 +135,9 @@ function Anuncios() {
             setRegister(false)
             mutate()
           }}
-          // onCallback={response => {
-          //   if (response?.data?.id) router.push(`/anuncios/${response.data.id}`)
-          // }}
+        // onCallback={response => {
+        //   if (response?.data?.id) router.push(`/anuncios/${response.data.id}`)
+        // }}
         />
       </Modal>
       <Modal centered opened={!!opened} onClose={() => setOpened(null)} title="Excluir anúncio">

@@ -21,7 +21,7 @@ function Agendas() {
   const router = useRouter()
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, error, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
   
   const expira = data?.periodos[data?.periodos.length - 1] ? new Date(data?.periodos[data?.periodos.length - 1].data_fim) : false
   // const aviso = new Date("Y-m-d")

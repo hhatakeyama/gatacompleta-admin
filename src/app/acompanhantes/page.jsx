@@ -29,7 +29,7 @@ function Acompanhantes() {
   const [register, setRegister] = useState(false)
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? '/admin/acompanhantes' : null, { busca: searchFilter, pagina }])
+  const { data, error, mutate } = useFetch([isAuthenticated === true ? '/admin/acompanhantes' : null, { busca: searchFilter, pagina }])
   const { data: acompanhantes = [], last_page } = data || {}
   const loading = !data && !error
 
@@ -98,7 +98,7 @@ function Acompanhantes() {
         <LoadingOverlay
           visible={loading}
           overlayProps={{ radius: 'sm', blur: 2 }}
-          loaderProps={{ type: 'bars' }}
+          loaderProps={{ color: 'pink', type: 'bars' }}
         />
         <ScrollArea h={acompanhantes.length > 15 ? "55vh" : "auto"} offsetScrollbars>
           <Table

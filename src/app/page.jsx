@@ -13,7 +13,7 @@ function Home() {
   const { isAuthenticated, permissionsData, userData } = useAuth()
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated ? '/admin/dashboard' : null])
+  const { data, error } = useFetch([isAuthenticated === true ? '/admin/dashboard' : null])
   const isLoading = !data && !error
 
   return (

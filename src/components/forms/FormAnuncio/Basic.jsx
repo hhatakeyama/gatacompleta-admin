@@ -4,6 +4,7 @@ import { Alert, Button, FileButton, Grid, Group, Image, LoadingOverlay, Select, 
 import { useForm, yupResolver } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
+import { IconCameraOff } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
@@ -129,7 +130,7 @@ export default function Basic({ anuncioData, onClose, onCallback }) {
             <FileButton onChange={file => form.setFieldValue('foto', file)} accept="image/png,image/jpeg">
               {(props) =>
                 <>
-                  <Image alt="Foto" size="xl" {...props} src={srcPictureFile} />
+                  {srcPictureFile ? <Image alt="Foto" size="xl" {...props} src={srcPictureFile} /> : <IconCameraOff style={{ width: 100, height: 100 }} />}
                   <Text {...props} style={{ textWrap: 'nowrap' }}>{form.values.foto ? 'Alterar foto' : 'Selecionar foto'}</Text>
                   <Text size="sm">721px x 157px</Text>
                 </>

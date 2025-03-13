@@ -1,8 +1,9 @@
 'use client'
 
-import { Box, Button, Group, Image, Stack, Tabs, Text } from '@mantine/core'
+import { Box, Button, Group, Image, Stack, Tabs, Text, Title } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser, IconVideo } from '@tabler/icons-react'
+import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
@@ -28,7 +29,7 @@ function Acompanhante() {
   const [tab, setTab] = useState('profile')
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, error, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
 
   // Constants
   const tabs = [
@@ -82,9 +83,7 @@ function Acompanhante() {
           <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={130} height={130} radius="md" />
 
           <Box>
-            <Text fz="lg" fw={500}>
-              {data?.nome}
-            </Text>
+            <Title order={4}>{data?.nome}</Title>
             <Active status={data?.status} />
             <Group wrap="nowrap" gap={10} mt={3}>
               <IconAt stroke={1.5} size="1rem" />
@@ -105,11 +104,11 @@ function Acompanhante() {
           </Box>
         </Group>
 
-        <Button component="a" href="/acompanhantes">Voltar</Button>
+        <Button component={Link} href="/acompanhantes">Voltar</Button>
       </Group>
 
       <Tabs value={tab} onChange={setTab}>
-        <Tabs.List mb={10}>
+        <Tabs.List mb="md">
           {tabs.map(item => (
             <Tabs.Tab key={item.id} value={item.id} leftSection={item.icon}>
               {item.label}
