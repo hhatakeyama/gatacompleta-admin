@@ -1,39 +1,37 @@
 'use client'
 
-import { Anchor, Container, Group } from '@mantine/core'
+import { Box, Container, Group, useMantineTheme } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import Link from 'next/link'
 
 import { useAuth } from '@/providers/AuthProvider'
 
 import classes from './Footer.module.css'
 
 const links = [
-  { link: '#', label: 'Contact' },
-  { link: '#', label: 'Privacy' },
-  { link: '#', label: 'Blog' },
-  { link: '#', label: 'Careers' },
+  { link: '/', label: 'Gata Completa' },
 ]
 
 export default function Footer() {
   // Hooks
   const { isAuthenticated } = useAuth()
-  
+  const theme = useMantineTheme()
+  const isSm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+
   // Constants
+  const showMenu = isAuthenticated === true && !isSm;
+
   const items = links.map((link) => (
-    <Anchor
-      key={link.label}
-      href={link.link}
-      onClick={(event) => event.preventDefault()}
-      size="sm"
-    >
+    <Link key={link.label} href={link.link} size="sm">
       {link.label}
-    </Anchor>
+    </Link>
   ))
 
   return (
-    <div className={classes.footer} style={{ left: isAuthenticated === true ? '300px' : '0', width: isAuthenticated === true ? 'calc(100% - 300px)' : '100%' }}>
-      <Container className={classes.inner} size="full">
+    <Box className={classes.footer} pl={showMenu ? '300px' : '0'}>
+      <Container className={classes.inner} size="xl">
         <Group className={classes.links}>{items}</Group>
       </Container>
-    </div>
+    </Box>
   )
 }

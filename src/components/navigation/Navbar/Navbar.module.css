@@ -3,22 +3,22 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  left: 0;
   padding: var(--mantine-spacing-md);
   position: fixed;
+  transition: all ease 0.5s;
   width: rem(300px);
-  z-index: 51;
+  z-index: 102;
+}
+.navbarFull {
+  width: 100vw;
+}
+.navbarClosed {
+  left: -100vw;
 }
 
 .navbarMain {
   flex: 1;
-}
-
-.header {
-  padding-bottom: var(--mantine-spacing-md);
-  margin-bottom: calc(var(--mantine-spacing-md) * 1.5);
-  border-bottom: 1px solid #333333;
-  display: flex;
-  width: 100%;
 }
 
 .footer {

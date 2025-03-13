@@ -1,7 +1,6 @@
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css';
 
-import { Box, ColorSchemeScript, Group, Stack } from '@mantine/core'
 import { Notifications } from '@mantine/notifications';
 
 import Content from '@/components/navigation/Content'
@@ -21,25 +20,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript />
         <meta name="robots" content="noindex,nofollow"></meta>
       </head>
       <body className={classes.body}>
         <Providers>
-          <Notifications position="top-right" autoClose={10000} zIndex={10000} top={95} />
-          <Stack gap={0}>
-            <Group gap={0} align="top">
-              <Navbar />
-
-              <Box style={{ left: 0, paddingTop: '95px', position: 'absolute', width: '100%' }}>
-                <Header />
-                <Content>
-                  {children}
-                </Content>
-                <Footer />
-              </Box>
-            </Group>
-          </Stack>
+          <Notifications autoClose={10000} position="top-right" zIndex={50} />
+          <Navbar />
+          <Header />
+          <Content>
+            {children}
+          </Content>
+          <Footer />
         </Providers>
       </body>
     </html >

@@ -1,3 +1,5 @@
+'use client'
+
 import { Box, Button, Grid, Group, Modal, Stack, Text } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'
@@ -16,8 +18,8 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
   // Constants
   const initialValues = {
     acompanhante_id: acompanhanteData.id,
-    estado_id: agendaData?.estado_id || '',
-    cidade_id: agendaData?.cidade_id || '',
+    estado_id: agendaData?.estado_id?.toString() || '',
+    cidade_id: agendaData?.cidade_id?.toString() || '',
     data_inicio: agendaData?.data_inicio || '',
     data_fim: agendaData?.data_fim || '',
   }

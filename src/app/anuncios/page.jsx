@@ -3,7 +3,6 @@
 import { Box, Button, Center, Container, Divider, Group, LoadingOverlay, Modal, Pagination, ScrollArea, Stack, Table, Text } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 import Active from '@/components/displayers/DisplayStatus/Active'
@@ -19,7 +18,6 @@ import classes from './Anuncios.module.css'
 function Anuncios() {
   // Hooks
   const { isAuthenticated } = useAuth()
-  const router = useRouter()
 
   // States
   const [pagina, setPagina] = useState(1)
@@ -77,7 +75,6 @@ function Anuncios() {
         <Stack pos="relative">
           <LoadingOverlay
             visible={loading}
-            zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
             loaderProps={{ type: 'bars' }}
           />

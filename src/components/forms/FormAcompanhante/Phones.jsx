@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Grid, Group } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { showNotification } from '@mantine/notifications'

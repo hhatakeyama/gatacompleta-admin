@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, Button, Grid, Group, LoadingOverlay, Select, Stack, useMantineTheme } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
@@ -14,7 +16,7 @@ export default function Basic({ usuarioData, mutate }) {
   // Hooks
   const { isValidating } = useAuth()
   const theme = useMantineTheme()
-  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`)
+  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs})`)
 
   // States
   const [error, setError] = useState(null)
@@ -80,7 +82,7 @@ export default function Basic({ usuarioData, mutate }) {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
-      <LoadingOverlay visible={isValidating} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+      <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
       <Grid>
         <Grid.Col span={{ base: 12, lg: 6 }}>
           <Stack>

@@ -22,6 +22,7 @@ function useProvideAuth() {
   const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [isValidating, setIsValidating] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false);
   // const [permissionsData, setPermissionsData] = useState(['admin'])
   // const permissionsIsValidating = false
 
@@ -134,10 +135,12 @@ function useProvideAuth() {
     forgotPassword,
     resetPassword,
     verifyToken,
+    setMenuOpen,
     isAuthenticated,
     isValidating,
+    menuOpen,
     userData,
-    permissionsData
+    permissionsData,
   }
 }
 

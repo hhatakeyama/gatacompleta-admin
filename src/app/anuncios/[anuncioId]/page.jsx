@@ -7,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
 import Active from '@/components/displayers/DisplayStatus/Active'
-import { FormAcompanhante, FormAnuncio } from '@/components/forms'
+import { FormAnuncio } from '@/components/forms'
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'

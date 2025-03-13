@@ -1,6 +1,6 @@
 'use client'
 
-import { Badge, Box, Button, Center, Container, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
+import { Box, Button, Center, Container, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput } from '@mantine/core'
 import { IconSearch } from '@tabler/icons-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -49,7 +49,6 @@ function Usuarios() {
         <Box pos="relative">
           <LoadingOverlay
             visible={loading}
-            zIndex={1000}
             overlayProps={{ radius: 'sm', blur: 2 }}
             loaderProps={{ color: 'pink', type: 'bars' }}
           />
