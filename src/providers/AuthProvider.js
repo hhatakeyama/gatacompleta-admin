@@ -22,16 +22,17 @@ function useProvideAuth() {
   const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [isValidating, setIsValidating] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false);
   // const [permissionsData, setPermissionsData] = useState(['admin'])
   // const permissionsIsValidating = false
 
   // // Fetch
   const { data: userData, isValidating: userIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/me' : null
+    isAuthenticated === true ? '/admin/accounts/me' : null
   ])
 
   const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-    !!isAuthenticated ? '/admin/accounts/permissions' : null
+    isAuthenticated === true ? '/admin/accounts/permissions' : null
   ])
 
   // Login with credentials
@@ -134,10 +135,12 @@ function useProvideAuth() {
     forgotPassword,
     resetPassword,
     verifyToken,
+    setMenuOpen,
     isAuthenticated,
     isValidating,
+    menuOpen,
     userData,
-    permissionsData
+    permissionsData,
   }
 }
 

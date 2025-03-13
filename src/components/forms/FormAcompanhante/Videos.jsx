@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Group, Text, useMantineTheme } from '@mantine/core'
 import { Dropzone } from '@mantine/dropzone'
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react'

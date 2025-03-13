@@ -1,7 +1,10 @@
+'use client'
+
 import { Alert, Button, FileButton, Grid, Group, Image, LoadingOverlay, Select, Stack, Text, useMantineTheme } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
+import { IconCameraOff } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
@@ -17,7 +20,7 @@ export default function Basic({ anuncioData, onClose, onCallback }) {
   const { isValidating } = useAuth()
   const theme = useMantineTheme()
   const { mutate: mutateGlobal } = useSWRConfig()
-  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`)
+  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs})`)
 
   // States
   const [error, setError] = useState(null)
@@ -26,7 +29,7 @@ export default function Basic({ anuncioData, onClose, onCallback }) {
   // Constants
   const editing = !!anuncioData
   const initialValues = {
-    foto: anuncioData?.foto || '',
+    foto: anuncioData?.foto || null,
     tipo: anuncioData?.tipo || '',
     acompanhante_id: anuncioData?.acompanhante_id?.toString() || '',
     data_inicio: anuncioData?.data_inicio || '',
@@ -115,11 +118,11 @@ export default function Basic({ anuncioData, onClose, onCallback }) {
   const srcPicture = anuncioData?.foto?.indexOf('http') !== -1
     ? anuncioData?.foto
     : `${process.env.NEXT_PUBLIC_API_DOMAIN}/storage/premium/${anuncioData?.foto}`
-  const srcPictureFile = form.values.foto && typeof form.values.foto !== "string" ? URL.createObjectURL(form.values.foto) : (srcPicture || '')
+  const srcPictureFile = form.values.foto && typeof form.values.foto !== "string" ? URL.createObjectURL(form.values.foto) : (srcPicture || null)
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
-      <LoadingOverlay visible={isValidating} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+      <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
 
       <Grid>
         <Grid.Col span={{ base: 12, lg: 6 }}>
@@ -127,7 +130,7 @@ export default function Basic({ anuncioData, onClose, onCallback }) {
             <FileButton onChange={file => form.setFieldValue('foto', file)} accept="image/png,image/jpeg">
               {(props) =>
                 <>
-                  <Image alt="Foto" size="xl" {...props} src={srcPictureFile} />
+                  {srcPictureFile ? <Image alt="Foto" size="xl" {...props} src={srcPictureFile} /> : <IconCameraOff style={{ width: 100, height: 100 }} />}
                   <Text {...props} style={{ textWrap: 'nowrap' }}>{form.values.foto ? 'Alterar foto' : 'Selecionar foto'}</Text>
                   <Text size="sm">721px x 157px</Text>
                 </>

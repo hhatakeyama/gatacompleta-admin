@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, Button, Grid, Group, LoadingOverlay, Select, Stack, Textarea, TextInput, useMantineTheme } from '@mantine/core'
 import { useForm, yupResolver } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
@@ -15,7 +17,7 @@ import * as Fields from './Fields'
 export default function Basic({ acompanhanteData, onClose, onCallback }) {
   // Hooks
   const theme = useMantineTheme()
-  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs}px)`)
+  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs})`)
   const { mutate: mutateGlobal } = useSWRConfig()
   const { isValidating } = useAuth()
 
@@ -37,10 +39,10 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
     virtual: acompanhanteData?.virtual || '0',
     verificado: acompanhanteData?.verificado || '0',
     status: acompanhanteData?.status || '0',
-    tipo_id: acompanhanteData?.tipo_id || '',
-    cabelo_id: acompanhanteData?.cabelo_id || '',
+    tipo_id: acompanhanteData?.tipo_id?.toString() || '',
+    cabelo_id: acompanhanteData?.cabelo_id?.toString() || '',
     idade: acompanhanteData?.idade || '',
-    olho_id: acompanhanteData?.olho_id || '',
+    olho_id: acompanhanteData?.olho_id?.toString() || '',
     altura: acompanhanteData?.altura || '',
     peso: acompanhanteData?.peso || '',
     busto: acompanhanteData?.busto || '',
@@ -145,7 +147,7 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
 
   return (
     <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
-      <LoadingOverlay visible={isValidating} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+      <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
       <Grid>
         <Grid.Col span={{ base: 12, lg: 6 }}>
           <Stack>

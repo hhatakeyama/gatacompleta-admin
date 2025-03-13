@@ -1,17 +1,13 @@
 .header {
   background-color: #3f0f2b;
   height: 80px;
-  left: 0px;
   margin-bottom: 15px;
-  padding-top: var(--mantine-spacing-sm);
+  padding-bottom: 10px;
+  padding-top: 10px;
   position: fixed;
-  right:0;
   top: 0;
-  z-index: 50;
-}
-
-.mainSection {
-  padding-bottom: var(--mantine-spacing-sm);
+  width: 100%;
+  z-index: 100;
 }
 
 .user {
@@ -23,10 +19,6 @@
 
   &:hover {
     background-color: #666666;
-  }
-
-  @media (max-width: $mantine-breakpoint-xs) {
-    display: none;
   }
 }
 

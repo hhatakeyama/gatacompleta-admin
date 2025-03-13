@@ -60,7 +60,7 @@ export default function Photos({ acompanhanteData, mutate }) {
       <Box maw={600} mt="sm">
         {acompanhanteData && <FormAcompanhante.Photos onFileUpload={handleFileUpload} />}
       </Box>
-      <Grid>
+      <Grid w="100%">
         {photos?.map((foto) => (
           <Grid.Col key={foto.id} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
             <PhotoCard acompanhanteData={acompanhanteData} fotoData={foto} index={foto.ordem} mutate={mutate} />

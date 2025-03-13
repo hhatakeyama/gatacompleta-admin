@@ -1,18 +1,19 @@
 'use client'
 
-import { Badge, Button, Container, Group, Image, Stack, Tabs, Text } from '@mantine/core'
+import { Box, Button, Group, Image, Stack, Tabs, Text, Title } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { IconAt, IconCalendar, IconPhone, IconPhoneCall, IconPhoto, IconUser, IconVideo } from '@tabler/icons-react'
+import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
+import Active from '@/components/displayers/DisplayStatus/Active'
 import { FormAcompanhante } from '@/components/forms'
 import guardAccount from '@/guards/AccountGuard'
 import { useFetch } from '@/hooks'
 import { useAuth } from '@/providers/AuthProvider'
 import { dateToHuman } from '@/utils'
 
-import classes from './Acompanhante.module.css'
 import Agenda from './Agenda'
 import Phones from './Phones'
 import Photos from './Photos'
@@ -28,8 +29,8 @@ function Acompanhante() {
   const [tab, setTab] = useState('profile')
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated ? `/admin/acompanhantes/${acompanhanteId}` : null])
-  
+  const { data, error, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
+
   // Constants
   const tabs = [
     { id: 'profile', label: 'Perfil', icon: <IconUser style={{ height: 12, width: 12 }} /> },
@@ -76,89 +77,71 @@ function Acompanhante() {
     : (data?.fotos && data?.fotos.length > 0 ? `${data?.fotos[0].path}/210x314-${data?.fotos[0].nome}` : '/img/sem-foto.jpg')
 
   return (
-    <Container size="100%" mb="50px">
-      <Stack>
-        <Group align="flex-start" justify="space-between">
-          <Group wrap="nowrap">
-            <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={130} height={130} radius="md" />
+    <Stack>
+      <Group align="flex-start" justify="space-between">
+        <Group wrap="nowrap">
+          <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={130} height={130} radius="md" />
 
-            <div>
-              {data?.status === '1' ? (
-                <Badge size="sm" color="green">Ativo</Badge>
-              ) : (
-                <Badge size="sm" color="red">Inativo</Badge>
-              )}
-              <Text fz="lg" fw={500} className={classes.profileName}>
-                {data?.nome}
-              </Text>
-              <Group wrap="nowrap" gap={10} mt={3}>
-                <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />
-                <Text fz="xs" c="dimmed">{data?.usuario.email}</Text>
+          <Box>
+            <Title order={4}>{data?.nome}</Title>
+            <Active status={data?.status} />
+            <Group wrap="nowrap" gap={10} mt={3}>
+              <IconAt stroke={1.5} size="1rem" />
+              <Text fz="xs" c="dimmed">{data?.usuario.email}</Text>
+            </Group>
+            {whatsapp && data?.url && (
+              <Group wrap="nowrap" gap={10} mt={5}>
+                <IconPhoneCall stroke={1.5} size="1rem" />
+                <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${whatsapp}?text=${texto}`}>{whatsapp}</Button>
               </Group>
-              {whatsapp && data?.url && (
-                <Group wrap="nowrap" gap={10} mt={5}>
-                  <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
-                  <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${whatsapp}?text=${texto}`}>{whatsapp}</Button>
-                </Group>
-              )}
-              {expira && (
-                <Group wrap="nowrap" gap={10} mt={5}>
-                  <IconCalendar stroke={1.5} size="1rem" className={classes.icon} />
-                  <Text fz="xs" c="dimmed">expira em {dateToHuman(expira)}</Text>
-                </Group>
-              )}
-            </div>
-          </Group>
-
-          <Button component="a" href="/acompanhantes">Voltar</Button>
+            )}
+            {expira && (
+              <Group wrap="nowrap" gap={10} mt={5}>
+                <IconCalendar stroke={1.5} size="1rem" />
+                <Text fz="xs" c="dimmed">expira em {dateToHuman(expira)}</Text>
+              </Group>
+            )}
+          </Box>
         </Group>
 
-        <Tabs value={tab} onChange={setTab}>
-          <Tabs.List>
-            {tabs.map(item => (
-              <Tabs.Tab key={item.id} value={item.id} leftSection={item.icon}>
-                {item.label}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
-          <Tabs.Panel value="profile">
-            {data && tab === 'profile' && (
-              <Container size="100%" mb="xl" mt="xs">
-                <FormAcompanhante.Basic acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="photos">
-            {data && tab === 'photos' && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Photos acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="phones">
-            {data && tab === 'phones' && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Phones acompanhanteData={data} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="agenda">
-            {data && tab === 'agenda' && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Agenda acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-          <Tabs.Panel value="videos">
-            {data && tab === 'videos' && (
-              <Container size="100%" mb="xl" mt="xs">
-                <Videos acompanhanteData={data} mutate={mutate} />
-              </Container>
-            )}
-          </Tabs.Panel>
-        </Tabs>
-      </Stack>
-    </Container>
+        <Button component={Link} href="/acompanhantes">Voltar</Button>
+      </Group>
+
+      <Tabs value={tab} onChange={setTab}>
+        <Tabs.List mb="md">
+          {tabs.map(item => (
+            <Tabs.Tab key={item.id} value={item.id} leftSection={item.icon}>
+              {item.label}
+            </Tabs.Tab>
+          ))}
+        </Tabs.List>
+        <Tabs.Panel value="profile">
+          {data && tab === 'profile' && (
+            <FormAcompanhante.Basic acompanhanteData={data} mutate={mutate} />
+          )}
+        </Tabs.Panel>
+        <Tabs.Panel value="photos">
+          {data && tab === 'photos' && (
+            <Photos acompanhanteData={data} mutate={mutate} />
+          )}
+        </Tabs.Panel>
+        <Tabs.Panel value="phones">
+          {data && tab === 'phones' && (
+            <Phones acompanhanteData={data} />
+          )}
+        </Tabs.Panel>
+        <Tabs.Panel value="agenda">
+          {data && tab === 'agenda' && (
+            <Agenda acompanhanteData={data} mutate={mutate} />
+          )}
+        </Tabs.Panel>
+        <Tabs.Panel value="videos">
+          {data && tab === 'videos' && (
+            <Videos acompanhanteData={data} mutate={mutate} />
+          )}
+        </Tabs.Panel>
+      </Tabs>
+    </Stack>
   )
 }
 

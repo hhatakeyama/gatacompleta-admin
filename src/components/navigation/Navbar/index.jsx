@@ -1,6 +1,9 @@
 'use client'
 
-import { IconEyeCheck, IconFlame, IconGraph, IconLogout, IconSpeakerphone, IconTimelineEventExclamation, IconUser, IconUsers } from '@tabler/icons-react'
+import { ActionIcon, Group, useMantineTheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import { IconEyeCheck, IconFlame, IconGraph, IconLogout, IconSpeakerphone, IconTimelineEventExclamation, IconUser, IconUsers, IconX } from '@tabler/icons-react'
+import clsx from "clsx";
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -12,7 +15,10 @@ import classes from './Navbar.module.css'
 
 export default function Navbar() {
   // Hooks
-  const { isAuthenticated, logout, permissionsData, userData } = useAuth()
+  const theme = useMantineTheme();
+  const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs})`);
+  const isSm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
+  const { isAuthenticated, logout, menuOpen, permissionsData, setMenuOpen, userData } = useAuth()
   const pathname = usePathname()
 
   // Constants
@@ -34,7 +40,8 @@ export default function Navbar() {
       className={classes.link}
       data-active={pathname.indexOf(item.link) !== -1 || undefined}
       href={item.link}
-      key={item.label}>
+      key={item.label}
+      onClick={() => setMenuOpen(false)}>
       <item.icon className={classes.linkIcon} stroke={1.5} />
       <span>{item.label}</span>
     </Link>
@@ -43,11 +50,27 @@ export default function Navbar() {
   if (!isAuthenticated && !userData) return null
 
   return (
-    <nav className={classes.navbar}>
+    <nav className={clsx(classes.navbar, {
+      [classes.navbarFull]: isXs,
+      [classes.navbarClosed]: isSm && !menuOpen,
+    })}>
       <div className={classes.navbarMain}>
-        <Link href="/" className={classes.header} justify="space-between">
-          <Image alt="GataCompleta" src={logo} width="auto" height={45} />
-        </Link>
+        <Group align="center" justify="space-between" mb={15}>
+          <Link href="/" style={{ display: 'flex' }}>
+            <Image alt="GataCompleta" src={logo} width="auto" height={45} />
+          </Link>
+
+          {isSm && (
+            <ActionIcon
+              variant="transparent"
+              color="white"
+              size="lg"
+              onClick={() => setMenuOpen(false)}
+            >
+              <IconX size={30} />
+            </ActionIcon>
+          )}
+        </Group>
         {isAuthenticated && menuItens}
       </div>
       {isAuthenticated && (
