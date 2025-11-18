@@ -1,8 +1,9 @@
-import axios from 'axios'
+/* eslint-disable no-undef */
+import axios from "axios"
 
-import { getCookie, removeCookie } from '@/utils'
+import { getCookie, removeCookie } from "@/utils"
 
-const cookieTokenString = 'gatacompleta-cms-token'
+const cookieTokenString = "gatacompleta-cms-token"
 const api = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_API_DOMAIN}`,
   withCredentials: true,
@@ -23,7 +24,7 @@ api.interceptors.request.use(
 
     return config
   },
-  error => Promise.reject(error)
+  error => Promise.reject(error),
 )
 
 api.interceptors.response.use(
@@ -31,10 +32,10 @@ api.interceptors.response.use(
     return response
   },
   function (error) {
-    if (error.response?.status === 401 && error.response?.data?.detail === 'Token inválido.')
+    if (error.response?.status === 401 && error.response?.data?.detail === "Token inválido.")
       removeCookie(cookieTokenString)
     return Promise.reject(error)
-  }
+  },
 )
 
 export default api

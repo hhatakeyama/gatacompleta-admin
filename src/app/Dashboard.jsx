@@ -1,15 +1,15 @@
-'use client'
+"use client"
 
-import { Box, Group, Paper, RingProgress, SimpleGrid, Text } from '@mantine/core'
+import { Box, Group, Paper, RingProgress, SimpleGrid, Text } from "@mantine/core"
 
 export default function Dashboard({ dashboardData }) {
   // Constants
   const { ativas, expirando, inativas } = dashboardData || {}
   const total = ativas + expirando + inativas
   const data = [
-    { label: 'Ativas', stats: ativas, progress: ativas * 100 / total, color: 'teal' },
-    { label: 'Expirando', stats: expirando, progress: expirando * 100 / total, color: 'orange' },
-    { label: 'Inativas', stats: inativas, progress: inativas * 100 / total, color: 'red' },
+    { label: "Ativas", stats: ativas, progress: (ativas * 100) / total, color: "teal" },
+    { label: "Expirando", stats: expirando, progress: (expirando * 100) / total, color: "orange" },
+    { label: "Inativas", stats: inativas, progress: (inativas * 100) / total, color: "red" },
   ]
 
   return (

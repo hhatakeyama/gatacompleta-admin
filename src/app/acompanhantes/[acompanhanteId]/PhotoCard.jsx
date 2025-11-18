@@ -1,9 +1,16 @@
-import { Button, ButtonGroup, Card, Group, Image, TextInput } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
-import { IconPlus, IconRotate, IconRotateClockwise, IconStar, IconStarFilled, IconX } from '@tabler/icons-react'
-import React, { useState } from 'react'
+import { Button, ButtonGroup, Card, Group, Image, TextInput } from "@mantine/core"
+import { notifications } from "@mantine/notifications"
+import {
+  IconPlus,
+  IconRotate,
+  IconRotateClockwise,
+  IconStar,
+  IconStarFilled,
+  IconX,
+} from "@tabler/icons-react"
+import React, { useState } from "react"
 
-import { api } from '@/utils'
+import { api } from "@/utils"
 
 export default function PhotoCard({ acompanhanteData, fotoData, index, mutate }) {
   // Constants
@@ -20,16 +27,16 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       .then(() => {
         mutate?.()
         notifications.show({
-          title: 'Sucesso',
-          message: 'Foto destacada com sucesso!',
-          color: 'green'
+          title: "Sucesso",
+          message: "Foto destacada com sucesso!",
+          color: "green",
         })
       })
       .catch(error => {
         notifications.show({
-          title: 'Erro',
-          message: error?.response?.data?.message || 'Erro ao destacar foto.',
-          color: 'red'
+          title: "Erro",
+          message: error?.response?.data?.message || "Erro ao destacar foto.",
+          color: "red",
         })
       })
   }
@@ -37,44 +44,48 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
   const handleSort = () => {
     if (order && Number(fotoData.ordem) !== Number(order))
       return api
-        .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/ordenar/${order}`)
+        .post(
+          `/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/ordenar/${order}`,
+        )
         .then(() => {
           mutate?.()
           notifications.show({
-            title: 'Sucesso',
-            message: 'Foto ordenada com sucesso!',
-            color: 'green'
+            title: "Sucesso",
+            message: "Foto ordenada com sucesso!",
+            color: "green",
           })
         })
         .catch(error => {
           notifications.show({
-            title: 'Erro',
-            message: error?.response?.data?.message || 'Erro ao ordenar foto.',
-            color: 'red'
+            title: "Erro",
+            message: error?.response?.data?.message || "Erro ao ordenar foto.",
+            color: "red",
           })
         })
   }
 
-  const handleRotate = async (direcao) => {
+  const handleRotate = async direcao => {
     let rotacionar = "girar-esquerda"
     if (direcao === "right") {
       rotacionar = "girar-direita"
     }
     await api
-      .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/${rotacionar}`)
+      .post(
+        `/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/${rotacionar}`,
+      )
       .then(() => {
         mutate?.()
         notifications.show({
-          title: 'Sucesso',
-          message: 'Foto girada com sucesso!',
-          color: 'green'
+          title: "Sucesso",
+          message: "Foto girada com sucesso!",
+          color: "green",
         })
       })
       .catch(error => {
         notifications.show({
-          title: 'Erro',
-          message: error?.response?.data?.message || 'Erro ao girar foto.',
-          color: 'red'
+          title: "Erro",
+          message: error?.response?.data?.message || "Erro ao girar foto.",
+          color: "red",
         })
       })
   }
@@ -85,16 +96,16 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       .then(() => {
         mutate?.()
         notifications.show({
-          title: 'Sucesso',
-          message: 'Foto deletada com sucesso!',
-          color: 'green'
+          title: "Sucesso",
+          message: "Foto deletada com sucesso!",
+          color: "green",
         })
       })
       .catch(error => {
         notifications.show({
-          title: 'Erro',
-          message: error?.response?.data?.message || 'Erro ao deletar foto.',
-          color: 'red'
+          title: "Erro",
+          message: error?.response?.data?.message || "Erro ao deletar foto.",
+          color: "red",
         })
       })
   }
@@ -104,8 +115,16 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       {newPhoto ? (
         <Card.Section inheritPadding py="xs">
           <Group justify="center">
-            <TextInput defaultValue={index} styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }} />
-            <Button color="green" leftSection={<IconPlus />}>Novo</Button>
+            <TextInput
+              defaultValue={index}
+              styles={{
+                label: { textAlign: "center", width: "100%" },
+                input: { textAlign: "center", width: "50px" },
+              }}
+            />
+            <Button color="green" leftSection={<IconPlus />}>
+              Novo
+            </Button>
           </Group>
         </Card.Section>
       ) : (
@@ -113,11 +132,18 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
           <Group justify="center">
             <TextInput
               value={order}
-              onChange={e => setOrder(e.target.value || '')}
+              onChange={e => setOrder(e.target.value || "")}
               onBlur={handleSort}
-              styles={{ label: { textAlign: 'center', width: '100%' }, input: { textAlign: 'center', width: '50px' } }}
+              styles={{
+                label: { textAlign: "center", width: "100%" },
+                input: { textAlign: "center", width: "50px" },
+              }}
             />
-            <Button variant={destacado ? "filled" : "outline"} color="yellow" onClick={() => !destacado ? handleHighlight(fotoData) : null} leftSection={destacado ? <IconStarFilled /> : <IconStar />}>
+            <Button
+              variant={destacado ? "filled" : "outline"}
+              color="yellow"
+              onClick={() => (!destacado ? handleHighlight(fotoData) : null)}
+              leftSection={destacado ? <IconStarFilled /> : <IconStar />}>
               {destacado ? "Destacado" : "Destacar"}
             </Button>
           </Group>
@@ -125,16 +151,32 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
       )}
       <Group justify="center">
         {newPhoto ? (
-          <Image alt="Nova foto" color="violet" src={fotoData} radius="xs" width={200} height={200} fit="contain" />
+          <Image
+            alt="Nova foto"
+            color="violet"
+            src={fotoData}
+            radius="xs"
+            width={200}
+            height={200}
+            fit="contain"
+          />
         ) : (
-          <Image alt={fotoData.nome} color="violet" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoData.path}/210x314-${fotoData.nome}?i=${Math.random()}`} radius="xs" width={200} height={200} fit="contain" />
+          <Image
+            alt={fotoData.nome}
+            color="violet"
+            src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoData.path}/210x314-${fotoData.nome}?i=${Math.random()}`}
+            radius="xs"
+            width={200}
+            height={200}
+            fit="contain"
+          />
         )}
       </Group>
       <Card.Section inheritPadding py="xs">
         <Group justify="center">
           <ButtonGroup>
             {!newPhoto && (
-              <Button title="Rotacionar esquerda" color="blue" onClick={() => handleRotate('left')}>
+              <Button title="Rotacionar esquerda" color="blue" onClick={() => handleRotate("left")}>
                 <IconRotate />
               </Button>
             )}
@@ -142,7 +184,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
               <IconX />
             </Button>
             {!newPhoto && (
-              <Button title="Rotacionar direita" color="blue" onClick={() => handleRotate('right')}>
+              <Button title="Rotacionar direita" color="blue" onClick={() => handleRotate("right")}>
                 <IconRotateClockwise />
               </Button>
             )}

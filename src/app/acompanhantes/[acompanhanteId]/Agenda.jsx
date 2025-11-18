@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { Box, Button, Card, Grid, Modal, Stack } from '@mantine/core'
-import React, { useState } from 'react'
+import { Box, Button, Card, Grid, Modal, Stack } from "@mantine/core"
+import React, { useState } from "react"
 
-import { FormAcompanhante } from '@/components/forms'
+import { FormAcompanhante } from "@/components/forms"
 
 export default function Agenda({ acompanhanteData, mutate }) {
   // States
@@ -19,8 +19,12 @@ export default function Agenda({ acompanhanteData, mutate }) {
           <Grid>
             {acompanhanteData?.periodos?.map(periodo => (
               <Grid.Col key={periodo.id} span={{ base: 12, lg: 6 }}>
-                <Card style={{ width: '100%' }}>
-                  <FormAcompanhante.Agenda acompanhanteData={acompanhanteData} agendaData={periodo} onSuccess={() => mutate()} />
+                <Card style={{ width: "100%" }}>
+                  <FormAcompanhante.Agenda
+                    acompanhanteData={acompanhanteData}
+                    agendaData={periodo}
+                    onSuccess={() => mutate()}
+                  />
                 </Card>
               </Grid.Col>
             ))}
@@ -28,10 +32,13 @@ export default function Agenda({ acompanhanteData, mutate }) {
         )}
       </Stack>
       <Modal centered opened={opened} onClose={() => setOpened(false)} title="Nova agenda">
-        <FormAcompanhante.Agenda acompanhanteData={acompanhanteData} onSuccess={() => {
-          mutate()
-          setOpened(false)
-        }} />
+        <FormAcompanhante.Agenda
+          acompanhanteData={acompanhanteData}
+          onSuccess={() => {
+            mutate()
+            setOpened(false)
+          }}
+        />
       </Modal>
     </>
   )

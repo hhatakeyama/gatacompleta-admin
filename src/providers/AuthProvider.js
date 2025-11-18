@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { useSWRConfig } from 'swr'
+import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import { useSWRConfig } from "swr"
 
-import { useFetch } from '@/hooks'
-import { api, getCookie, removeCookie, setCookie } from '@/utils'
+import { useFetch } from "@/hooks"
+import { api, getCookie, removeCookie, setCookie } from "@/utils"
 
 const AuthContext = createContext(null)
 
@@ -15,34 +15,34 @@ function useProvideAuth() {
   const { cache } = useSWRConfig()
 
   // Constants
-  const cookieTokenString = 'gatacompleta-cms-token'
+  const cookieTokenString = "gatacompleta-cms-token"
   const { token: cookieToken, expiry: cookieExpiry } = getCookie(cookieTokenString) || {}
 
   // States
   const [loading, setLoading] = useState(null)
   const [isAuthenticated, setIsAuthenticated] = useState(null)
   const [isValidating, setIsValidating] = useState(null)
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
   // const [permissionsData, setPermissionsData] = useState(['admin'])
   // const permissionsIsValidating = false
 
   // // Fetch
   const { data: userData, isValidating: userIsValidating } = useFetch([
-    isAuthenticated === true ? '/admin/accounts/me' : null
+    isAuthenticated === true ? "/admin/accounts/me" : null,
   ])
 
   const { data: permissionsData, isValidating: permissionsIsValidating } = useFetch([
-    isAuthenticated === true ? '/admin/accounts/permissions' : null
+    isAuthenticated === true ? "/admin/accounts/permissions" : null,
   ])
 
   // Login with credentials
-  const login = async (credentials) => {
+  const login = async credentials => {
     setLoading(true)
-    await api.get('/sanctum/csrf-cookie')
+    await api.get("/sanctum/csrf-cookie")
     const response = await api
-      .post('/api/admin/authentication/login', {
+      .post("/api/admin/authentication/login", {
         email: credentials.email,
-        password: credentials.password
+        password: credentials.password,
       })
       .then(response => {
         const { data } = response || {}
@@ -53,15 +53,15 @@ function useProvideAuth() {
           setCookie(cookieTokenString, tokenData)
           setIsAuthenticated(true)
         } else {
-          return { error: 'E-mail ou senha inválidos' }
+          return { error: "E-mail ou senha inválidos" }
         }
       })
       .catch(error => {
         return {
           error:
-            error?.response?.data?.message === 'Unauthorized'
-              ? 'E-mail ou senha inválidos'
-              : 'Ocorreu um erro inesperado. Tente novamente mais tarde'
+            error?.response?.data?.message === "Unauthorized"
+              ? "E-mail ou senha inválidos"
+              : "Ocorreu um erro inesperado. Tente novamente mais tarde",
         }
       })
       .finally(() => setLoading(false))
@@ -72,7 +72,7 @@ function useProvideAuth() {
   // Logout user from API
   const logout = async () => {
     try {
-      await api.post('/api/admin/authentication/logout')
+      await api.post("/api/admin/authentication/logout")
     } finally {
       removeCookie(cookieTokenString)
       setIsAuthenticated(false)
@@ -81,17 +81,17 @@ function useProvideAuth() {
   }
 
   // Send reset password link
-  const forgotPassword = async (email) => {
-    const response = await api.post('/api/admin/password-reset', { email })
+  const forgotPassword = async email => {
+    const response = await api.post("/api/admin/password-reset", { email })
     return response
   }
 
   // Reset password
   const resetPassword = async (password, uidb64, hash) => {
-    const response = await api.post('/api/admin/password-reset/confirm', {
+    const response = await api.post("/api/admin/password-reset/confirm", {
       password,
       uidb64,
-      token: hash
+      token: hash,
     })
     return response
   }

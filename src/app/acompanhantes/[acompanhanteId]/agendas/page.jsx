@@ -1,18 +1,18 @@
-'use client'
+"use client"
 
-import { Badge, Button, Group, Image, Stack, Text } from '@mantine/core'
-import { notifications } from '@mantine/notifications'
-import { IconAt, IconCalendar, IconPhoneCall } from '@tabler/icons-react'
-import { useParams, useRouter } from 'next/navigation'
-import React from 'react'
+import { Button, Group, Image, Stack, Text, Title } from "@mantine/core"
+import { notifications } from "@mantine/notifications"
+import { IconAt, IconCalendar, IconPhoneCall } from "@tabler/icons-react"
+import { useParams, useRouter } from "next/navigation"
+import React from "react"
 
-import guardAccount from '@/guards/AccountGuard'
-import { useFetch } from '@/hooks'
-import { useAuth } from '@/providers/AuthProvider'
-import { dateToHuman } from '@/utils'
+import Active from "@/components/displayers/DisplayStatus/Active"
+import guardAccount from "@/guards/AccountGuard"
+import { useFetch } from "@/hooks"
+import { useAuth } from "@/providers/AuthProvider"
+import { dateToHuman } from "@/utils"
 
-import Agenda from '../Agenda'
-import classes from './Agenda.module.css'
+import Agenda from "../Agenda"
 
 function Agendas() {
   // Hooks
@@ -21,9 +21,13 @@ function Agendas() {
   const router = useRouter()
 
   // Fetch
-  const { data, error, mutate } = useFetch([isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null])
+  const { data, error, mutate } = useFetch([
+    isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null,
+  ])
 
-  const expira = data?.periodos[data?.periodos.length - 1] ? new Date(data?.periodos[data?.periodos.length - 1].data_fim) : false
+  const expira = data?.periodos[data?.periodos.length - 1]
+    ? new Date(data?.periodos[data?.periodos.length - 1].data_fim)
+    : false
   // const aviso = new Date("Y-m-d")
   // const dataFim = new Date("d/m/Y")
   // if (expira) {
@@ -31,8 +35,8 @@ function Agendas() {
   //   const dataFimArray = expira.split("-")
   //   dataFim = dataFimArray[2] + "/" + dataFimArray[1] + "/" + dataFimArray[0]
   // }
-  let texto = ''
-  let whatsapp = '';
+  let texto = ""
+  let whatsapp = ""
   if (data?.telefones && data?.telefones.length > 0 && data?.telefones[0] && data?.url) {
     whatsapp = data?.telefones[0].numero
     const dataInicio = dateToHuman(data?.created_at)
@@ -49,44 +53,58 @@ function Agendas() {
     
     Obrigado por sua atenção.`
   }
-  const fotoDestaque = data?.fotoDestaque && data?.fotoDestaque.length > 0
-    ? `${data?.fotoDestaque[0].path}/210x314-${data?.fotoDestaque[0].nome}`
-    : (data?.fotos && data?.fotos.length > 0 ? `${data?.fotos[0].path}/210x314-${data?.fotos[0].nome}` : '/img/sem-foto.jpg')
+  const fotoDestaque =
+    data?.fotoDestaque && data?.fotoDestaque.length > 0
+      ? `${data?.fotoDestaque[0].path}/210x314-${data?.fotoDestaque[0].nome}`
+      : data?.fotos && data?.fotos.length > 0
+        ? `${data?.fotos[0].path}/210x314-${data?.fotos[0].nome}`
+        : "/img/sem-foto.jpg"
 
   // Validations
   if (error?.response?.data?.message === "Unauthorized") {
-    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: 'red' })
-    return router.push('/')
+    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: "red" })
+    return router.push("/")
   }
 
   return (
     <Stack>
       <Group wrap="nowrap">
-        <Image alt="Foto destaque" src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`} width={200} height={200} radius="md" />
+        <Image
+          alt="Foto destaque"
+          src={`${process.env.NEXT_PUBLIC_API_DOMAIN}${fotoDestaque}`}
+          width={200}
+          height={200}
+          radius="md"
+        />
 
         <div>
-          {data?.status === '1' ? (
-            <Badge size="sm" color="green">Ativo</Badge>
-          ) : (
-            <Badge size="sm" color="red">Inativo</Badge>
-          )}
-          <Text fz="lg" fw={500} className={classes.profileName}>
-            {data?.nome}
-          </Text>
+          <Active status={data?.status} />
+          <Title order={3}>{data?.nome}</Title>
           <Group wrap="nowrap" gap={10} mt={3}>
-            <IconAt stroke={1.5} size="1rem" className={classes.profileIcon} />
-            <Text fz="xs" c="dimmed">{data?.usuario.email}</Text>
+            <IconAt stroke={1.5} size="1rem" />
+            <Text fz="xs" c="dimmed">
+              {data?.usuario.email}
+            </Text>
           </Group>
           {whatsapp && data?.url && (
             <Group wrap="nowrap" gap={10} mt={5}>
-              <IconPhoneCall stroke={1.5} size="1rem" className={classes.icon} />
-              <Button size="compact-sm" component="a" color="green" title="WhatsApp" href={`https://wa.me/+55${whatsapp}?text=${texto}`}>{whatsapp}</Button>
+              <IconPhoneCall stroke={1.5} size="1rem" />
+              <Button
+                size="compact-sm"
+                component="a"
+                color="green"
+                title="WhatsApp"
+                href={`https://wa.me/+55${whatsapp}?text=${texto}`}>
+                {whatsapp}
+              </Button>
             </Group>
           )}
           {expira && (
             <Group wrap="nowrap" gap={10} mt={5}>
-              <IconCalendar stroke={1.5} size="1rem" className={classes.icon} />
-              <Text fz="xs" c="dimmed">expira em {dateToHuman(expira)}</Text>
+              <IconCalendar stroke={1.5} size="1rem" />
+              <Text fz="xs" c="dimmed">
+                expira em {dateToHuman(expira)}
+              </Text>
             </Group>
           )}
         </div>

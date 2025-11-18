@@ -1,13 +1,26 @@
-'use client'
+"use client"
 
-import { Center, Grid, LoadingOverlay, Pagination, rem, ScrollArea, Select, Stack, Table, Text, TextInput, Title } from '@mantine/core'
-import { IconSearch } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import {
+  Center,
+  Grid,
+  LoadingOverlay,
+  Pagination,
+  rem,
+  ScrollArea,
+  Select,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core"
+import { IconSearch } from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
+import React, { useState } from "react"
 
-import guardAccount from '@/guards/AccountGuard'
-import { useFetch } from '@/hooks'
-import { useAuth } from '@/providers/AuthProvider'
+import guardAccount from "@/guards/AccountGuard"
+import { useFetch } from "@/hooks"
+import { useAuth } from "@/providers/AuthProvider"
 
 function MaisAcessadas() {
   // Hooks
@@ -18,23 +31,23 @@ function MaisAcessadas() {
   const { permissions } = permissionsData || {}
 
   // States
-  const [search, setSearch] = useState('')
-  const [searchFilter, setSearchFilter] = useState('')
-  const [evento, setEvento] = useState('')
-  const [dataInicio, setDataInicio] = useState('')
-  const [dataFim, setDataFim] = useState('')
+  const [search, setSearch] = useState("")
+  const [searchFilter, setSearchFilter] = useState("")
+  const [evento, setEvento] = useState("")
+  const [dataInicio, setDataInicio] = useState("")
+  const [dataFim, setDataFim] = useState("")
   const [pagina, setPagina] = useState(1)
 
   // Fetch
   const { data, error } = useFetch([
-    isAuthenticated === true ? '/admin/events/paginasMaisAcessadas' : null,
-    { busca: searchFilter, evento, dataInicio, dataFim, pagina }
+    isAuthenticated === true ? "/admin/events/paginasMaisAcessadas" : null,
+    { busca: searchFilter, evento, dataInicio, dataFim, pagina },
   ])
   const { data: paginasMaisAcessadas = [], last_page } = data || {}
   const loading = !data && !error
 
   // Validations
-  if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
+  if (permissions?.find(item => item !== "s" && item !== "a")) return router.push("/")
 
   return (
     <Stack>
@@ -53,7 +66,11 @@ function MaisAcessadas() {
         <Grid.Col span={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
           <Select
             placeholder="Evento"
-            data={[{ value: '', label: 'Todos' }, { value: 'whatsapp', label: 'Whatsapp' }, { value: 'telefone', label: 'Telefone' }]}
+            data={[
+              { value: "", label: "Todos" },
+              { value: "whatsapp", label: "Whatsapp" },
+              { value: "telefone", label: "Telefone" },
+            ]}
             onChange={option => setEvento(option)}
           />
         </Grid.Col>
@@ -78,16 +95,11 @@ function MaisAcessadas() {
       <Stack pos="relative">
         <LoadingOverlay
           visible={loading}
-          overlayProps={{ radius: 'sm', blur: 2 }}
-          loaderProps={{ color: 'pink', type: 'bars' }}
+          overlayProps={{ radius: "sm", blur: 2 }}
+          loaderProps={{ color: "pink", type: "bars" }}
         />
         <ScrollArea h={paginasMaisAcessadas.length > 15 ? "55vh" : "auto"} offsetScrollbars>
-          <Table
-            striped
-            highlightOnHover
-            withTableBorder
-            miw={700}
-          >
+          <Table striped highlightOnHover withTableBorder miw={700}>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Evento</Table.Th>
@@ -96,16 +108,8 @@ function MaisAcessadas() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {paginasMaisAcessadas.length > 0 ? paginasMaisAcessadas.map((row) => {
-                return (
-                  <Table.Tr key={row.id}>
-                    <Table.Td>{row.evento}</Table.Td>
-                    <Table.Td>{row.url}</Table.Td>
-                    <Table.Td>{row.count}</Table.Td>
-                  </Table.Tr>
-                )
-              }) : (
-                <Table.Tr>
+              {!paginasMaisAcessadas.length && (
+                <Table.Tr key='empty'>
                   <Table.Td colSpan={5}>
                     <Text fw={500} ta="center">
                       Nenhum evento encontrado
@@ -113,6 +117,15 @@ function MaisAcessadas() {
                   </Table.Td>
                 </Table.Tr>
               )}
+              {paginasMaisAcessadas.map(row => {
+                return (
+                  <Table.Tr key={row.id}>
+                    <Table.Td>{row.evento}</Table.Td>
+                    <Table.Td>{row.url}</Table.Td>
+                    <Table.Td>{row.count}</Table.Td>
+                  </Table.Tr>
+                )
+              })}
             </Table.Tbody>
           </Table>
         </ScrollArea>

@@ -1,16 +1,18 @@
-import dayjs from 'dayjs'
+import dayjs from "dayjs"
 
 const defaultOptions = {
   format: undefined,
   display: {
-    date: 'DD/MM/YYYY',
-    time: 'HH:mm',
-    datetime: 'DD/MM/YYYY HH:mm'
-  }
+    date: "DD/MM/YYYY",
+    time: "HH:mm",
+    datetime: "DD/MM/YYYY HH:mm",
+  },
 }
 
 export function displayer(inputDayjs, options) {
-  if (!dayjs.isDayjs(inputDayjs)) { return { date: undefined, time: undefined, datetime: undefined } }
+  if (!dayjs.isDayjs(inputDayjs)) {
+    return { date: undefined, time: undefined, datetime: undefined }
+  }
 
   if (!options) {
     options = defaultOptions
@@ -19,7 +21,7 @@ export function displayer(inputDayjs, options) {
   return {
     date: inputDayjs.format(options.display.date),
     time: inputDayjs.format(options.display.time),
-    datetime: inputDayjs.format(options.display.datetime)
+    datetime: inputDayjs.format(options.display.datetime),
   }
 }
 
@@ -47,9 +49,9 @@ function isDate(value) {
 export function datter(input, options = defaultOptions) {
   const inputIsDayjs = dayjs.isDayjs(input)
   const inputIsDate = isDate(input)
-  const inputIsString = typeof input === 'string'
+  const inputIsString = typeof input === "string"
 
-  if (!options) throw Error('Options is mandatory for datter')
+  if (!options) throw Error("Options is mandatory for datter")
 
   const mergedOptions = { ...defaultOptions, ...options }
   const { format } = mergedOptions
@@ -81,7 +83,7 @@ export function datter(input, options = defaultOptions) {
   return { input, output: null, raw: null, display: displayer(input, mergedOptions) }
 }
 
-export const dateToHuman = (date, type = 'datetime') => {
+export const dateToHuman = (date, type = "datetime") => {
   const dateObject = new Date(date)
   let format = {
     year: "numeric",
@@ -89,14 +91,14 @@ export const dateToHuman = (date, type = 'datetime') => {
     day: "numeric",
     hour: "numeric",
     minute: "numeric",
-    timeZone: 'UTC',
+    timeZone: "UTC",
   }
-  if (type === 'date') {
+  if (type === "date") {
     format = {
       year: "numeric",
       month: "numeric",
       day: "numeric",
     }
   }
-  return new Intl.DateTimeFormat('pt-BR', format).format(dateObject)
+  return new Intl.DateTimeFormat("pt-BR", format).format(dateObject)
 }

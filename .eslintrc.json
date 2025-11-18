@@ -1,46 +1,42 @@
 {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["next", "plugin:react/recommended"],
-  "plugins": ["react", "simple-import-sort"],
+  "extends": ["next", "prettier", "plugin:react/recommended"],
+  "plugins": ["simple-import-sort", "react", "react-hooks", "@next/next"],
   "rules": {
-    "semi": "off",
-    "import/no-anonymous-default-export": "off",
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1,
-        "offsetTernaryExpressions": true,
-        "ignoredNodes": ["TemplateLiteral"]
-      }
-    ],
-    "jsx-quotes": ["error", "prefer-double"],
-    "multiline-ternary": "off",
+    // Regras básicas de JavaScript
     "no-console": "warn",
     "no-unused-vars": "warn",
-    "no-use-before-define": "off",
-    "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off",
+    "no-undef": "error",
+    "no-duplicate-imports": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "eqeqeq": ["warn"],
+    
+    // Regras de formatação
+    "semi": ["error", "never"],
+    "quotes": ["error", "double"],
+    "indent": ["error", 2],
+    "comma-dangle": ["error", "always-multiline"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "never"],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
-    "space-before-function-paren": [
-      "error",
-      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
-    ]
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx"]
-      }
-    },
-    "react": {
-      "version": "detect" // Automatically detect the react version
-    }
+
+    // Regras específicas do React
+    "react/no-unknown-property": "warn",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-uses-vars": "error",
+    "react/jsx-no-undef": "error",
+    "react/jsx-curly-spacing": ["error", "never"],
+    "react/jsx-equals-spacing": ["error", "never"],
+    "react/jsx-tag-spacing": ["error", { "beforeSelfClosing": "always" }],
+    
+    // Regras de hooks
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    
+    // Regras específicas do Next.js
+    "@next/next/no-img-element": "warn",
+    "@next/next/no-html-link-for-pages": "error"
   }
 }

@@ -1,10 +1,10 @@
-'use client'
+"use client"
 
-import { Stack, Text, Title } from '@mantine/core'
-import { useRouter } from 'next/navigation'
+import { Stack, Text, Title } from "@mantine/core"
+import { useRouter } from "next/navigation"
 
-import guardAccount from '@/guards/AccountGuard'
-import { useAuth } from '@/providers/AuthProvider'
+import guardAccount from "@/guards/AccountGuard"
+import { useAuth } from "@/providers/AuthProvider"
 
 function Relatorios() {
   // Hooks
@@ -15,7 +15,7 @@ function Relatorios() {
   const { permissions } = permissionsData || {}
 
   // Validations
-  if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
+  if (permissions?.find(item => item !== "s" && item !== "a")) return router.push("/")
 
   return (
     <Stack>
