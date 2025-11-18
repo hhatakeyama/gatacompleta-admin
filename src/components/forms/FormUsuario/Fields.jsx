@@ -1,4 +1,4 @@
-import { Select, TextInput } from '@mantine/core'
+import { Select, TextInput } from "@mantine/core"
 
 export const NameField = ({ inputProps }) => (
   <TextInput {...inputProps} label="Nome" placeholder="Nome" type="text" />
@@ -25,25 +25,10 @@ export const OldPasswordField = ({ inputProps }) => (
   <TextInput {...inputProps} label="Senha Antiga" placeholder="Senha Antiga" type="password" />
 )
 
-export const StateField = ({ inputProps }) => (
-  <Select
-    {...inputProps}
-    label="UF"
-    placeholder="UF"
-  />
-)
+export const StateField = ({ inputProps }) => <Select {...inputProps} label="UF" placeholder="UF" />
 
 export const CityField = ({ inputProps }) => (
-  <Select
-    {...inputProps}
-    label="Cidade"
-    placeholder="Cidade"
-  />
+  <Select {...inputProps} label="Cidade" placeholder="Cidade" />
 )
 
-export const DateField = ({ inputProps }) => (
-  <TextInput
-    type="date"
-    {...inputProps}
-  />
-)
+export const DateField = ({ inputProps }) => <TextInput type="date" {...inputProps} />

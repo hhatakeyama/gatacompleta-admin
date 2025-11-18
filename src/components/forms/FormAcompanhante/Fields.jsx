@@ -1,8 +1,8 @@
-import { Button, Checkbox, FileInput, InputBase, Select, TextInput } from '@mantine/core'
-import { IconFileUpload } from '@tabler/icons-react'
-import { IMaskInput } from 'react-imask'
+import { Button, Checkbox, FileInput, InputBase, Select, TextInput } from "@mantine/core"
+import { IconFileUpload } from "@tabler/icons-react"
+import { IMaskInput } from "react-imask"
 
-const acceptTypes = ['image/gif', 'image/png', 'image/jpeg']
+const acceptTypes = ["image/gif", "image/png", "image/jpeg"]
 
 export const NameField = ({ inputProps }) => (
   <TextInput {...inputProps} label="Nome" placeholder="Nome" type="text" />
@@ -29,28 +29,13 @@ export const OldPasswordField = ({ inputProps }) => (
   <TextInput {...inputProps} label="Senha Antiga" placeholder="Senha Antiga" type="password" />
 )
 
-export const StateField = ({ inputProps }) => (
-  <Select
-    {...inputProps}
-    label="UF"
-    placeholder="UF"
-  />
-)
+export const StateField = ({ inputProps }) => <Select {...inputProps} label="UF" placeholder="UF" />
 
 export const CityField = ({ inputProps }) => (
-  <Select
-    {...inputProps}
-    label="Cidade"
-    placeholder="Cidade"
-  />
+  <Select {...inputProps} label="Cidade" placeholder="Cidade" />
 )
 
-export const DateField = ({ inputProps }) => (
-  <TextInput
-    type="date"
-    {...inputProps}
-  />
-)
+export const DateField = ({ inputProps }) => <TextInput type="date" {...inputProps} />
 
 export const PhoneNumberField = ({ inputProps }) => (
   <InputBase
@@ -72,8 +57,8 @@ export const PictureField = ({ inputProps }) => (
     <FileInput
       {...inputProps}
       multiple
-      accept={acceptTypes.join(',')}
-      style={{ display: 'none' }}
+      accept={acceptTypes.join(",")}
+      style={{ display: "none" }}
     />
   </Button>
 )

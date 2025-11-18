@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { redirect, usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { redirect, usePathname, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
 
-import { FormLogin } from '@/components/forms'
-import guardAccount from '@/guards/AccountGuard'
-import { useAuth } from '@/providers/AuthProvider'
+import { FormLogin } from "@/components/forms"
+import guardAccount from "@/guards/AccountGuard"
+import { useAuth } from "@/providers/AuthProvider"
 
 function Login() {
   // Hooks
@@ -17,12 +17,12 @@ function Login() {
   const [forgotPassword, setForgotPassword] = useState(false)
 
   // Constants
-  const redirectCallback = search.get('redirectCallback')
+  const redirectCallback = search.get("redirectCallback")
 
   useEffect(() => {
     if (isAuthenticated === true) {
       if (redirectCallback) redirect(redirectCallback)
-      redirect('/')
+      redirect("/")
     }
   }, [isAuthenticated, pathname, redirectCallback, search])
 

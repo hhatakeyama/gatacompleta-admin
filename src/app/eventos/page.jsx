@@ -1,14 +1,27 @@
-'use client'
+"use client"
 
-import { Center, Grid, LoadingOverlay, Pagination, rem, ScrollArea, Select, Stack, Table, Text, TextInput, Title } from '@mantine/core'
-import { IconSearch } from '@tabler/icons-react'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import {
+  Center,
+  Grid,
+  LoadingOverlay,
+  Pagination,
+  rem,
+  ScrollArea,
+  Select,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core"
+import { IconSearch } from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
+import React, { useState } from "react"
 
-import guardAccount from '@/guards/AccountGuard'
-import { useFetch } from '@/hooks'
-import { useAuth } from '@/providers/AuthProvider'
-import { dateToHuman } from '@/utils'
+import guardAccount from "@/guards/AccountGuard"
+import { useFetch } from "@/hooks"
+import { useAuth } from "@/providers/AuthProvider"
+import { dateToHuman } from "@/utils"
 
 function Eventos() {
   // Hooks
@@ -19,18 +32,21 @@ function Eventos() {
   const { permissions } = permissionsData || {}
 
   // States
-  const [search, setSearch] = useState('')
-  const [searchFilter, setSearchFilter] = useState('')
-  const [evento, setEvento] = useState('')
+  const [search, setSearch] = useState("")
+  const [searchFilter, setSearchFilter] = useState("")
+  const [evento, setEvento] = useState("")
   const [pagina, setPagina] = useState(1)
 
   // Fetch
-  const { data, error } = useFetch([isAuthenticated === true ? '/admin/events' : null, { busca: searchFilter, pagina, evento }])
+  const { data, error } = useFetch([
+    isAuthenticated === true ? "/admin/events" : null,
+    { busca: searchFilter, pagina, evento },
+  ])
   const { data: eventos = [], last_page } = data || {}
   const loading = !data && !error
 
   // Validations
-  if (permissions?.find(item => item !== 's' && item !== 'a')) return router.push('/')
+  if (permissions?.find(item => item !== "s" && item !== "a")) return router.push("/")
 
   return (
     <Stack>
@@ -49,7 +65,11 @@ function Eventos() {
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Select
             placeholder="Evento"
-            data={[{ value: '', label: 'Todos' }, { value: 'whatsapp', label: 'Whatsapp' }, { value: 'telefone', label: 'Telefone' }]}
+            data={[
+              { value: "", label: "Todos" },
+              { value: "whatsapp", label: "Whatsapp" },
+              { value: "telefone", label: "Telefone" },
+            ]}
             onChange={option => setEvento(option)}
           />
         </Grid.Col>
@@ -58,16 +78,11 @@ function Eventos() {
       <Stack pos="relative">
         <LoadingOverlay
           visible={loading}
-          overlayProps={{ radius: 'sm', blur: 2 }}
-          loaderProps={{ color: 'pink', type: 'bars' }}
+          overlayProps={{ radius: "sm", blur: 2 }}
+          loaderProps={{ color: "pink", type: "bars" }}
         />
         <ScrollArea h={eventos.length > 15 ? "55vh" : "auto"} offsetScrollbars>
-          <Table
-            striped
-            highlightOnHover
-            withTableBorder
-            miw={700}
-          >
+          <Table striped highlightOnHover withTableBorder miw={700}>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>ID</Table.Th>
@@ -78,17 +93,19 @@ function Eventos() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {eventos.length > 0 ? eventos.map((row) => {
-                return (
-                  <Table.Tr key={row.id}>
-                    <Table.Td>{row.id}</Table.Td>
-                    <Table.Td>{row.evento}</Table.Td>
-                    <Table.Td>{row.mensagem}</Table.Td>
-                    <Table.Td>{row.url}</Table.Td>
-                    <Table.Td>{row.created_at ? dateToHuman(row.created_at) : ''}</Table.Td>
-                  </Table.Tr>
-                )
-              }) : (
+              {eventos.length > 0 ? (
+                eventos.map(row => {
+                  return (
+                    <Table.Tr key={row.id}>
+                      <Table.Td>{row.id}</Table.Td>
+                      <Table.Td>{row.evento}</Table.Td>
+                      <Table.Td>{row.mensagem}</Table.Td>
+                      <Table.Td>{row.url}</Table.Td>
+                      <Table.Td>{row.created_at ? dateToHuman(row.created_at) : ""}</Table.Td>
+                    </Table.Tr>
+                  )
+                })
+              ) : (
                 <Table.Tr>
                   <Table.Td colSpan={5}>
                     <Text fw={500} ta="center">

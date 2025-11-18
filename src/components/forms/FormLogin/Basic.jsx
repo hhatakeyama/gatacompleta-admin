@@ -1,9 +1,20 @@
-'use client'
+"use client"
 
-import { Alert, Button, Container, LoadingOverlay, Paper, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core'
-import React, { useState } from 'react'
+import {
+  Alert,
+  Button,
+  Container,
+  LoadingOverlay,
+  Paper,
+  PasswordInput,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core"
+import React, { useState } from "react"
 
-import { useAuth } from '@/providers/AuthProvider'
+import { useAuth } from "@/providers/AuthProvider"
 
 export default function Basic({ onForgotPassword, onSubmit }) {
   // Hooks
@@ -12,12 +23,12 @@ export default function Basic({ onForgotPassword, onSubmit }) {
   // States
   const [error, setError] = useState(null)
   const [credentials, setCredentials] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   })
 
   // Actions
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     setError(null)
     const response = await onSubmit?.(credentials)
@@ -27,17 +38,15 @@ export default function Basic({ onForgotPassword, onSubmit }) {
   }
 
   return (
-    <Container size="xl" my={40} style={{ maxWidth: '400px', width: '100%' }}>
-      <Title ta="center">
-        Bem-vindo(a)!
-      </Title>
+    <Container size="xl" my={40} style={{ maxWidth: "400px", width: "100%" }}>
+      <Title ta="center">Bem-vindo(a)!</Title>
       <Text c="dimmed" fz="sm" ta="center">
         Faça seu login abaixo.
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md" pos="relative">
         <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
-        <form onSubmit={handleSubmit} style={{ position: 'relative' }}>
+        <form onSubmit={handleSubmit} style={{ position: "relative" }}>
           <Stack>
             <TextInput
               label="E-mail"
@@ -60,9 +69,13 @@ export default function Basic({ onForgotPassword, onSubmit }) {
             </Group> */}
 
             {!!error && (
-              <Alert color="red" title="Erro">{error}</Alert>
+              <Alert color="red" title="Erro">
+                {error}
+              </Alert>
             )}
-            <Button type="submit" fullWidth>Login</Button>
+            <Button type="submit" fullWidth>
+              Login
+            </Button>
           </Stack>
         </form>
       </Paper>

@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import { Box, Button, Grid, Group, Modal, Stack, Text } from '@mantine/core'
-import { useForm, yupResolver } from '@mantine/form'
-import { showNotification } from '@mantine/notifications'
-import React, { useState } from 'react'
+import { Box, Button, Grid, Group, Modal, Stack, Text } from "@mantine/core"
+import { useForm, yupResolver } from "@mantine/form"
+import { showNotification } from "@mantine/notifications"
+import React, { useState } from "react"
 
-import { useFetch } from '@/hooks'
-import { api, Yup } from '@/utils'
+import { useFetch } from "@/hooks"
+import { api, Yup } from "@/utils"
 
-import * as Fields from './Fields'
+import * as Fields from "./Fields"
 
 export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
   // States
@@ -18,10 +18,10 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
   // Constants
   const initialValues = {
     acompanhante_id: acompanhanteData.id,
-    estado_id: agendaData?.estado_id?.toString() || '',
-    cidade_id: agendaData?.cidade_id?.toString() || '',
-    data_inicio: agendaData?.data_inicio || '',
-    data_fim: agendaData?.data_fim || '',
+    estado_id: agendaData?.estado_id?.toString() || "",
+    cidade_id: agendaData?.cidade_id?.toString() || "",
+    data_inicio: agendaData?.data_inicio || "",
+    data_fim: agendaData?.data_fim || "",
   }
 
   const schema = Yup.object().shape({
@@ -36,21 +36,34 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
     initialValues,
     validate: yupResolver(schema),
     validateInputOnBlur: true,
-    validateInputOnChange: true
+    validateInputOnChange: true,
   })
 
   // Actions
-  const handleSubmit = async (newValues) => {
+  const handleSubmit = async newValues => {
     setIsSubmitting(true)
     if (agendaData) {
       return api
-        .patch(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${agendaData.id}`, newValues)
+        .patch(
+          `/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${agendaData.id}`,
+          newValues,
+        )
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.message || 'Agenda atualizada com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.message || "Agenda atualizada com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
-          showNotification({ title: 'Erro', message: response?.message || 'Ocorreu um erro ao atualizar a agenda. Tente novamente mais tarde.', color: 'red' })
+          showNotification({
+            title: "Erro",
+            message:
+              response?.message ||
+              "Ocorreu um erro ao atualizar a agenda. Tente novamente mais tarde.",
+            color: "red",
+          })
         })
         .finally(() => {
           setIsSubmitting(false)
@@ -62,13 +75,19 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
         .post(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.message || 'Agenda cadastrada com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.message || "Agenda cadastrada com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
           showNotification({
-            title: 'Erro',
-            message: response?.message || 'Ocorreu um erro ao cadastrar a agenda. Tente novamente mais tarde.',
-            color: 'red'
+            title: "Erro",
+            message:
+              response?.message ||
+              "Ocorreu um erro ao cadastrar a agenda. Tente novamente mais tarde.",
+            color: "red",
           })
         })
         .finally(() => {
@@ -85,13 +104,19 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
         .delete(`/api/admin/acompanhantes/${acompanhanteData.user_id}/agendas/${remove.id}`)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Agenda removida com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.data?.message || "Agenda removida com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
           showNotification({
-            title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao remover a agenda. Tente novamente mais tarde.',
-            color: 'red'
+            title: "Erro",
+            message:
+              response?.data?.message ||
+              "Ocorreu um erro ao remover a agenda. Tente novamente mais tarde.",
+            color: "red",
           })
         })
         .finally(() => setIsSubmitting(false))
@@ -99,19 +124,22 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
   }
 
   // Fetch
-  const { data } = useFetch([`/admin/estados`])
-  const { data: dataCidades } = useFetch([form.values.estado_id ? `/admin/estados/${form.values.estado_id}/cidades` : null])
+  const { data } = useFetch(["/admin/estados"])
+  const { data: dataCidades } = useFetch([
+    form.values.estado_id ? `/admin/estados/${form.values.estado_id}/cidades` : null,
+  ])
   const optionsEstados = data?.map(estado => ({ value: estado.id, label: estado.nome })) || []
-  const optionsCidades = dataCidades?.map(cidade => ({ value: cidade.id.toString(), label: cidade.nome })) || []
+  const optionsCidades =
+    dataCidades?.map(cidade => ({ value: cidade.id.toString(), label: cidade.nome })) || []
 
   return (
     <>
-      <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
+      <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: "relative" }}>
         <Grid align="center">
           <Grid.Col span={4}>
             <Fields.StateField
               inputProps={{
-                ...form.getInputProps('estado_id'),
+                ...form.getInputProps("estado_id"),
                 data: optionsEstados,
                 disabled: isSubmitting,
                 searchable: true,
@@ -119,23 +147,33 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
             />
           </Grid.Col>
           <Grid.Col span={8}>
-            {optionsCidades.length > 0 && <Fields.CityField
-              inputProps={{
-                ...form.getInputProps('cidade_id'),
-                data: optionsCidades,
-                disabled: !form.values.estado_id || isSubmitting,
-                searchable: true,
-              }}
-            />}
+            {optionsCidades.length > 0 && (
+              <Fields.CityField
+                inputProps={{
+                  ...form.getInputProps("cidade_id"),
+                  data: optionsCidades,
+                  disabled: !form.values.estado_id || isSubmitting,
+                  searchable: true,
+                }}
+              />
+            )}
           </Grid.Col>
           <Grid.Col span={6}>
             <Fields.DateField
-              inputProps={{ ...form.getInputProps('data_inicio'), label: 'Data Início', disabled: isSubmitting }}
+              inputProps={{
+                ...form.getInputProps("data_inicio"),
+                label: "Data Início",
+                disabled: isSubmitting,
+              }}
             />
           </Grid.Col>
           <Grid.Col span={6}>
             <Fields.DateField
-              inputProps={{ ...form.getInputProps('data_fim'), label: 'Data Fim', disabled: isSubmitting }}
+              inputProps={{
+                ...form.getInputProps("data_fim"),
+                label: "Data Fim",
+                disabled: isSubmitting,
+              }}
             />
           </Grid.Col>
         </Grid>
@@ -162,13 +200,11 @@ export default function Agenda({ acompanhanteData, agendaData, onSuccess }) {
       </form>
       <Modal centered opened={!!remove} onClose={() => setRemove(null)} title="Remover agenda">
         <Stack>
-          <Text>Tem certeza que deseja remover a agenda de {remove?.cidade?.nome} / {remove?.estado_id}?</Text>
+          <Text>
+            Tem certeza que deseja remover a agenda de {remove?.cidade?.nome} / {remove?.estado_id}?
+          </Text>
           <Box>
-            <Button
-              color="red"
-              type="button"
-              size="sm"
-              onClick={handleDelete}>
+            <Button color="red" type="button" size="sm" onClick={handleDelete}>
               Remover
             </Button>
           </Box>

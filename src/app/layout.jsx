@@ -1,19 +1,19 @@
-import '@mantine/core/styles.css'
-import '@mantine/notifications/styles.css';
+import "@mantine/core/styles.css"
+import "@mantine/notifications/styles.css"
 
-import { Notifications } from '@mantine/notifications';
+import { Notifications } from "@mantine/notifications"
 
-import Content from '@/components/navigation/Content'
-import Footer from '@/components/navigation/Footer'
-import Header from '@/components/navigation/Header'
-import Navbar from '@/components/navigation/Navbar'
+import Content from "@/components/navigation/Content"
+import Footer from "@/components/navigation/Footer"
+import Header from "@/components/navigation/Header"
+import Navbar from "@/components/navigation/Navbar"
 
-import classes from './Global.module.css'
-import Providers from './Providers'
+import classes from "./Global.module.css"
+import Providers from "./Providers"
 
 export const metadata = {
-  title: 'GataCompleta Admin',
-  description: 'Painel de gerenciamento de acompanhantes',
+  title: "GataCompleta Admin",
+  description: "Painel de gerenciamento de acompanhantes",
 }
 
 export default function RootLayout({ children }) {
@@ -27,12 +27,10 @@ export default function RootLayout({ children }) {
           <Notifications autoClose={10000} position="top-right" zIndex={102} />
           <Navbar />
           <Header />
-          <Content>
-            {children}
-          </Content>
+          <Content>{children}</Content>
           <Footer />
         </Providers>
       </body>
-    </html >
+    </html>
   )
 }

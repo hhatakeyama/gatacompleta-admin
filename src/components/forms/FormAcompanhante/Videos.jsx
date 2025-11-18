@@ -1,16 +1,16 @@
-'use client'
+"use client"
 
-import { Button, Group, Text, useMantineTheme } from '@mantine/core'
-import { Dropzone } from '@mantine/dropzone'
-import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react'
-import React, { useRef } from 'react'
+import { Button, Group, Text, useMantineTheme } from "@mantine/core"
+import { Dropzone } from "@mantine/dropzone"
+import { IconCloudUpload, IconDownload, IconX } from "@tabler/icons-react"
+import React, { useRef } from "react"
 
-import classes from './FormAcompanhante.module.css'
+import classes from "./FormAcompanhante.module.css"
 
 export default function Videos({ onFileUpload }) {
   // Hooks
-  const theme = useMantineTheme();
-  const openRef = useRef(null);
+  const theme = useMantineTheme()
+  const openRef = useRef(null)
 
   return (
     <div className={classes.wrapper}>
@@ -20,10 +20,14 @@ export default function Videos({ onFileUpload }) {
         className={classes.dropzone}
         radius="md"
         maxSize={30 * 1024 ** 2}>
-        <div style={{ pointerEvents: 'none' }}>
+        <div style={{ pointerEvents: "none" }}>
           <Group justify="center">
             <Dropzone.Accept>
-              <IconDownload style={{ width: 50, height: 50 }} color={theme.colors.blue[6]} stroke={1.5} />
+              <IconDownload
+                style={{ width: 50, height: 50 }}
+                color={theme.colors.blue[6]}
+                stroke={1.5}
+              />
             </Dropzone.Accept>
             <Dropzone.Reject>
               <IconX style={{ width: 50, height: 50 }} color={theme.colors.red[6]} stroke={1.5} />
@@ -39,7 +43,8 @@ export default function Videos({ onFileUpload }) {
             <Dropzone.Idle>Upload vídeos</Dropzone.Idle>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            Arraste os arquivos aqui para subir os vídeos.<br />
+            Arraste os arquivos aqui para subir os vídeos.
+            <br />
             Apenas vídeos menores que 100mb.
           </Text>
         </div>

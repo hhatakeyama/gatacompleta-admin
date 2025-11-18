@@ -1,16 +1,30 @@
-'use client'
+"use client"
 
-import { Button, Center, Grid, Group, LoadingOverlay, Pagination, rem, ScrollArea, Stack, Table, Text, TextInput, Title } from '@mantine/core'
-import { IconSearch } from '@tabler/icons-react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import {
+  Button,
+  Center,
+  Grid,
+  Group,
+  LoadingOverlay,
+  Pagination,
+  rem,
+  ScrollArea,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core"
+import { IconSearch } from "@tabler/icons-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import React, { useState } from "react"
 
-import Active from '@/components/displayers/DisplayStatus/Active'
-import guardAccount from '@/guards/AccountGuard'
-import { useFetch } from '@/hooks'
-import { useAuth } from '@/providers/AuthProvider'
-import { dateToHuman } from '@/utils'
+import Active from "@/components/displayers/DisplayStatus/Active"
+import guardAccount from "@/guards/AccountGuard"
+import { useFetch } from "@/hooks"
+import { useAuth } from "@/providers/AuthProvider"
+import { dateToHuman } from "@/utils"
 
 function Usuarios() {
   // Hooks
@@ -21,21 +35,20 @@ function Usuarios() {
   const { permissions } = permissionsData || {}
 
   // States
-  const [search, setSearch] = useState('')
-  const [searchFilter, setSearchFilter] = useState('')
+  const [search, setSearch] = useState("")
+  const [searchFilter, setSearchFilter] = useState("")
   const [pagina, setPagina] = useState(1)
 
   // Fetch
   const { data, error } = useFetch([
-    isAuthenticated === true ? '/admin/usuarios' : null,
-    { busca: searchFilter, pagina }
+    isAuthenticated === true ? "/admin/usuarios" : null,
+    { busca: searchFilter, pagina },
   ])
   const { data: usuarios = [], last_page } = data || {}
   const loading = !data && !error
 
   // Validations
-  if (permissions?.find(item => item !== 's' && item !== 'a'))
-    return router.push('/')
+  if (permissions?.find(item => item !== "s" && item !== "a")) return router.push("/")
 
   return (
     <Stack>
@@ -56,16 +69,11 @@ function Usuarios() {
       <Stack pos="relative">
         <LoadingOverlay
           visible={loading}
-          overlayProps={{ radius: 'sm', blur: 2 }}
-          loaderProps={{ color: 'pink', type: 'bars' }}
+          overlayProps={{ radius: "sm", blur: 2 }}
+          loaderProps={{ color: "pink", type: "bars" }}
         />
         <ScrollArea h={usuarios.length > 15 ? "55vh" : "auto"} offsetScrollbars>
-          <Table
-            striped
-            highlightOnHover
-            withTableBorder
-            miw={700}
-          >
+          <Table striped highlightOnHover withTableBorder miw={700}>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>ID</Table.Th>
@@ -77,22 +85,33 @@ function Usuarios() {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {usuarios.length > 0 ? usuarios.map((row) => {
-                return (
-                  <Table.Tr key={row.id}>
-                    <Table.Td>{row.id}</Table.Td>
-                    <Table.Td>{row.name}</Table.Td>
-                    <Table.Td>{row.email}</Table.Td>
-                    <Table.Td><Active status={row.status} /></Table.Td>
-                    <Table.Td>{row.created_at ? dateToHuman(row.created_at) : ''}</Table.Td>
-                    <Table.Td>
-                      <Group gap="xs">
-                        <Button size="compact-sm" component={Link} color="orange" title="Editar" href={`/usuarios/${row.id}`}>Editar</Button>
-                      </Group>
-                    </Table.Td>
-                  </Table.Tr>
-                )
-              }) : (
+              {usuarios.length > 0 ? (
+                usuarios.map(row => {
+                  return (
+                    <Table.Tr key={row.id}>
+                      <Table.Td>{row.id}</Table.Td>
+                      <Table.Td>{row.name}</Table.Td>
+                      <Table.Td>{row.email}</Table.Td>
+                      <Table.Td>
+                        <Active status={row.status} />
+                      </Table.Td>
+                      <Table.Td>{row.created_at ? dateToHuman(row.created_at) : ""}</Table.Td>
+                      <Table.Td>
+                        <Group gap="xs">
+                          <Button
+                            size="compact-sm"
+                            component={Link}
+                            color="orange"
+                            title="Editar"
+                            href={`/usuarios/${row.id}`}>
+                            Editar
+                          </Button>
+                        </Group>
+                      </Table.Td>
+                    </Table.Tr>
+                  )
+                })
+              ) : (
                 <Table.Tr>
                   <Table.Td colSpan={6}>
                     <Text fw={500} ta="center">

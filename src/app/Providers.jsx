@@ -1,22 +1,26 @@
-'use client'
+"use client"
 
-import 'dayjs/locale/pt-br'
+import "dayjs/locale/pt-br"
 
-import { MantineProvider } from '@mantine/core'
-import { DatesProvider } from '@mantine/dates'
-import { SWRConfig } from 'swr'
+import { MantineProvider } from "@mantine/core"
+import { DatesProvider } from "@mantine/dates"
+import { SWRConfig } from "swr"
 
-import AuthProvider from '@/providers/AuthProvider'
-import { fetcher } from '@/utils'
+import AuthProvider from "@/providers/AuthProvider"
+import { fetcher } from "@/utils"
 
 export default function Providers({ children }) {
   return (
     <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
-      <DatesProvider settings={{ locale: 'pt-br', firstDayOfWeek: 0, weekendDays: [0], timezone: 'America/Sao_Paulo' }}>
+      <DatesProvider
+        settings={{
+          locale: "pt-br",
+          firstDayOfWeek: 0,
+          weekendDays: [0],
+          timezone: "America/Sao_Paulo",
+        }}>
         <MantineProvider defaultColorScheme="dark">
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
         </MantineProvider>
       </DatesProvider>
     </SWRConfig>

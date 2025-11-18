@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
-import { Button, Grid, Group } from '@mantine/core'
-import { useForm, yupResolver } from '@mantine/form'
-import { showNotification } from '@mantine/notifications'
-import React, { useState } from 'react'
+import { Button, Grid, Group } from "@mantine/core"
+import { useForm, yupResolver } from "@mantine/form"
+import { showNotification } from "@mantine/notifications"
+import React, { useState } from "react"
 
-import { api, Yup } from '@/utils'
+import { api, Yup } from "@/utils"
 
-import * as Fields from './Fields'
+import * as Fields from "./Fields"
 
 export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
   // States
@@ -16,7 +16,7 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
   // Constants
   const initialValues = {
     acompanhante_id: acompanhanteId,
-    numero: phoneData?.numero || '',
+    numero: phoneData?.numero || "",
     whatsapp: phoneData?.whatsapp === "1" ? true : false,
     operadora_id: "1",
     status: "1",
@@ -32,21 +32,31 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
     initialValues,
     validate: yupResolver(schema),
     validateInputOnBlur: true,
-    validateInputOnChange: true
+    validateInputOnChange: true,
   })
 
   // Actions
-  const handleSubmit = async (newValues) => {
+  const handleSubmit = async newValues => {
     setIsSubmitting(true)
     if (phoneData) {
       return api
         .patch(`/api/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone atualizado com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.data?.message || "Telefone atualizado com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
-          showNotification({ title: 'Erro', message: response?.data?.message || 'Ocorreu um erro ao atualizar o telefone. Tente novamente mais tarde.', color: 'red' })
+          showNotification({
+            title: "Erro",
+            message:
+              response?.data?.message ||
+              "Ocorreu um erro ao atualizar o telefone. Tente novamente mais tarde.",
+            color: "red",
+          })
         })
         .finally(() => {
           setIsSubmitting(false)
@@ -58,13 +68,19 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
         .post(`/api/admin/acompanhantes/${acompanhanteId}/telefones`, newValues)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone cadastrado com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.data?.message || "Telefone cadastrado com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
           showNotification({
-            title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao cadastrar o telefone. Tente novamente mais tarde.',
-            color: 'red'
+            title: "Erro",
+            message:
+              response?.data?.message ||
+              "Ocorreu um erro ao cadastrar o telefone. Tente novamente mais tarde.",
+            color: "red",
           })
         })
         .finally(() => {
@@ -81,13 +97,19 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
         .delete(`/api/admin/acompanhantes/${acompanhanteId}/telefones/${phoneData.id}`)
         .then(response => {
           onSuccess?.()
-          showNotification({ title: 'Sucesso', message: response?.data?.message || 'Telefone removido com sucesso!', color: 'green' })
+          showNotification({
+            title: "Sucesso",
+            message: response?.data?.message || "Telefone removido com sucesso!",
+            color: "green",
+          })
         })
         .catch(response => {
           showNotification({
-            title: 'Erro',
-            message: response?.data?.message || 'Ocorreu um erro ao remover o telefone. Tente novamente mais tarde.',
-            color: 'red'
+            title: "Erro",
+            message:
+              response?.data?.message ||
+              "Ocorreu um erro ao remover o telefone. Tente novamente mais tarde.",
+            color: "red",
           })
         })
         .finally(() => setIsSubmitting(false))
@@ -95,12 +117,12 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
+    <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: "relative" }}>
       <Grid align="center">
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Fields.PhoneNumberField
             inputProps={{
-              ...form.getInputProps('numero'),
+              ...form.getInputProps("numero"),
               disabled: isSubmitting,
             }}
           />
@@ -108,20 +130,15 @@ export default function Phones({ acompanhanteId, phoneData, onSuccess }) {
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Fields.WhatsappCheckboxField
             inputProps={{
-              ...form.getInputProps('whatsapp', { type: 'checkbox' }),
-              disabled: isSubmitting
+              ...form.getInputProps("whatsapp", { type: "checkbox" }),
+              disabled: isSubmitting,
             }}
           />
         </Grid.Col>
       </Grid>
       <Group mt="xl">
         {phoneData && (
-          <Button
-            color="red"
-            type="button"
-            size="sm"
-            onClick={handleDelete}
-            loading={isSubmitting}>
+          <Button color="red" type="button" size="sm" onClick={handleDelete} loading={isSubmitting}>
             Remover
           </Button>
         )}

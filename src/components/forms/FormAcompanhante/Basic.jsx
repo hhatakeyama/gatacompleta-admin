@@ -1,18 +1,29 @@
-'use client'
+"use client"
 
-import { Alert, Button, Grid, Group, LoadingOverlay, Select, Stack, Textarea, TextInput, useMantineTheme } from '@mantine/core'
-import { useForm, yupResolver } from '@mantine/form'
-import { useMediaQuery } from '@mantine/hooks'
-import { notifications } from '@mantine/notifications'
-import { IconBrandSkype, IconBrandYoutube } from '@tabler/icons-react'
-import React, { useState } from 'react'
-import { useSWRConfig } from 'swr'
+import {
+  Alert,
+  Button,
+  Grid,
+  Group,
+  LoadingOverlay,
+  Select,
+  Stack,
+  Textarea,
+  TextInput,
+  useMantineTheme,
+} from "@mantine/core"
+import { useForm, yupResolver } from "@mantine/form"
+import { useMediaQuery } from "@mantine/hooks"
+import { notifications } from "@mantine/notifications"
+import { IconBrandSkype, IconBrandYoutube } from "@tabler/icons-react"
+import React, { useState } from "react"
+import { useSWRConfig } from "swr"
 
-import { useAuth } from '@/providers/AuthProvider'
-import { api, Yup } from '@/utils'
-import errorHandler from '@/utils/errorHandler'
+import { useAuth } from "@/providers/AuthProvider"
+import { api, Yup } from "@/utils"
+import errorHandler from "@/utils/errorHandler"
 
-import * as Fields from './Fields'
+import * as Fields from "./Fields"
 
 export default function Basic({ acompanhanteData, onClose, onCallback }) {
   // Hooks
@@ -30,44 +41,44 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
 
   // Form
   const initialValues = {
-    name: acompanhanteData?.usuario?.name || '',
-    email: acompanhanteData?.usuario?.email || '',
-    password: '',
-    confirmPassword: '',
-    sobre: acompanhanteData?.sobre || '',
-    ordem: acompanhanteData?.ordem || '',
-    virtual: acompanhanteData?.virtual || '0',
-    verificado: acompanhanteData?.verificado || '0',
-    status: acompanhanteData?.status || '0',
-    tipo_id: acompanhanteData?.tipo_id?.toString() || '',
-    cabelo_id: acompanhanteData?.cabelo_id?.toString() || '',
-    idade: acompanhanteData?.idade || '',
-    olho_id: acompanhanteData?.olho_id?.toString() || '',
-    altura: acompanhanteData?.altura || '',
-    peso: acompanhanteData?.peso || '',
-    busto: acompanhanteData?.busto || '',
-    cintura: acompanhanteData?.cintura || '',
-    quadril: acompanhanteData?.quadril || '',
-    manequim: acompanhanteData?.manequim || '',
-    cache: acompanhanteData?.cache || '',
-    duracao: acompanhanteData?.duracao || '',
-    dia_inteiro: acompanhanteData?.dia_inteiro || '0',
-    observacao_horario: acompanhanteData?.observacao_horario || '',
-    video: acompanhanteData?.video || '',
-    skype: acompanhanteData?.skype || '',
-    acessorios: acompanhanteData?.acessorios || '',
-    atende: acompanhanteData?.atende || '',
-    locais: acompanhanteData?.locais || '',
-    viagem: acompanhanteData?.viagem || '',
-    anal: acompanhanteData?.anal || '',
-    adicionais: acompanhanteData?.adicionais || '',
+    name: acompanhanteData?.usuario?.name || "",
+    email: acompanhanteData?.usuario?.email || "",
+    password: "",
+    confirmPassword: "",
+    sobre: acompanhanteData?.sobre || "",
+    ordem: acompanhanteData?.ordem || "",
+    virtual: acompanhanteData?.virtual || "0",
+    verificado: acompanhanteData?.verificado || "0",
+    status: acompanhanteData?.status || "0",
+    tipo_id: acompanhanteData?.tipo_id?.toString() || "",
+    cabelo_id: acompanhanteData?.cabelo_id?.toString() || "",
+    idade: acompanhanteData?.idade || "",
+    olho_id: acompanhanteData?.olho_id?.toString() || "",
+    altura: acompanhanteData?.altura || "",
+    peso: acompanhanteData?.peso || "",
+    busto: acompanhanteData?.busto || "",
+    cintura: acompanhanteData?.cintura || "",
+    quadril: acompanhanteData?.quadril || "",
+    manequim: acompanhanteData?.manequim || "",
+    cache: acompanhanteData?.cache || "",
+    duracao: acompanhanteData?.duracao || "",
+    dia_inteiro: acompanhanteData?.dia_inteiro || "0",
+    observacao_horario: acompanhanteData?.observacao_horario || "",
+    video: acompanhanteData?.video || "",
+    skype: acompanhanteData?.skype || "",
+    acessorios: acompanhanteData?.acessorios || "",
+    atende: acompanhanteData?.atende || "",
+    locais: acompanhanteData?.locais || "",
+    viagem: acompanhanteData?.viagem || "",
+    anal: acompanhanteData?.anal || "",
+    adicionais: acompanhanteData?.adicionais || "",
   }
 
   const schema = Yup.object().shape({
     name: Yup.string().required(),
     email: Yup.string().email().required(),
     password: Yup.string().nullable(),
-    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Senhas diferentes'),
+    confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Senhas diferentes"),
     sobre: Yup.string().nullable(),
     ordem: Yup.string().nullable(),
     virtual: Yup.string().nullable(),
@@ -102,21 +113,23 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
     initialValues,
     validate: yupResolver(schema),
     validateInputOnBlur: true,
-    validateInputOnChange: true
+    validateInputOnChange: true,
   })
 
   // Actions
-  const handleSubmit = async (newValues) => {
+  const handleSubmit = async newValues => {
     setError(null)
     setIsSubmitting(true)
     if (form.isDirty()) {
       const { password, confirmPassword, ...restValues } = newValues
-      return api
-        [editing ? 'patch' : 'post'](`/api/admin/acompanhantes${editing ? `/${acompanhanteData?.user_id}` : ''}`, {
+      return api[editing ? "patch" : "post"](
+        `/api/admin/acompanhantes${editing ? `/${acompanhanteData?.user_id}` : ""}`,
+        {
           ...restValues,
-          ...(password && password !== '' ? { password: password } : {}),
-          ...(confirmPassword ? { password_confirmation: confirmPassword } : {})
-        }) // Verificar usuário logado no painel
+          ...(password && password !== "" ? { password: password } : {}),
+          ...(confirmPassword ? { password_confirmation: confirmPassword } : {}),
+        },
+      ) // Verificar usuário logado no painel
         .then(response => {
           if (editing) {
             mutateGlobal(`/api/admin/acompanhantes/${acompanhanteData?.user_id}`)
@@ -127,18 +140,18 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
             onCallback?.(response)
           }
           notifications.show({
-            title: 'Sucesso',
-            message: `Dados ${editing ? 'atualizados' : 'cadastrados'} com sucesso!`,
-            color: 'green'
+            title: "Sucesso",
+            message: `Dados ${editing ? "atualizados" : "cadastrados"} com sucesso!`,
+            color: "green",
           })
         })
         .catch(error => {
           notifications.show({
-            title: 'Erro',
+            title: "Erro",
             message:
               errorHandler(error.response?.data?.errors)?.messages ||
-              `Erro ao ${editing ? 'atualizar' : 'cadastrar'} os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.`,
-            color: 'red'
+              `Erro ao ${editing ? "atualizar" : "cadastrar"} os dados. Entre em contato com o administrador do site ou tente novamente mais tarde.`,
+            color: "red",
           })
         })
         .finally(() => setIsSubmitting(false))
@@ -146,26 +159,48 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: 'relative' }}>
+    <form onSubmit={form.onSubmit(handleSubmit)} style={{ position: "relative" }}>
       <LoadingOverlay visible={isValidating} overlayProps={{ radius: "sm", blur: 2 }} />
       <Grid>
         <Grid.Col span={{ base: 12, lg: 6 }}>
           <Stack>
             <Grid>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.NameField inputProps={{ ...form.getInputProps('name'), required: true, disabled: isSubmitting }} />
+                <Fields.NameField
+                  inputProps={{
+                    ...form.getInputProps("name"),
+                    required: true,
+                    disabled: isSubmitting,
+                  }}
+                />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.EmailField inputProps={{ ...form.getInputProps('email'), required: true, disabled: isSubmitting }} />
+                <Fields.EmailField
+                  inputProps={{
+                    ...form.getInputProps("email"),
+                    required: true,
+                    disabled: isSubmitting,
+                  }}
+                />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.PasswordField inputProps={{ ...form.getInputProps('password'), disabled: isSubmitting }} />
+                <Fields.PasswordField
+                  inputProps={{ ...form.getInputProps("password"), disabled: isSubmitting }}
+                />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6 }}>
-                <Fields.ConfirmPasswordField inputProps={{ ...form.getInputProps('confirmPassword'), disabled: isSubmitting }} />
+                <Fields.ConfirmPasswordField
+                  inputProps={{ ...form.getInputProps("confirmPassword"), disabled: isSubmitting }}
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <Textarea {...form.getInputProps('sobre')} disabled={isSubmitting} label="Sobre" placeholder="Sobre" rows={6} />
+                <Textarea
+                  {...form.getInputProps("sobre")}
+                  disabled={isSubmitting}
+                  label="Sobre"
+                  placeholder="Sobre"
+                  rows={6}
+                />
               </Grid.Col>
               {/* <Grid.Col span={4}>
                 <Fields.StateField inputProps={{ ...form.getInputProps('uf'), disabled: isSubmitting }} />
@@ -174,35 +209,50 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
                 <Fields.CityField inputProps={{ ...form.getInputProps('cidade_id'), disabled: isSubmitting }} />
               </Grid.Col> */}
               <Grid.Col span={6}>
-                <TextInput {...form.getInputProps('ordem')} disabled={isSubmitting} label="Ordem" placeholder="Ordem" type="number" />
+                <TextInput
+                  {...form.getInputProps("ordem")}
+                  disabled={isSubmitting}
+                  label="Ordem"
+                  placeholder="Ordem"
+                  type="number"
+                />
               </Grid.Col>
               <Grid.Col span={6}>
                 <Select
                   label="Atende virtualmente?"
                   placeholder="Atende virtualmente?"
-                  data={[{ value: '1', label: 'Sim' }, { value: '0', label: 'Não' }]}
+                  data={[
+                    { value: "1", label: "Sim" },
+                    { value: "0", label: "Não" },
+                  ]}
                   disabled={isSubmitting}
                   clearable
-                  {...form.getInputProps('virtual')}
+                  {...form.getInputProps("virtual")}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
                 <Select
                   label="Conta verificada?"
                   placeholder="Conta verificada?"
-                  data={[{ value: '1', label: 'Sim' }, { value: '0', label: 'Não' }]}
+                  data={[
+                    { value: "1", label: "Sim" },
+                    { value: "0", label: "Não" },
+                  ]}
                   disabled={isSubmitting}
                   clearable
-                  {...form.getInputProps('verificado')}
+                  {...form.getInputProps("verificado")}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
                 <Select
                   label="Conta ativa?"
                   placeholder="Conta ativa?"
-                  data={[{ value: '1', label: 'Sim' }, { value: '0', label: 'Não' }]}
+                  data={[
+                    { value: "1", label: "Sim" },
+                    { value: "0", label: "Não" },
+                  ]}
                   disabled={isSubmitting}
-                  {...form.getInputProps('status')}
+                  {...form.getInputProps("status")}
                 />
               </Grid.Col>
             </Grid>
@@ -217,13 +267,13 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
                   label="Tipo"
                   placeholder="Tipo"
                   data={[
-                    { value: '1', label: 'Mulher' },
-                    { value: '2', label: 'Travesti' },
-                    { value: '3', label: 'Casal' },
-                    { value: '4', label: 'Homem' },
+                    { value: "1", label: "Mulher" },
+                    { value: "2", label: "Travesti" },
+                    { value: "3", label: "Casal" },
+                    { value: "4", label: "Homem" },
                   ]}
                   disabled={isSubmitting}
-                  {...form.getInputProps('tipo_id')}
+                  {...form.getInputProps("tipo_id")}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
@@ -231,113 +281,227 @@ export default function Basic({ acompanhanteData, onClose, onCallback }) {
                   label="Cabelo"
                   placeholder="Cabelo"
                   data={[
-                    { value: '1', label: 'Loira' },
-                    { value: '2', label: 'Morena' },
-                    { value: '3', label: 'Mestiça' },
-                    { value: '4', label: 'Mulata' },
-                    { value: '5', label: 'Oriental' },
-                    { value: '6', label: 'Ruiva' },
+                    { value: "1", label: "Loira" },
+                    { value: "2", label: "Morena" },
+                    { value: "3", label: "Mestiça" },
+                    { value: "4", label: "Mulata" },
+                    { value: "5", label: "Oriental" },
+                    { value: "6", label: "Ruiva" },
                   ]}
                   disabled={isSubmitting}
                   clearable
-                  {...form.getInputProps('cabelo_id')}
+                  {...form.getInputProps("cabelo_id")}
                 />
               </Grid.Col>
               <Grid.Col span={6}>
-                <TextInput {...form.getInputProps('idade')} disabled={isSubmitting} label="Idade" placeholder="Idade" type="number" />
+                <TextInput
+                  {...form.getInputProps("idade")}
+                  disabled={isSubmitting}
+                  label="Idade"
+                  placeholder="Idade"
+                  type="number"
+                />
               </Grid.Col>
               <Grid.Col span={6}>
                 <Select
                   label="Olhos"
                   placeholder="Olhos"
                   data={[
-                    { value: '1', label: 'Azul' },
-                    { value: '2', label: 'Castanho' },
-                    { value: '3', label: 'Castanho Claro' },
-                    { value: '4', label: 'Castanho Escuro' },
-                    { value: '5', label: 'Castanho Esverdeado' },
-                    { value: '6', label: 'Mel' },
-                    { value: '7', label: 'Preto' },
-                    { value: '8', label: 'Verde' },
+                    { value: "1", label: "Azul" },
+                    { value: "2", label: "Castanho" },
+                    { value: "3", label: "Castanho Claro" },
+                    { value: "4", label: "Castanho Escuro" },
+                    { value: "5", label: "Castanho Esverdeado" },
+                    { value: "6", label: "Mel" },
+                    { value: "7", label: "Preto" },
+                    { value: "8", label: "Verde" },
                   ]}
                   disabled={isSubmitting}
                   clearable
-                  {...form.getInputProps('olho_id')}
+                  {...form.getInputProps("olho_id")}
                 />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('altura')} disabled={isSubmitting} label="Altura" placeholder="Altura" type="text" />
+                <TextInput
+                  {...form.getInputProps("altura")}
+                  disabled={isSubmitting}
+                  label="Altura"
+                  placeholder="Altura"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('peso')} disabled={isSubmitting} label="Peso" placeholder="Peso" type="text" />
+                <TextInput
+                  {...form.getInputProps("peso")}
+                  disabled={isSubmitting}
+                  label="Peso"
+                  placeholder="Peso"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('busto')} disabled={isSubmitting} label="Busto" placeholder="Busto" type="text" />
+                <TextInput
+                  {...form.getInputProps("busto")}
+                  disabled={isSubmitting}
+                  label="Busto"
+                  placeholder="Busto"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('cintura')} disabled={isSubmitting} label="Cintura" placeholder="Cintura" type="text" />
+                <TextInput
+                  {...form.getInputProps("cintura")}
+                  disabled={isSubmitting}
+                  label="Cintura"
+                  placeholder="Cintura"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('quadril')} disabled={isSubmitting} label="Quadril" placeholder="Quadril" type="text" />
+                <TextInput
+                  {...form.getInputProps("quadril")}
+                  disabled={isSubmitting}
+                  label="Quadril"
+                  placeholder="Quadril"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('manequim')} disabled={isSubmitting} label="Manequim" placeholder="Manequim" type="text" />
+                <TextInput
+                  {...form.getInputProps("manequim")}
+                  disabled={isSubmitting}
+                  label="Manequim"
+                  placeholder="Manequim"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('cache')} disabled={isSubmitting} label="Cachê" placeholder="Cachê" type="text" />
+                <TextInput
+                  {...form.getInputProps("cache")}
+                  disabled={isSubmitting}
+                  label="Cachê"
+                  placeholder="Cachê"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
-                <TextInput {...form.getInputProps('duracao')} disabled={isSubmitting} label="Duração" placeholder="Duração" type="text" />
+                <TextInput
+                  {...form.getInputProps("duracao")}
+                  disabled={isSubmitting}
+                  label="Duração"
+                  placeholder="Duração"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={4}>
                 <Select
                   label="Dia inteiro"
                   placeholder="Dia inteiro"
-                  data={[{ value: '1', label: 'Sim' }, { value: '0', label: 'Não' }]}
+                  data={[
+                    { value: "1", label: "Sim" },
+                    { value: "0", label: "Não" },
+                  ]}
                   disabled={isSubmitting}
                   clearable
-                  {...form.getInputProps('dia_inteiro')}
+                  {...form.getInputProps("dia_inteiro")}
                 />
               </Grid.Col>
               <Grid.Col span={12}>
-                <Textarea {...form.getInputProps('observacao_horario')} disabled={isSubmitting} label="Observação de horário" placeholder="Observação de horário" />
+                <Textarea
+                  {...form.getInputProps("observacao_horario")}
+                  disabled={isSubmitting}
+                  label="Observação de horário"
+                  placeholder="Observação de horário"
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <TextInput {...form.getInputProps('video')} disabled={isSubmitting} label="Vídeo destaque (url)" placeholder="Vídeo destaque (url)" type="text" leftSection={<IconBrandYoutube />} />
+                <TextInput
+                  {...form.getInputProps("video")}
+                  disabled={isSubmitting}
+                  label="Vídeo destaque (url)"
+                  placeholder="Vídeo destaque (url)"
+                  type="text"
+                  leftSection={<IconBrandYoutube />}
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <TextInput {...form.getInputProps('skype')} disabled={isSubmitting} label="Skype" placeholder="Skype" type="text" leftSection={<IconBrandSkype />} />
+                <TextInput
+                  {...form.getInputProps("skype")}
+                  disabled={isSubmitting}
+                  label="Skype"
+                  placeholder="Skype"
+                  type="text"
+                  leftSection={<IconBrandSkype />}
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <Textarea {...form.getInputProps('acessorios')} disabled={isSubmitting} label="Acessórios" placeholder="Acessórios" />
+                <Textarea
+                  {...form.getInputProps("acessorios")}
+                  disabled={isSubmitting}
+                  label="Acessórios"
+                  placeholder="Acessórios"
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <TextInput {...form.getInputProps('atende')} disabled={isSubmitting} label="Atende (homem, mulher, casal, etc...)" placeholder="Atende (homem, mulher, casal, etc...)" type="text" />
+                <TextInput
+                  {...form.getInputProps("atende")}
+                  disabled={isSubmitting}
+                  label="Atende (homem, mulher, casal, etc...)"
+                  placeholder="Atende (homem, mulher, casal, etc...)"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <TextInput {...form.getInputProps('locais')} disabled={isSubmitting} label="Atende em (atende em motel, local próprio, etc...)" placeholder="Atende em (atende em motel, local próprio, etc...)" type="text" />
+                <TextInput
+                  {...form.getInputProps("locais")}
+                  disabled={isSubmitting}
+                  label="Atende em (atende em motel, local próprio, etc...)"
+                  placeholder="Atende em (atende em motel, local próprio, etc...)"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={6}>
-                <TextInput {...form.getInputProps('viagem')} disabled={isSubmitting} label="Viaja (sim, não, a combinar, etc...)" placeholder="Viaja" type="text" />
+                <TextInput
+                  {...form.getInputProps("viagem")}
+                  disabled={isSubmitting}
+                  label="Viaja (sim, não, a combinar, etc...)"
+                  placeholder="Viaja"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={6}>
-                <TextInput {...form.getInputProps('anal')} disabled={isSubmitting} label="Anal (sim, não, a combinar, etc...)" placeholder="Anal" type="text" />
+                <TextInput
+                  {...form.getInputProps("anal")}
+                  disabled={isSubmitting}
+                  label="Anal (sim, não, a combinar, etc...)"
+                  placeholder="Anal"
+                  type="text"
+                />
               </Grid.Col>
               <Grid.Col span={12}>
-                <Textarea {...form.getInputProps('adicionais')} disabled={isSubmitting} label="Texto adicional" placeholder="Texto adicional" />
+                <Textarea
+                  {...form.getInputProps("adicionais")}
+                  disabled={isSubmitting}
+                  label="Texto adicional"
+                  placeholder="Texto adicional"
+                />
               </Grid.Col>
             </Grid>
           </Stack>
         </Grid.Col>
       </Grid>
 
-      {!!error && <Alert color="red" title="Erro">{error}</Alert>}
+      {!!error && (
+        <Alert color="red" title="Erro">
+          {error}
+        </Alert>
+      )}
 
       <Group mt="xl">
         <Button
           color="green"
           type="submit"
-          size={isXs ? 'sm' : 'md'}
+          size={isXs ? "sm" : "md"}
           fullWidth={!!isXs}
           disabled={!form.isValid() || !form.isDirty()}
           loading={isSubmitting}>

@@ -6,7 +6,7 @@ import { useEffect } from "react"
 
 import { useAuth } from "@/providers/AuthProvider"
 
-const publicRoutes = ['/accounts/login']
+const publicRoutes = ["/accounts/login"]
 
 export default function guardAccount(Component) {
   return function IsAuth(props) {
@@ -16,11 +16,20 @@ export default function guardAccount(Component) {
 
     // Effects
     useEffect(() => {
-      if (publicRoutes.indexOf(pathname) === -1 && isValidating === false && isAuthenticated === false)
+      if (
+        publicRoutes.indexOf(pathname) === -1 &&
+        isValidating === false &&
+        isAuthenticated === false
+      )
         redirect(`/accounts/login?redirectCallback=${pathname}`)
     }, [isAuthenticated, isValidating, pathname])
 
-    if (isAuthenticated === null) return <Center style={{ height: '400px' }}><Loader color="blue" /></Center>
+    if (isAuthenticated === null)
+      return (
+        <Center style={{ height: "400px" }}>
+          <Loader color="blue" />
+        </Center>
+      )
 
     return <Component {...props} />
   }

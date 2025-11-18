@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR from "swr"
 
 function useFetch(...args) {
   const [params, options] = args
