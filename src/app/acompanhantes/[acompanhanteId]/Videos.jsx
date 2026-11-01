@@ -15,7 +15,7 @@ export default function Videos({ acompanhanteData, mutate }) {
 
   // Actions
   const handleFileUpload = async payload => {
-    // eslint-disable-next-line no-undef
+     
     await Promise.all(
       payload.map(async file => {
         if (file?.size < 1024 * 100000) {
