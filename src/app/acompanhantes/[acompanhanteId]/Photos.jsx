@@ -14,7 +14,7 @@ export default function Photos({ acompanhanteData, mutate }) {
 
   // Actions
   const handleFileUpload = async payload => {
-    // eslint-disable-next-line no-undef
+     
     await Promise.all(
       payload.map(file => {
         const formData = new FormData()

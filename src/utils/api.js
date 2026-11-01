@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import axios from "axios"
 
 import { getCookie, removeCookie } from "@/utils"
@@ -40,7 +39,9 @@ api.interceptors.response.use(
     ) {
       removeCookie(cookieTokenString)
       const { pathname } = window.location
+      // Recarrega a página (e não router.push) para zerar o estado do AuthProvider e o cache do SWR
       if (pathname !== loginPath)
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination
         window.location.href = `${loginPath}?redirectCallback=${encodeURIComponent(pathname)}`
     }
     return Promise.reject(error)

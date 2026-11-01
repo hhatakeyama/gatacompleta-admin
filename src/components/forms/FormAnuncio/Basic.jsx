@@ -13,10 +13,11 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core"
-import { useForm, yupResolver } from "@mantine/form"
+import { useForm } from "@mantine/form"
 import { useMediaQuery } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
 import { IconCameraOff } from "@tabler/icons-react"
+import { yupResolver } from "mantine-form-yup-resolver"
 import React, { useState } from "react"
 import { useSWRConfig } from "swr"
 

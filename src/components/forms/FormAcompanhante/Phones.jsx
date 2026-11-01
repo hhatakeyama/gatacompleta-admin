@@ -1,8 +1,9 @@
 "use client"
 
 import { Button, Grid, Group } from "@mantine/core"
-import { useForm, yupResolver } from "@mantine/form"
+import { useForm } from "@mantine/form"
 import { showNotification } from "@mantine/notifications"
+import { yupResolver } from "mantine-form-yup-resolver"
 import React, { useState } from "react"
 
 import { api, Yup } from "@/utils"

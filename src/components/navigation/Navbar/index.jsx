@@ -78,7 +78,15 @@ export default function Navbar() {
       <div className={classes.navbarMain}>
         <Group align="center" justify="space-between" mb={15}>
           <Link href="/" style={{ display: "flex" }}>
-            <Image alt="GataCompleta" src={logo} width="auto" height={45} />
+            {/* Arquivo local (sem Cloudinary) e LCP da página: carrega sem lazy loading */}
+            <Image
+              alt="GataCompleta"
+              src={logo}
+              width="auto"
+              height={45}
+              loading="eager"
+              unoptimized
+            />
           </Link>
 
           {isSm && (
