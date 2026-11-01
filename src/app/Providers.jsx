@@ -1,28 +1,23 @@
 "use client"
 
-import "dayjs/locale/pt-br"
-
-import { MantineProvider } from "@mantine/core"
-import { DatesProvider } from "@mantine/dates"
+import { createTheme, MantineProvider, v8CssVariablesResolver } from "@mantine/core"
 import { SWRConfig } from "swr"
 
 import AuthProvider from "@/providers/AuthProvider"
 import { fetcher } from "@/utils"
 
+// Mantém o visual do Mantine 7/8: raio padrão "sm" e variante light com transparência
+const theme = createTheme({ defaultRadius: "sm" })
+
 export default function Providers({ children }) {
   return (
     <SWRConfig value={{ fetcher, revalidateOnFocus: false }}>
-      <DatesProvider
-        settings={{
-          locale: "pt-br",
-          firstDayOfWeek: 0,
-          weekendDays: [0],
-          timezone: "America/Sao_Paulo",
-        }}>
-        <MantineProvider defaultColorScheme="dark">
-          <AuthProvider>{children}</AuthProvider>
-        </MantineProvider>
-      </DatesProvider>
+      <MantineProvider
+        theme={theme}
+        cssVariablesResolver={v8CssVariablesResolver}
+        defaultColorScheme="dark">
+        <AuthProvider>{children}</AuthProvider>
+      </MantineProvider>
     </SWRConfig>
   )
 }
