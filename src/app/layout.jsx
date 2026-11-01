@@ -24,7 +24,12 @@ export default function RootLayout({ children }) {
       </head>
       <body className={classes.body}>
         <Providers>
-          <Notifications autoClose={10000} position="top-right" zIndex={102} />
+          <Notifications
+            autoClose={10000}
+            position="top-right"
+            zIndex={102}
+            pauseResetOnHover="notification"
+          />
           <Navbar />
           <Header />
           <Content>{children}</Content>

@@ -10,9 +10,10 @@ import {
   Stack,
   useMantineTheme,
 } from "@mantine/core"
-import { useForm, yupResolver } from "@mantine/form"
+import { useForm } from "@mantine/form"
 import { useMediaQuery } from "@mantine/hooks"
 import { notifications } from "@mantine/notifications"
+import { yupResolver } from "mantine-form-yup-resolver"
 import React, { useState } from "react"
 
 import { useAuth } from "@/providers/AuthProvider"
