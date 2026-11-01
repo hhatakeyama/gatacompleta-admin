@@ -119,7 +119,7 @@ function MaisAcessadas() {
               )}
               {paginasMaisAcessadas.map(row => {
                 return (
-                  <Table.Tr key={row.id}>
+                  <Table.Tr key={row.url}>
                     <Table.Td>{row.evento}</Table.Td>
                     <Table.Td>{row.url}</Table.Td>
                     <Table.Td>{row.count}</Table.Td>
