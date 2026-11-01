@@ -32,8 +32,12 @@ function Usuario() {
   ]
 
   // Validations
-  if (error?.response?.data?.message === "Unauthorized") {
-    notifications.show({ title: "Erro", message: error?.response?.data?.message, color: "red" })
+  if (error?.response?.status === 403) {
+    notifications.show({
+      title: "Erro",
+      message: "Você não tem permissão para acessar esta página",
+      color: "red",
+    })
     return router.push("/")
   }
 

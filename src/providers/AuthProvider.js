@@ -38,7 +38,6 @@ function useProvideAuth() {
   // Login with credentials
   const login = async credentials => {
     setLoading(true)
-    await api.get("/sanctum/csrf-cookie")
     const response = await api
       .post("/api/admin/authentication/login", {
         email: credentials.email,
@@ -57,12 +56,12 @@ function useProvideAuth() {
         }
       })
       .catch(error => {
-        return {
-          error:
-            error?.response?.data?.message === "Unauthorized"
-              ? "E-mail ou senha inválidos"
-              : "Ocorreu um erro inesperado. Tente novamente mais tarde",
-        }
+        const { status, data } = error?.response || {}
+        if (status === 401) return { error: "E-mail ou senha inválidos" }
+        if (status === 429)
+          return { error: "Muitas tentativas de login. Aguarde 1 minuto e tente novamente" }
+        if (status === 422) return { error: data?.message || "Preencha e-mail e senha" }
+        return { error: "Ocorreu um erro inesperado. Tente novamente mais tarde" }
       })
       .finally(() => setLoading(false))
 
