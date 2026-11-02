@@ -3,7 +3,7 @@
 import { Stack, Text, Title } from "@mantine/core"
 import { useRouter } from "next/navigation"
 
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useAuth } from "@/providers/AuthProvider"
 
 function Relatorios() {
@@ -26,4 +26,4 @@ function Relatorios() {
   )
 }
 
-export default guardAccount(Relatorios)
+export default guardAdmin(Relatorios)

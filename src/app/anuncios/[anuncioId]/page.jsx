@@ -9,7 +9,7 @@ import React, { useState } from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
 import { FormAnuncio } from "@/components/forms"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 
@@ -77,4 +77,4 @@ function Acompanhante() {
   )
 }
 
-export default guardAccount(Acompanhante)
+export default guardAdmin(Acompanhante)

@@ -25,8 +25,9 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
+import Situacao from "@/components/displayers/DisplayStatus/Situacao"
 import { FormAcompanhante } from "@/components/forms"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 import { api, dateToHuman } from "@/utils"
@@ -209,6 +210,11 @@ function Acompanhantes() {
                         <Box>
                           <Active status={row.status} />
                         </Box>
+                        <Situacao
+                          situacao={row.situacao}
+                          fotosPendentes={row.fotos_pendentes_count}
+                          videosPendentes={row.videos_pendentes_count}
+                        />
                         {expira ? dateToHuman(expira) : ""}
                       </Table.Td>
                       <Table.Td>
@@ -321,4 +327,4 @@ function Acompanhantes() {
   )
 }
 
-export default guardAccount(Acompanhantes)
+export default guardAdmin(Acompanhantes)

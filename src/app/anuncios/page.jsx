@@ -22,7 +22,7 @@ import React, { useState } from "react"
 import Active from "@/components/displayers/DisplayStatus/Active"
 import TipoAnuncio from "@/components/displayers/DisplayStatus/TipoAnuncio"
 import { FormAnuncio } from "@/components/forms"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 import { api, dateToHuman } from "@/utils"
@@ -203,4 +203,4 @@ function Anuncios() {
   )
 }
 
-export default guardAccount(Anuncios)
+export default guardAdmin(Anuncios)

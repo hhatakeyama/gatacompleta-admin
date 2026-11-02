@@ -18,7 +18,7 @@ import { IconSearch } from "@tabler/icons-react"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 
@@ -139,4 +139,4 @@ function MaisAcessadas() {
   )
 }
 
-export default guardAccount(MaisAcessadas)
+export default guardAdmin(MaisAcessadas)

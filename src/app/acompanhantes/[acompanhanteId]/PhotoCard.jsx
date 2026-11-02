@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Card, Group, Image, TextInput } from "@mantine/core"
+import { Badge, Button, ButtonGroup, Card, Group, Image, TextInput } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
 import {
+  IconCheck,
   IconPlus,
   IconRotate,
   IconRotateClockwise,
@@ -16,6 +17,7 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
   // Constants
   const newPhoto = !fotoData.id
   const destacado = fotoData.destaque === "1"
+  const pendente = fotoData.status === "0"
 
   // States
   const [order, setOrder] = useState(index)
@@ -85,6 +87,23 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
         notifications.show({
           title: "Erro",
           message: error?.response?.data?.message || "Erro ao girar foto.",
+          color: "red",
+        })
+      })
+  }
+
+  // Foto enviada pela acompanhante: só aparece no site depois de aprovada
+  const handleApprove = () => {
+    return api
+      .post(`/api/admin/acompanhantes/${acompanhanteData.usuario.id}/fotos/${fotoData.id}/aprovar`)
+      .then(() => {
+        mutate?.()
+        notifications.show({ title: "Sucesso", message: "Foto aprovada!", color: "green" })
+      })
+      .catch(error => {
+        notifications.show({
+          title: "Erro",
+          message: error?.response?.data?.message || "Erro ao aprovar foto.",
           color: "red",
         })
       })
@@ -172,6 +191,14 @@ export default function PhotoCard({ acompanhanteData, fotoData, index, mutate })
           />
         )}
       </Group>
+      {pendente && (
+        <Group justify="center" mt="xs">
+          <Badge color="yellow">Aguardando aprovação</Badge>
+          <Button size="xs" color="green" leftSection={<IconCheck size={14} />} onClick={handleApprove}>
+            Aprovar
+          </Button>
+        </Group>
+      )}
       <Card.Section inheritPadding py="xs">
         <Group justify="center">
           <ButtonGroup>

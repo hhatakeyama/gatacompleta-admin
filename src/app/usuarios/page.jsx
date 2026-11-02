@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 import { dateToHuman } from "@/utils"
@@ -133,4 +133,4 @@ function Usuarios() {
   )
 }
 
-export default guardAccount(Usuarios)
+export default guardAdmin(Usuarios)
