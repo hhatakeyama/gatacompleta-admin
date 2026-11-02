@@ -17,12 +17,13 @@ import React, { useState } from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
 import { FormAcompanhante } from "@/components/forms"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 import { dateToHuman } from "@/utils"
 
 import Agenda from "./Agenda"
+import Moderacao from "./Moderacao"
 import Phones from "./Phones"
 import Photos from "./Photos"
 import Videos from "./Videos"
@@ -145,6 +146,8 @@ function Acompanhante() {
         </Button>
       </Group>
 
+      {data && <Moderacao acompanhanteData={data} mutate={mutate} />}
+
       <Tabs value={tab} onChange={setTab}>
         <Tabs.List mb="md">
           {tabs.map(item => (
@@ -175,4 +178,4 @@ function Acompanhante() {
   )
 }
 
-export default guardAccount(Acompanhante)
+export default guardAdmin(Acompanhante)

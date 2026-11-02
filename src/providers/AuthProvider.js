@@ -35,6 +35,14 @@ function useProvideAuth() {
     isAuthenticated === true ? "/admin/accounts/permissions" : null,
   ])
 
+  // Guarda o token do Sanctum no cookie (expira junto com o token na API: 1 dia)
+  const saveToken = token => {
+    const date = new Date()
+    date.setDate(date.getDate() + 1)
+    setCookie(cookieTokenString, { expiry: date.toISOString(), token })
+    setIsAuthenticated(true)
+  }
+
   // Login with credentials
   const login = async credentials => {
     setLoading(true)
@@ -46,11 +54,7 @@ function useProvideAuth() {
       .then(response => {
         const { data } = response || {}
         if (data?.token) {
-          const date = new Date()
-          date.setDate(date.getDate() + 1)
-          const tokenData = { expiry: date.toISOString(), token: data.token }
-          setCookie(cookieTokenString, tokenData)
-          setIsAuthenticated(true)
+          saveToken(data.token)
         } else {
           return { error: "E-mail ou senha inválidos" }
         }
@@ -58,6 +62,7 @@ function useProvideAuth() {
       .catch(error => {
         const { status, data } = error?.response || {}
         if (status === 401) return { error: "E-mail ou senha inválidos" }
+        if (status === 403) return { error: data?.message || "Acesso bloqueado" }
         if (status === 429)
           return { error: "Muitas tentativas de login. Aguarde 1 minuto e tente novamente" }
         if (status === 422) return { error: data?.message || "Preencha e-mail e senha" }
@@ -128,8 +133,16 @@ function useProvideAuth() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
+  // Papéis (a API valida tudo; aqui é só para escolher telas e redirecionamentos)
+  const tipo = userData?.tipo
+  const isAdmin = tipo === "s" || tipo === "a"
+  const isAcompanhante = tipo === "g"
+
   return {
     login,
+    saveToken,
+    isAdmin,
+    isAcompanhante,
     logout,
     forgotPassword,
     resetPassword,

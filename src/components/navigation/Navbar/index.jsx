@@ -3,13 +3,13 @@
 import { ActionIcon, Group, useMantineTheme } from "@mantine/core"
 import { useMediaQuery } from "@mantine/hooks"
 import {
+  IconClipboardCheck,
   IconEyeCheck,
   IconFlame,
   IconGraph,
   IconLogout,
   IconSpeakerphone,
   IconTimelineEventExclamation,
-  IconUser,
   IconUsers,
   IconX,
 } from "@tabler/icons-react"
@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation"
 import { useAuth } from "@/providers/AuthProvider"
 
 import logo from "../../../../public/logo.jpg"
+import { isAreaAcompanhante } from "../areas"
 import classes from "./Navbar.module.css"
 
 export default function Navbar() {
@@ -28,21 +29,15 @@ export default function Navbar() {
   const theme = useMantineTheme()
   const isXs = useMediaQuery(`(max-width: ${theme.breakpoints.xs})`)
   const isSm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
-  const { isAuthenticated, logout, menuOpen, permissionsData, setMenuOpen, userData } = useAuth()
+  const { isAdmin, isAuthenticated, logout, menuOpen, setMenuOpen, userData } = useAuth()
   const pathname = usePathname()
 
   // Constants
-  const { permissions } = permissionsData || {}
-  const adminAccess = !!permissions?.find(perm => perm === "s" || perm === "a") || false
-  const acompanhanteAccess = !!permissions?.find(perm => perm === "g") || false
+  // A acompanhante usa a área /minha-conta, com navegação própria
+  const adminAccess = isAdmin
 
   const menu = [
-    {
-      link: `/acompanhantes/${userData?.id}`,
-      label: "Perfil",
-      icon: IconUser,
-      visible: acompanhanteAccess,
-    },
+    { link: "/pendencias", label: "Pendências", icon: IconClipboardCheck, visible: adminAccess },
     { link: "/acompanhantes", label: "Acompanhantes", icon: IconFlame, visible: adminAccess },
     { link: "/anuncios", label: "Anúncios", icon: IconSpeakerphone, visible: adminAccess },
     { link: "/usuarios", label: "Usuários", icon: IconUsers, visible: adminAccess },
@@ -68,6 +63,7 @@ export default function Navbar() {
   ))
 
   if (!isAuthenticated && !userData) return null
+  if (isAreaAcompanhante(pathname)) return null
 
   return (
     <nav

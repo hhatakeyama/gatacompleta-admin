@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation"
 import React from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 import { dateToHuman } from "@/utils"
@@ -119,4 +119,4 @@ function Agendas() {
   )
 }
 
-export default guardAccount(Agendas)
+export default guardAdmin(Agendas)
