@@ -2,7 +2,7 @@
 
 import { Button, Group, Loader, Stack, Text } from "@mantine/core"
 
-import guardAccount from "@/guards/AccountGuard"
+import { guardAdmin } from "@/guards/RoleGuard"
 import { useFetch } from "@/hooks"
 import { useAuth } from "@/providers/AuthProvider"
 
@@ -45,16 +45,9 @@ function Home() {
             </Button>
           </>
         )}
-        {permissionsData?.permissions?.indexOf("g") !== -1 && (
-          <>
-            <Button component="a" href="/acompanhante">
-              Acompanhante
-            </Button>
-          </>
-        )}
       </Group>
     </Stack>
   )
 }
 
-export default guardAccount(Home)
+export default guardAdmin(Home)

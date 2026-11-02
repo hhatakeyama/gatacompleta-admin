@@ -17,10 +17,12 @@ import { useMediaQuery } from "@mantine/hooks"
 import { IconChevronDown, IconLogout, IconUser } from "@tabler/icons-react"
 import cx from "clsx"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 import { useAuth } from "@/providers/AuthProvider"
 
+import { isAreaAcompanhante } from "../areas"
 import classes from "./Header.module.css"
 
 export default function Header() {
@@ -28,12 +30,15 @@ export default function Header() {
   const { isAuthenticated, logout, menuOpen, userData, setMenuOpen } = useAuth()
   const theme = useMantineTheme()
   const isSm = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+  const pathname = usePathname()
 
   // Constants
   const showMenu = isAuthenticated === true && !isSm
 
   // States
   const [userMenuOpened, setUserMenuOpened] = useState(false)
+
+  if (isAreaAcompanhante(pathname)) return null
 
   return (
     <Box className={classes.header} pl={showMenu ? "300px" : "0"}>
