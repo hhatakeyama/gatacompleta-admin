@@ -16,12 +16,12 @@ import { urlMidia } from "@/components/minhaConta/acoes"
 /**
  * Foto com as ações em um menu com texto (mais fácil de entender do que só ícones).
  */
-export default function FotoCard({ foto, posicao, total, versao, onAcao }) {
+export default function FotoCard({ foto, posicao, total, onAcao }) {
   return (
     <Card withBorder radius="md" p={6}>
       <Card.Section pos="relative">
         <Image
-          src={`${urlMidia(foto.path, foto.nome, "210x314-")}${versao ? `?v=${versao}` : ""}`}
+          src={urlMidia(foto.path, foto.nome, "210x314-")}
           alt={`Foto ${posicao + 1}`}
           h={220}
           fit="cover"
