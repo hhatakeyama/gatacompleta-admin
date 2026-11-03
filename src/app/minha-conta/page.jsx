@@ -1,7 +1,7 @@
 "use client"
 
 import { Alert, Button, Center, Loader, Paper, Stack, Text, ThemeIcon, Title } from "@mantine/core"
-import { IconAlertCircle, IconCheck, IconChevronRight, IconClock, IconPoint } from "@tabler/icons-react"
+import { IconAlertCircle, IconCheck, IconChevronRight, IconClock } from "@tabler/icons-react"
 import Link from "next/link"
 
 import Ajuda from "@/components/minhaConta/Ajuda"
