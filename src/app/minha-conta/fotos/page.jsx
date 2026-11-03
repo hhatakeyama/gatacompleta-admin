@@ -37,7 +37,6 @@ export default function Fotos() {
   // States
   const [envio, setEnvio] = useState(null) // { atual, total }
   const [removendo, setRemovendo] = useState(null)
-  const [versoes, setVersoes] = useState({}) // força recarregar a imagem depois de girar
 
   if (isLoading)
     return (
@@ -108,10 +107,8 @@ export default function Fotos() {
       if (await executar(() => api.post(`/api/minha-conta/fotos/${foto.id}/destacar`))) mutate()
       return
     }
-    // Girar
-    if (await executar(() => api.post(`/api/minha-conta/fotos/${foto.id}/girar/${tipo}`))) {
-      setVersoes(atual => ({ ...atual, [foto.id]: Date.now() }))
-    }
+    // Girar: a foto ganha um nome novo, então recarrega a lista
+    if (await executar(() => api.post(`/api/minha-conta/fotos/${foto.id}/girar/${tipo}`))) mutate()
   }
 
   const remover = async () => {
@@ -180,7 +177,6 @@ export default function Fotos() {
               foto={foto}
               posicao={posicao}
               total={fotos.length}
-              versao={versoes[foto.id]}
               onAcao={acao}
             />
           ))}
