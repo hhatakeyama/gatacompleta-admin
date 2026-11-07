@@ -1,8 +1,9 @@
 "use client"
 
-import { Box, Button, Group, Image, Stack, Tabs, Text, Title } from "@mantine/core"
+import { Badge, Box, Button, Group, Image, Stack, Tabs, Text, Title } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
 import {
+  IconAlertTriangle,
   IconAt,
   IconCalendar,
   IconPhone,
@@ -12,7 +13,7 @@ import {
   IconVideo,
 } from "@tabler/icons-react"
 import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import React, { useState } from "react"
 
 import Active from "@/components/displayers/DisplayStatus/Active"
@@ -26,20 +27,27 @@ import Agenda from "./Agenda"
 import Moderacao from "./Moderacao"
 import Phones from "./Phones"
 import Photos from "./Photos"
+import Reclamacoes from "./Reclamacoes"
 import Videos from "./Videos"
+
+const ABAS_POR_URL = { reclamacoes: "complaints" }
 
 function Acompanhante() {
   // Hooks
   const { isAuthenticated } = useAuth()
   const { acompanhanteId } = useParams()
+  const searchParams = useSearchParams()
   const router = useRouter()
 
   // States
-  const [tab, setTab] = useState("profile")
+  const [tab, setTab] = useState(() => ABAS_POR_URL[searchParams.get("aba")] || "profile")
 
   // Fetch
   const { data, error, mutate } = useFetch([
     isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}` : null,
+  ])
+  const { data: reclamacoes, error: erroReclamacoes } = useFetch([
+    isAuthenticated === true ? `/admin/acompanhantes/${acompanhanteId}/problemas` : null,
   ])
 
   // Constants
@@ -49,6 +57,12 @@ function Acompanhante() {
     { id: "phones", label: "Telefones", icon: <IconPhone style={{ height: 12, width: 12 }} /> },
     { id: "agenda", label: "Agenda", icon: <IconCalendar style={{ height: 12, width: 12 }} /> },
     { id: "videos", label: "Vídeos", icon: <IconVideo style={{ height: 12, width: 12 }} /> },
+    {
+      id: "complaints",
+      label: "Reclamações",
+      icon: <IconAlertTriangle style={{ height: 12, width: 12 }} />,
+      contador: reclamacoes?.length,
+    },
   ]
 
   // Effects
@@ -151,7 +165,17 @@ function Acompanhante() {
       <Tabs value={tab} onChange={setTab}>
         <Tabs.List mb="md">
           {tabs.map(item => (
-            <Tabs.Tab key={item.id} value={item.id} leftSection={item.icon}>
+            <Tabs.Tab
+              key={item.id}
+              value={item.id}
+              leftSection={item.icon}
+              rightSection={
+                item.contador > 0 && (
+                  <Badge size="xs" circle color="red">
+                    {item.contador}
+                  </Badge>
+                )
+              }>
               {item.label}
             </Tabs.Tab>
           ))}
@@ -172,6 +196,11 @@ function Acompanhante() {
         </Tabs.Panel>
         <Tabs.Panel value="videos">
           {data && tab === "videos" && <Videos acompanhanteData={data} mutate={mutate} />}
+        </Tabs.Panel>
+        <Tabs.Panel value="complaints">
+          {tab === "complaints" && (
+            <Reclamacoes reclamacoes={reclamacoes} error={erroReclamacoes} />
+          )}
         </Tabs.Panel>
       </Tabs>
     </Stack>
